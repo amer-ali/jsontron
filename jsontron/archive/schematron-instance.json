@@ -1,0 +1,109 @@
+{
+  "schema": {
+    "patterns": {
+      "pattern": {
+        "rules": [
+          {
+            "rule": [
+              {
+                "context": "this is context",
+                "assertions": [
+                  {
+                    "assert": {
+                      "test": "this is test",
+                      "report": "report"
+                    }
+                  },
+                  {
+                    "assert": {
+                      "test": "this is test",
+                      "report": "report"
+                    }
+                  }
+                  
+                ]
+              }
+              
+            ]
+          },
+                    {
+            "rule": [
+              {
+                "context": "this is context",
+                "assertions": [
+                  {
+                    "assert": {
+                      "test": "this is test",
+                      "report": "report"
+                    }
+                  },
+                  {
+                    "assert": {
+                      "test": "this is test",
+                      "report": "report"
+                    }
+                  }
+                  
+                ]
+              }
+              
+            ]
+          }
+          
+        ]
+      },
+     "pattern": {
+        "rules": [
+          {
+            "rule": [
+              {
+                "context": "this is context",
+                "assertions": [
+                  {
+                    "assert": {
+                      "test": "this is test",
+                      "report": "report"
+                    }
+                  },
+                  {
+                    "assert": {
+                      "test": "this is test",
+                      "report": "report"
+                    }
+                  }
+                  
+                ]
+              }
+              
+            ]
+          },
+                    {
+            "rule": [
+              {
+                "context": "this is context",
+                "assertions": [
+                  {
+                    "assert": {
+                      "test": "this is test",
+                      "report": "report"
+                    }
+                  },
+                  {
+                    "assert": {
+                      "test": "this is test",
+                      "report": "report"
+                    }
+                  }
+                  
+                ]
+              }
+              
+            ]
+          }
+          
+        ]
+      } 
+      
+    }
+  }
+}

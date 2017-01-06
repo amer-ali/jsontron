@@ -1,0 +1,120 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "schemaVersion": {
+          "type": "string",
+          "minLength":1
+        },
+        "queryBinding": {
+          "type": "string",
+          "minLength":1
+        },
+        "defatulePhase": {
+          "type": "string"
+        },
+        "phase": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "active": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        },
+        "pattern": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "documents": {
+                "type": "string"
+              },
+              "abstract": {
+                "type": "boolean"
+              },
+              "rule": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "abstract": {
+                      "type": "boolean"
+                    },
+                    "context": {
+                      "type": "string"
+                    },
+                    "assert": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "test": {
+                            "type": "string"
+                          },
+                          "message": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "test",
+                          "message"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "context",
+                    "assert"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "id",
+              "abstract"
+            ]
+          }
+        }
+      },
+      "required": [
+        "pattern"
+      ]
+    }
+  },
+  "required": [
+    "schema"
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "schema": {
+  
+  	"id":"this is schema id",
+  	"title":"Schematron Title",
+  	"schemaVersion":"ISO Schematron 2016",
+  	"queryBinding":"jsonpath",
+  	"defatulePhase":"phase default",
+  
+    "phases":[{
+    	"phase":{
+    		"id":"phase id",
+    		"active":["pattern1","pattern2","pattern3"]
+    	}
+    }],
+    
+    "patterns": [{
+      "pattern": {
+      	"id":"pattern id",
+      	"title":"pattern title",
+      	"documents":"pathValue",
+      	"abstract":false,      	
+        "rules": [
+          {
+            "rule": [
+              {
+              	"id":"rule id",
+              	"abstract":false,
+                "context": "this is context",
+                "assertions": [
+                  {
+                    "assert": {
+                    "id":"assert id 1",
+                     "test": "boolean expression to test",
+                     "successMessage": "Success Message",
+                     "failureMessage": "Failure Message"
+                    }
+                  },
+                  {
+                    "assert": {
+                    "id":"assert id 2",
+                     "test": "boolean expression to test",
+                     "successMessage": "Success Message",
+                     "failureMessage": "Failure Message"
+                    }
+                  }
+                  
+                  
+                ]
+              }
+              
+            ]
+          },
+          {
+            "rule": [
+              {
+              	"id":"rule id 2",
+              	"abstract":false,
+                "context": "this is context",
+                "assertions": [
+                  {
+                    "assert": {
+                    "id":"assert id 1",
+                     "test": "boolean expression to test",
+                     "successMessage": "Success Message",
+                     "failureMessage": "Failure Message"
+                    }
+                  },
+                  {
+                    "assert": {
+                    "id":"assert id 2",
+                     "test": "boolean expression to test",
+                     "successMessage": "Success Message",
+                     "failureMessage": "Failure Message"
+                    }
+                  }
+                  
+                  
+                ]
+              }
+              
+            ]
+          }
+                
+        ]
+      }
+      
+    }
+    
+    ]
+  }
+}

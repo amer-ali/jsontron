@@ -1,0 +1,114 @@
+{
+	"type": "Ojbect",
+	"properties":{
+				
+				"id":{
+					"description":"Need to Change Schema ID type to xsd:ID",
+					"type":"string",
+					"optional":true
+					
+					},
+					
+				"schemaVersion":{
+					"type":"string",
+					"minimumLength": 1,
+					"optional":true	
+					},
+					
+				"defaultPhase":{
+					"description":"Need to change the ID type to xsd:IDREF",
+					"type":"string",
+					"optional":true
+				},
+				
+				"queryBinding":{
+					"type":"string",
+					"minimumLength":1,
+					"optional":true
+				},
+				
+				"phase":{},
+				"pattern"
+			},
+			
+	"additionalProperties":{
+				"title":{"$ref":"#/definitions/title"},
+				"rich":{"$ref":"#/definitions/rich"},
+				"foreign":{"$ref":"#/definitions/foreign"},
+				"inclusion":{"$ref":"#/definitions/foreign"},
+				"ns":{"$ref":"#/definitions/ns"},
+				"p":{"$ref":"#/definitions/p"},
+				"let":{"$ref":"#/definitions/let"},
+				"diagnostics":{"$ref":"#/definitions/diagnostics"},
+				"sProperties":{"$ref":"#/definitions/sProperties"}
+			},
+
+	"definitions":{
+			"title":{
+				"description":"TODO: define this properly",
+				"type":"string",
+				"optional":true
+				
+		},
+			"rich":{
+				"description": "TODO define this property",
+				"type":"string",
+				"optional":true
+			},
+			
+			"foreign":{
+				"description": "TODO define this property",
+				"type":"string",
+				"optional":true
+			},
+			
+			"inclusion":{
+				"description": "TODO define this property",
+				"type":"string",
+				"optional":true
+			},
+			
+			"ns":{
+				"description": "TODO define this property",
+				"type":"string",
+				"optional":true
+			},
+			
+			"p":{
+				"description": "TODO define this property",
+				"type":"string",
+				"optional":true
+			},
+			
+			"let":{
+				"description": "TODO define this property",
+				"type":"string",
+				"optional":true
+			},
+			
+			"diagnostics":{
+				"description": "TODO define this property",
+				"type":"string",
+				"optional":true
+			},
+			
+			"sProperties":{
+				"description": "TODO define this property",
+				"type":"string",
+				"optional":true
+			}
+		}			
+}
+
+
+{
+"description" :' {element schema {
+attribute id { xsd:ID }?,
+rich,
+attribute schemaVersion { non-empty-string }?,
+attribute defaultPhase { xsd:IDREF }?,
+attribute queryBinding { non-empty-string }?,
+(foreign
+& inclusion*
+& (title?, ns*, p*, let*, phase*, pattern+, p*, diagnostics?, properties))
+}'}

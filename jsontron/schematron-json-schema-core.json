@@ -1,0 +1,132 @@
+{
+
+"type":"object",
+
+"properties":{
+	
+		"schemaVersion":{
+				"Description":"Gives Schema Version",
+				"type":"string",
+				"minimumLegth":1,
+				"optional":true,
+				"default":"ISO Schematron 19757-3:2016"
+				},
+				
+		"schID":{"$ref":"#/definitions/schID"},
+		
+		"defaultPhase":{
+				"description":"Default Phase of Schema",
+				"$ref":"#/definitions/schID",
+				"optional":true
+				},
+				
+		"queryBinding":{
+				"description":"Query language used",
+				"type":"string",
+				"optional":true,
+				"default":"json-path"
+				},
+		"schLet":{"$ref":"#/definitions/schLet"},
+		"include":{"$ref":"#/definitions/include"},
+		"schTitle":{"$ref":"#/definitions/schtTitle"},
+		
+		"phase":{
+				"description":"set of active patterns",
+				"schID":"#/definitions/schID",
+				"active":["string"]
+				},
+		
+		"pattern":{
+				"type":"object",
+				"properties":{
+					"schID":{"$ref":"#/definitions/schID"},
+					"schTitle":{"$ref":"#/definitions/schtTitle"},
+					"schLet":{"$ref":"#/definitions/schLet"},
+					"documents":{"$ref":"#/definitions/documents"},
+					"rule":{
+						"type":"object",
+						"properties":{
+							"schID":{"$ref":"#/definitions/schID"},
+							"schTitle":{"$ref":"#/definitions/schtTitle"},
+							"schLet":{"$ref":"#/definitions/schLet"},
+							"flag":{"$ref":"#/definitions/flag"},
+							"context":{"$ref":"#/definitions/context"},
+							"assert":{
+								"type":"object",
+								"properties":{
+									"description":"TODO: implement required either assert or report",
+									"schID":{"$ref":"#/definitions/schID"},
+									"test":{"$ref":"#/definitions/test"}
+									}
+								}
+							
+							}
+					}
+					
+				
+				}
+		
+		}
+		
+		
+		},
+		
+"additionalProperties":true,
+
+"definitions":{
+		"schID":{
+			"description":"TODO: Further refine the type",
+			"type":"string",
+			"optional":"true"
+			},
+			
+		"schLet":{
+			"description":"TODO: Further refine the type",
+			"type":"string",
+			"optional":"true"
+			},
+			
+		"include":{
+			"description":"TODO: Further refine the type",
+			"type":"string",
+			"optional":"true"
+			},
+			
+		"schTitle":{
+			"description":"TODO: Further refine the type",
+			"type":"string",
+			"optional":"true"
+			},
+					
+		"flag":{
+			"description":"applies to rule, assert, report",
+			"type":"string",
+			"optional":"true"
+			},
+			
+		"documents":{
+			"description":"this is the context of the pattern, new in 2016",
+			"type":"string",
+			"optional":"true"
+			},
+			
+		"context":{
+			"description":"this is the context of the rule",
+			"type":"string",
+			"optional":"true"
+			},
+			
+		"test":{
+			"description":"this is the context of the rule",
+			"type":"string",
+			"optional":"true"
+			}
+
+		},
+
+"required":["pattern"]
+
+
+
+
+}
