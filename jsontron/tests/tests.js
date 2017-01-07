@@ -1,4 +1,4 @@
-var env,
+ /* var env,
 	ENVIRONMENTS = [
 		"json-schema-draft-01",
 		"json-schema-draft-02"
@@ -48,6 +48,54 @@ test("Acquire Validator", function () {
 });
 }(ENVIRONMENTS[curEnvId]));
 
+
+
+test("Schematron Validation", function () {
+	equal("blah", "blah", "String");
+
+});
+
+*/
+
+// testingfile = require ("../index.js");
+test("Schematron Validation", function () {
+	equal(trueOrfalse(2), 4, "sq of 2 is 4");
+	equal(trueOrfalse(4), 16, "sq of 4 is 16");
+	//ok(trueOrfalse, "This is true or false test");
+
+});
+
+test("Phase Validation", function () {
+	equal(trueOrfalse(2), 4, "sq of 2 is 4");
+	equal(trueOrfalse(4), 16, "sq of 4 is 16");
+	//ok(trueOrfalse, "This is true or false test");
+
+});
+
+test("Pattern Validation", function () {
+	equal(trueOrfalse(2), 4, "sq of 2 is 4");
+	equal(trueOrfalse(4), 16, "sq of 4 is 16");
+	//ok(trueOrfalse, "This is true or false test");
+
+});
+
+test("Rule Validation", function () {
+	equal(trueOrfalse(2), 4, "sq of 2 is 4");
+	equal(trueOrfalse(4), 16, "sq of 4 is 16");
+	//ok(trueOrfalse, "This is true or false test");
+
+});
+
+test("Assert Validation", function () {
+	equal(trueOrfalse(2), 4, "sq of 2 is 4");
+	equal(trueOrfalse(4), 16, "sq of 4 is 16");
+	//ok(trueOrfalse, "This is true or false test");
+
+});
+
+// Below tests were part of Gary Court's JSV Test suite
+
+/*
 test("Primitive Validation", function () {
 	equal(env.validate({}).errors.length, 0, "Object");
 	equal(env.validate([]).errors.length, 0, "Array");
@@ -59,10 +107,7 @@ test("Primitive Validation", function () {
 
 //testing the suite
 
-test("Schematron Validation", function () {
-	equal("blah", "blah", "String");
 
-});
 	
 test("Type Validation", function () {
 	//simple type
@@ -450,10 +495,11 @@ test("Complex Examples", function () {
 	        }
 	    }
 	});
-	
+ 	
 	report = env.validate({ "id" : "some id", "role" : "yunowork?"}, schema);
 	
 	equal(report.errors.length, 0, "example 2");
 });
 
-}
+*/
+//}

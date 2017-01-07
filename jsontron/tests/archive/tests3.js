@@ -1,9 +1,11 @@
 var env,
-	ENVIRONMENTS = [
-		"json-schema-draft-01",
-		"json-schema-draft-02"
+	DRAFTS = [
+		"draft-00",
+		"draft-01",
+		"draft-02",
+		"draft-03"
 	],
-	curEnvId;
+	curDraftId;
 
 //calls ok(true) if no error is thrown
 function okNoError(func, msg) {
@@ -11,7 +13,7 @@ function okNoError(func, msg) {
 		func();
 		ok(true, msg);
 	} catch (e) {
-		ok(false, msg + ': ' + e);
+		ok(false, msg + ': ' + JSON.stringify(e));
 	}
 }
 
@@ -21,7 +23,7 @@ function okError(func, msg) {
 		func();
 		ok(false, msg);
 	} catch (e) {
-		ok(true, msg + ': ' + e);
+		ok(true, msg + ': ' + JSON.stringify(e));
 	}
 }
 
@@ -31,9 +33,9 @@ function okError(func, msg) {
 //
 //
 
-for (curEnvId = 0; curEnvId < ENVIRONMENTS.length; ++curEnvId) {
+for (curDraftId = 0; curDraftId < DRAFTS.length; ++curDraftId) {
 
-module(ENVIRONMENTS[curEnvId]);
+module(DRAFTS[curDraftId]);
 
 (function (id) {
 test("Acquire Validator", function () {
@@ -42,11 +44,17 @@ test("Acquire Validator", function () {
 	
 	ok(JSV, "JSV is loaded");
 	
-	env = JSV.createEnvironment(id);
+	env = JSV.createEnvironment("json-schema-draft-03");
 	
-	ok(env, id + " environment created");
+	env.setOption("defaultSchemaURI", "http://json-schema.org/" + id + "/hyper-schema#");
+	env.setOption("latestJSONSchemaSchemaURI", "http://json-schema.org/" + id + "/schema#");
+	env.setOption("latestJSONSchemaHyperSchemaURI", "http://json-schema.org/" + id + "/hyper-schema#");
+	env.setOption("latestJSONSchemaLinksURI", "http://json-schema.org/" + id + "/links#");
+	
+	ok(env, "Environment created");
+	
 });
-}(ENVIRONMENTS[curEnvId]));
+}(DRAFTS[curDraftId]));
 
 test("Primitive Validation", function () {
 	equal(env.validate({}).errors.length, 0, "Object");
@@ -55,13 +63,6 @@ test("Primitive Validation", function () {
 	equal(env.validate(00).errors.length, 0, "Number");
 	equal(env.validate(false).errors.length, 0, "Boolean");
 	equal(env.validate(null).errors.length, 0, "Null");
-});
-
-//testing the suite
-
-test("Schematron Validation", function () {
-	equal("blah", "blah", "String");
-
 });
 	
 test("Type Validation", function () {
@@ -98,26 +99,23 @@ test("Properties Validation", function () {
 	equal(env.validate({ a : 1 }, { type : 'object', properties : { a : {}} }).errors.length, 0);
 	equal(env.validate({ a : 1 }, { type : 'object', properties : { a : { type : 'number' }} }).errors.length, 0);
 	equal(env.validate({ a : { b : 'two' } }, { type : 'object', properties : { a : { type : 'object', properties : { b : { type : 'string' } } }} }).errors.length, 0);
+	
+	notEqual(env.validate({ a : 1 }, { type : 'object', properties : { a : { type : 'string' }} }).errors.length, 0);
+	notEqual(env.validate({ a : { b : 'two' } }, { type : 'object', properties : { a : { type : 'object', properties : { b : { type : 'number' } } }} }).errors.length, 0);
 });
 
-test("Items Validation", function () {
-	equal(env.validate([], { type : 'array', items : { type : 'string' } }).errors.length, 0);
-	equal(env.validate(['foo'], { type : 'array', items : { type : 'string' } }).errors.length, 0);
-	equal(env.validate(['foo', 2], { type : 'array', items : [{ type : 'string' }, { type : 'number' }] }).errors.length, 0);
-	
-	notEqual(env.validate([1], { type : 'array', items : { type : 'string' } }).errors.length, 0);
-	notEqual(env.validate(['foo', 'two'], { type : 'array', items : [{ type : 'string' }, { type : 'number' }] }).errors.length, 0);
+if (curDraftId > 2) {
+test("PatternProperties Validation", function () {
+	equal(env.validate(null, { patternProperties : {} }).errors.length, 0);
+	equal(env.validate({}, { patternProperties : {} }).errors.length, 0);
+	equal(env.validate({ a : 1 }, { patternProperties : { '[a-z]' : {}} }).errors.length, 0);
+	equal(env.validate({ a : 1, b : 2, cc : '3' }, { patternProperties : { '^[a-z]$' : { type : 'number' }} }).errors.length, 0);
+	equal(env.validate({ a : { b : 'two' } }, { patternProperties : { '[a-z]' : { patternProperties : { '[a-z]' : { type : 'string' } } }} }).errors.length, 0);
+		
+	notEqual(env.validate({ a : 1, b : 2, c : '3' }, { patternProperties : { '^[a-z]$' : { type : 'number' }} }).errors.length, 0);
+	notEqual(env.validate({ a : { b : 'two' } }, { patternProperties : { '[a-z]' : { patternProperties : { '[a-z]' : { type : 'number' } } }} }).errors.length, 0);
 });
-
-test("Optional Validation", function () {
-	equal(env.validate({}, { properties : { a : { optional : true } } }).errors.length, 0);
-	equal(env.validate({ a : false }, { properties : { a : { optional : true } } }).errors.length, 0);
-	equal(env.validate({ a : false }, { properties : { a : { optional : false } } }).errors.length, 0);
-	
-	notEqual(env.validate({}, { properties : { a : { optional : false } } }).errors.length, 0);
-	notEqual(env.validate({ b : true }, { properties : { a : { optional : false } } }).errors.length, 0);
-	notEqual(env.validate({ b : true }, { properties : { a : {} } }).errors.length, 0);
-});
+}
 
 test("AdditionalProperties Validation", function () {
 	//object tests
@@ -143,9 +141,66 @@ test("AdditionalProperties Validation", function () {
 	equal(env.validate(['1', '2', 3], { items : [ { type : 'string' }, { type : 'string' } ], additionalProperties : { type : 'number' } }).errors.length, 0);
 	equal(env.validate(['1', '2', '3'], { items : [ { type : 'string' }, { type : 'string' }, { type : 'string' } ], additionalProperties : { type : 'number' } }).errors.length, 0);
 	
+	if (curDraftId < 3) {
 	notEqual(env.validate(['1', '2', '3'], { items : [ { type : 'string' }, { type : 'string' } ], additionalProperties : false }).errors.length, 0);
 	notEqual(env.validate(['1', '2', '3'], { items : [ { type : 'string' }, { type : 'string' } ], additionalProperties : { type : 'number' } }).errors.length, 0);
+	}
 });
+
+test("Items Validation", function () {
+	equal(env.validate([], { type : 'array', items : { type : 'string' } }).errors.length, 0);
+	equal(env.validate(['foo'], { type : 'array', items : { type : 'string' } }).errors.length, 0);
+	equal(env.validate(['foo', 2], { type : 'array', items : [{ type : 'string' }, { type : 'number' }] }).errors.length, 0);
+	
+	notEqual(env.validate([1], { type : 'array', items : { type : 'string' } }).errors.length, 0);
+	notEqual(env.validate(['foo', 'two'], { type : 'array', items : [{ type : 'string' }, { type : 'number' }] }).errors.length, 0);
+});
+
+if (curDraftId > 2) {
+test("AdditionalItems Validation", function () {
+	//array tests
+	equal(env.validate([1, 2, 3], {}).errors.length, 0);
+	equal(env.validate([1, 2, 3], { additionalItems : true }).errors.length, 0);
+	equal(env.validate([1, 2, 3], { additionalItems : { type : 'number' } }).errors.length, 0);
+	equal(env.validate(['1', '2'], { items : { type : 'string' }, additionalItems : false }).errors.length, 0);
+	equal(env.validate(['1', '2'], { items : [ { type : 'string' }, { type : 'string' } ], additionalItems : false }).errors.length, 0);
+	equal(env.validate(['1', '2', 3], { items : [ { type : 'string' }, { type : 'string' } ], additionalItems : { type : 'number' } }).errors.length, 0);
+	equal(env.validate(['1', '2', '3'], { items : [ { type : 'string' }, { type : 'string' }, { type : 'string' } ], additionalItems : { type : 'number' } }).errors.length, 0);
+	
+	notEqual(env.validate([1, 2, 3], { additionalItems : false }).errors.length, 0);
+	notEqual(env.validate([1, 2, 3], { additionalItems : { type : 'string' } }).errors.length, 0);
+	notEqual(env.validate(['1', '2', '3'], { items : [ { type : 'string' }, { type : 'string' } ], additionalItems : false }).errors.length, 0);
+	notEqual(env.validate(['1', '2', '3'], { items : [ { type : 'string' }, { type : 'string' } ], additionalItems : { type : 'number' } }).errors.length, 0);
+});
+}
+
+(function (curDraftId) {
+test("Optional Validation", function () {
+	equal(env.validate({}, { properties : { a : { optional : true } } }).errors.length, 0);
+	equal(env.validate({ a : false }, { properties : { a : { optional : true } } }).errors.length, 0);
+	equal(env.validate({ a : false }, { properties : { a : { optional : false } } }).errors.length, 0);
+	
+	notEqual(env.validate({}, { properties : { a : { optional : false } } }).errors.length, 0);
+	notEqual(env.validate({ b : true }, { properties : { a : { optional : false } } }).errors.length, 0);
+	if (curDraftId < 3) {
+	notEqual(env.validate({ b : true }, { properties : { a : {} } }).errors.length, 0);
+	} else {
+	equal(env.validate({ b : true }, { properties : { a : {} } }).errors.length, 0);
+	}
+});
+}(curDraftId));
+
+if (curDraftId > 2) {
+test("Required Validation", function () {
+	equal(env.validate({ b : true }, { properties : { a : {} } }).errors.length, 0);
+	equal(env.validate({}, { properties : { a : { required : false } } }).errors.length, 0);
+	equal(env.validate({ a : false }, { properties : { a : { required : false } } }).errors.length, 0);
+	equal(env.validate({ a : false }, { properties : { a : { required : true } } }).errors.length, 0);
+	
+	notEqual(env.validate({}, { properties : { a : { required : true } } }).errors.length, 0);
+	notEqual(env.validate({ b : true }, { properties : { a : { required : true } } }).errors.length, 0);
+});
+}
 
 test("Requires Validation", function () {
 	equal(env.validate({ a : 1 }, { properties : { a : { requires : 'a' } } }).errors.length, 0);
@@ -157,6 +212,21 @@ test("Requires Validation", function () {
 	notEqual(env.validate({ a : 1, b : 2 }, { properties : { a : { requires : 'b' }, b : { requires : 'c' } } }).errors.length, 0);
 	notEqual(env.validate({ b : 2 }, { properties : { b : { requires : { properties : { b : { type : 'string' } } } } } }).errors.length, 0);
 });
+
+if (curDraftId > 2) {
+test("Dependencies Validation", function () {
+	equal(env.validate(null, { dependencies : {} }).errors.length, 0);
+	equal(env.validate({ a : 1, b : 2 }, { dependencies : {} }).errors.length, 0);
+	equal(env.validate({ a : 1, b : 2 }, { dependencies : { a : 'b' } }).errors.length, 0);
+	equal(env.validate({ a : 1, b : 2 }, { dependencies : { c : 'd' } }).errors.length, 0);
+	equal(env.validate({ a : 1, b : 2, c : 3 }, { dependencies : { a : ['b'], b : ['a', 'c'] } }).errors.length, 0);
+	equal(env.validate({ a : 1, b : 2 }, { dependencies : { a : { properties : { b : { type : 'number', required : true } } } } }).errors.length, 0);
+	
+	notEqual(env.validate({ a : 1, b : 2 }, { dependencies : { a : 'c' } }).errors.length, 0);
+	notEqual(env.validate({ a : 1, b : 2, c : 3 }, { dependencies : { a : ['b'], b : ['a', 'd'] } }).errors.length, 0);
+	notEqual(env.validate({ a : 1, b : 2 }, { dependencies : { a : { properties : { b : { type : 'string', required : true } } } } }).errors.length, 0);
+});
+}
 
 test("Minimum/Maximum Validation", function () {
 	equal(env.validate(0, {}).errors.length, 0);
@@ -193,6 +263,32 @@ test("MinimumCanEqual/MaximumCanEqual Validation", function () {
 	notEqual(env.validate(11, { minimum : 1, maximum : 10, minimumCanEqual : false, maximumCanEqual : false  }).errors.length, 0);
 });
 
+if (curDraftId > 2) {
+test("ExclusiveMinimum/ExclusiveMaximum Validation", function () {
+	//true
+	notEqual(env.validate(0, { exclusiveMinimum : false, exclusiveMaximum : false }).errors.length, 0);  //illegal
+	equal(env.validate(1, { minimum : 1, maximum : 10, exclusiveMinimum : false, exclusiveMaximum : false }).errors.length, 0);
+	equal(env.validate(5, { minimum : 1, maximum : 10, exclusiveMinimum : false, exclusiveMaximum : false  }).errors.length, 0);
+	equal(env.validate(10, { minimum : 1, maximum : 10, exclusiveMinimum : false, exclusiveMaximum : false  }).errors.length, 0);
+	equal(env.validate(1, { minimum : 1, maximum : 1, exclusiveMinimum : false, exclusiveMaximum : false  }).errors.length, 0);
+	
+	notEqual(env.validate(0, { minimum : 1, maximum : 10, exclusiveMinimum : false, exclusiveMaximum : false  }).errors.length, 0);
+	notEqual(env.validate(11, { minimum : 1, maximum : 10, exclusiveMinimum : false, exclusiveMaximum : false  }).errors.length, 0);
+	
+	//false
+	notEqual(env.validate(0, { exclusiveMinimum : true, exclusiveMaximum : true }).errors.length, 0);  //illegal
+	equal(env.validate(1.0001, { minimum : 1, maximum : 10, exclusiveMinimum : true, exclusiveMaximum : true  }).errors.length, 0);
+	equal(env.validate(5, { minimum : 1, maximum : 10, exclusiveMinimum : true, exclusiveMaximum : true  }).errors.length, 0);
+	equal(env.validate(9.9999, { minimum : 1, maximum : 10, exclusiveMinimum : true, exclusiveMaximum : true  }).errors.length, 0);
+	
+	notEqual(env.validate(1, { minimum : 1, maximum : 10, exclusiveMinimum : true, exclusiveMaximum : true }).errors.length, 0);
+	notEqual(env.validate(10, { minimum : 1, maximum : 10, exclusiveMinimum : true, exclusiveMaximum : true  }).errors.length, 0);
+	notEqual(env.validate(1, { minimum : 1, maximum : 1, exclusiveMinimum : true, exclusiveMaximum : true  }).errors.length, 0);
+	notEqual(env.validate(0, { minimum : 1, maximum : 10, exclusiveMinimum : true, exclusiveMaximum : true  }).errors.length, 0);
+	notEqual(env.validate(11, { minimum : 1, maximum : 10, exclusiveMinimum : true, exclusiveMaximum : true  }).errors.length, 0);
+});
+}
+
 test("MinItems/MaxItems Validation", function () {
 	equal(env.validate([], {}).errors.length, 0);
 	equal(env.validate([1], { minItems : 1, maxItems : 1 }).errors.length, 0);
@@ -205,7 +301,7 @@ test("MinItems/MaxItems Validation", function () {
 	notEqual(env.validate([1, 2, 3, 4], { minItems : 1, maxItems : 3 }).errors.length, 0);
 });
 
-if (curEnvId >= 1) {
+if (curDraftId > 1) {
 test("UniqueItems Validation", function () {
 	equal(env.validate([], {}).errors.length, 0);
 	equal(env.validate([], { uniqueItems : true }).errors.length, 0);
@@ -250,19 +346,18 @@ test("Enum Validation", function () {
 	equal(env.validate(true, { 'enum' : [false, true] }).errors.length, 0);
 	equal(env.validate(2, { 'enum' : [1, 2, 3] }).errors.length, 0);
 	equal(env.validate('a', { 'enum' : ['a'] }).errors.length, 0);
-	equal(env.validate({}, { 'properties' : { 'a' : { 'enum' : ['a'], 'optional' : true } } }).errors.length, 0);
+	equal(env.validate({}, { 'properties' : { 'a' : { 'enum' : ['a'], 'optional' : true, 'required' : false } } }).errors.length, 0);
 	
 	notEqual(env.validate(true, { 'enum' : ['false', 'true'] }).errors.length, 0);
 	notEqual(env.validate(4, { 'enum' : [1, 2, 3, '4'] }).errors.length, 0);
 	notEqual(env.validate('', { 'enum' : [] }).errors.length, 0);
-	notEqual(env.validate({}, { 'properties' : { 'a' : { 'enum' : ['a'] } } }).errors.length, 0);
+	notEqual(env.validate({}, { 'properties' : { 'a' : { 'enum' : ['a'], 'optional' : false, 'required' : true } } }).errors.length, 0);
 });
 
 test("Format Validation", function () {
 	//TODO
 });
 
-if (curEnvId === 0) {
 test("MaxDecimal Validation", function () {
 	equal(env.validate(0, {}).errors.length, 0);
 	equal(env.validate(0, { maxDecimal : 0 }).errors.length, 0);
@@ -273,9 +368,8 @@ test("MaxDecimal Validation", function () {
 	notEqual(env.validate(0.1, { maxDecimal : 0 }).errors.length, 0);
 	notEqual(env.validate(0.111, { maxDecimal : 1 }).errors.length, 0);
 });
-}
 
-if (curEnvId >= 1) {
+if (curDraftId > 1) {
 test("DivisibleBy Validation", function () {
 	equal(env.validate(0, {}).errors.length, 0);
 	equal(env.validate(0, { divisibleBy : 1 }).errors.length, 0);
@@ -284,6 +378,7 @@ test("DivisibleBy Validation", function () {
 	equal(env.validate(0, { divisibleBy : 2.5 }).errors.length, 0);
 	equal(env.validate(5, { divisibleBy : 2.5 }).errors.length, 0);
 	equal(env.validate(7.5, { divisibleBy : 2.5 }).errors.length, 0);
+	equal(env.validate(9.1, { divisibleBy : 1.3 }).errors.length, 0);
 	
 	notEqual(env.validate(0, { divisibleBy : 0 }).errors.length, 0);
 	notEqual(env.validate(7, { divisibleBy : 5 }).errors.length, 0);
@@ -323,9 +418,9 @@ test("Extends Validation", function () {
 });
 
 test("JSON Schema Validation", function () {
-	var schema = env.findSchema("http://json-schema.org/schema");
-	var hyperSchema = env.findSchema("http://json-schema.org/hyper-schema");
-	var links = env.findSchema("http://json-schema.org/links");
+	var schema = env.findSchema(env.getOption("latestJSONSchemaSchemaURI"));
+	var hyperSchema = env.findSchema(env.getOption("latestJSONSchemaHyperSchemaURI"));
+	var links = env.findSchema(env.getOption("latestJSONSchemaLinksURI"));
 	
 	equal(schema.validate(schema).errors.length, 0, "schema.validate(schema)");
 	equal(hyperSchema.validate(schema).errors.length, 0, "hyperSchema.validate(schema)");
@@ -333,27 +428,40 @@ test("JSON Schema Validation", function () {
 	equal(hyperSchema.validate(links).errors.length, 0, "hyperSchema.validate(links)");
 });
 
+(function(curDraftId){
 test("Links Validation", function () {
-	var schema;
+	var schema, instance;
 	//full
 	equal(env.validate({ 'a' : {} }, { 'type' : 'object', 'additionalProperties' : { '$ref' : '#' } }).errors.length, 0);
 	notEqual(env.validate({ 'a' : 1 }, { 'type' : 'object', 'additionalProperties' : { '$ref' : '#' } }).errors.length, 0);
 	
 	//describedby
-	schema = env.createSchema({ "id" : "http://test.example.com/3", "properties" : { "test" : { "type" : "object" } }, "extends" : { "$ref" : "http://json-schema.org/hyper-schema" } }, null, "http://test.example.com/3");
-	equal(env.validate({}, { "$schema" : "http://test.example.com/3", "test" : {} }).errors.length, 0);
-	notEqual(env.validate({}, { "$schema" : "http://test.example.com/3", "test" : 0 }).errors.length, 0);
+	okNoError(function () {
+		schema = env.createSchema({ "id" : "http://test.example.com/3", "properties" : { "test" : { "type" : "object" } }, "extends" : { "$ref" : "http://json-schema.org/draft-03/schema#" } }, null, "http://test.example.com/3");
+		equal(env.validate({}, { "$schema" : "http://test.example.com/3", "test" : {} }).errors.length, 0);
+		notEqual(env.validate({}, { "$schema" : "http://test.example.com/3", "test" : 0 }).errors.length, 0);
+	}, "describedby schema");
 	
 	//self
-	schema = env.createSchema({ "properties" : { "two" : { "id" : "http://test.example.com/2", "type" : "object" } } }, null, "http://not.example.com/2");
-	equal(env.validate({}, { "$ref" : "http://test.example.com/2" }).errors.length, 0);
-	notEqual(env.validate(null, { "$ref" : "http://test.example.com/2" }).errors.length, 0);
+	okNoError(function () {
+		schema = env.createSchema({ "properties" : { "two" : { "id" : "http://test.example.com/2", "type" : "object" } } }, null, "http://not.example.com/2");
+		equal(env.validate({}, { "$ref" : "http://test.example.com/2" }).errors.length, 0);
+		notEqual(env.validate(null, { "$ref" : "http://test.example.com/2" }).errors.length, 0);
+	}, "self schema");
 	
 	//links api
-	schema = env.createSchema({ "links" : [ { "rel" : "bar", "href" : "http:{-this}#" } ] });
-	instance = env.createInstance("foo");
-	equal(schema.getLink("bar", instance), "http:foo#", "'bar' link and self reference");
+	okNoError(function () {
+		schema = env.createSchema({ "links" : [ { "rel" : "bar", "href" : "http:" + (curDraftId < 3 ? "{-this}" : "{@}") + "#" } ] });
+		instance = env.createInstance("foo");
+		equal(schema.getLink("bar", instance), "http:foo#", "'bar' link and self reference");
+	}, "links api schema");
+	
+	//invalid reference
+	(env.getOption("enforceReferences") ? okError : okNoError)(function () {
+		schema = env.createSchema({ "$ref" : "asdf:qwerty" });  //should throw error
+	}, "invalid reference");
 });
+}(curDraftId));
 
 test("PathStart Validation", function () {
 	var instance = env.createInstance({}, "http://test.example.com/4"),
@@ -368,7 +476,7 @@ test("PathStart Validation", function () {
 
 test("Register Schemas", function () {
 	var schema = env.createSchema({'type' : 'string'}, null, 'http://test.example.com/1');
-	equal(env.findSchema('http://json-schema.org/hyper-schema').validate(schema).errors.length, 0);
+	equal(env.findSchema(env.getOption("latestJSONSchemaHyperSchemaURI")).validate(schema).errors.length, 0);
 	equal(env.validate('', { '$ref' : 'http://test.example.com/1' }).errors.length, 0);
 	notEqual(env.validate({}, { '$ref' : 'http://test.example.com/1' }).errors.length, 0);
 });

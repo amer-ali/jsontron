@@ -17,7 +17,9 @@
 	console.log(report);
 	console.log("step done with Example1 !");
 	
-	trueOrfalse = function(){return true;};
+	function trueOrfalse(number){
+		
+		return number *number ;};
 	
 	report = env.validate({ a : 1 }, { type : 'object', properties : { a : { type : 'string' }} });
 	console.log(report);
