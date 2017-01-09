@@ -1,0 +1,130 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "loan_data": {
+      "type": "object",
+      "properties": {
+        "loans": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "loan_id": {
+                "type": "string",
+                "minLength":7,
+                "maxLength":8
+              },
+              "loan_type": {
+                "type": "string",
+                "enum": ["FHA", "Traditional", "Jumbo", "Commercial"]
+                
+              },
+              "customer_id": {
+                "type": "string"
+              },
+              "data_time": {
+                "type": "string"
+              },
+              "amount": {
+                "type": "number",
+                "multipleOf": 1,
+                "minimum": 100000,
+                "exclusiveMinimum": false
+              },
+              "interest_rate": {
+                "type": "number",
+                "default":3.5
+              },
+              "prime_rate": {
+                "type": "number"
+              },
+              "mip_rate": {
+                "type": "number",
+                "maximum": 1.75,
+                "minimum": 0.85,
+                "exclusiveMaximum": false,
+                "exclusiveMinimum": false
+                
+              },
+              "down_payment": {
+                "type": "integer",
+                "minimum":3.5,
+                "default":3.5
+              },
+              "loan_restricted": {
+                "type": "boolean",
+                "default":false
+              },
+              "escrow": {
+                "type": "boolean"
+              },
+              "origination_id": {
+                "type": "string",
+                "enum":["branch","web","phone","thirdparty"]
+              },
+              "branch_id": {
+                "type": "string"
+              },
+              "electronic": {
+                "type": "boolean"
+              },
+              "email": {
+                "type": "string",
+                "format":"email"
+              },
+              "customer": {
+                "type": "object",
+                "properties": {
+                  "customer_id": {
+                    "type": "string"
+                  },
+                  "customer_fname": {
+                    "type": "string"
+                  },
+                  "customer_lname": {
+                    "type": "string"
+                  },
+                  "customer_address": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "customer_id",
+                  "customer_fname",
+                  "customer_lname",
+                  "customer_address"
+                ]
+              }
+            },
+            "required": [
+              "loan_id",
+              "loan_type",
+              "customer_id",
+              "data_time",
+              "amount",
+              "interest_rate",
+              "prime_rate",
+              "mip_rate",
+              "down_payment",
+              "escrow",
+              "origination_id",
+              "electronic",
+              "customer"
+            ],
+             "dependencies": {
+    "credit_card": ["billing_address"],
+    "billing_address": ["credit_card"]
+  }
+          }
+        }
+      },
+      "required": [
+        "loans"
+      ]
+    }
+  },
+  "required": [
+    "loan_data"
+  ]
+}
