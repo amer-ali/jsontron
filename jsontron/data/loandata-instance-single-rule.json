@@ -1,0 +1,17 @@
+          {          
+              	"id":"rule1",
+              	"abstract":false,
+                "context": "$.loan_data.loans[0].loan_id",
+                "assert":[
+                  {
+                     "id":"assert id 1",
+                     "test": "loanid > 1 && loanid < 2234567",
+                     "message": "Assert 1: Loan ID cannot be less than 1 or greater than 2234567"
+                  },
+                  {
+                     "id":"assert id 2",
+                     "test": "loanid < 1 && loanid > 2234567",
+                     "message": "Assert 2: Loan ID cannot be less than 1 or greater than 223456"
+                  }  
+                ]              
+          }
