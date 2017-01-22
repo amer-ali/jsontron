@@ -19,6 +19,7 @@ var schInstance = require("../data/loandata-instance-simple.json");
 var myRule = require("../data/loandata-instance-single-rule.json");
 var myPattern = require("../data/loandata-instance-single-pattern.json");
 var myPatterns = require("../data/loandata-instance-single-schemaWithPatterns.json");
+var mySchema = require("../data/loandata-instance-single-schemaWithPatternsNPhases.json");
 
 console.log(schInstance);
 console.log(myRule);
@@ -176,4 +177,25 @@ var validatePatterns = function(psInstance, psSchema){
 	
 }
 
-validatePatterns(schInstance, myPatterns);
+//validatePatterns(schInstance, myPatterns);
+
+console.log("Parsing the phase.....");
+var parsePhases = function(phSchema){
+	
+	var activePatterns = [];
+	var myPhases = [];
+	myPhases = phSchema.schema.phase;
+	myPhases.forEach(function(element){
+		
+		activePatterns = activePatterns.concat(element.active);
+		
+	})
+	
+	console.log(activePatterns);
+	
+	
+	
+}
+
+parsePhases(mySchema);
+

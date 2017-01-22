@@ -1,5 +1,18 @@
 {
 "schema":{
+
+
+	  "phase":[
+    	{
+    		"id":"phase id 1",
+    		"active":["pattern1","pattern2","pattern3"]
+    	},
+    	
+    	{
+    		"id":"phase id 2",
+    		"active":["pattern1","pattern2","pattern3"]
+    	}
+    ],
     
 	"pattern":[
       {

@@ -9,7 +9,7 @@
   
     "phase":[
     	{
-    		"id":"phase id",
+    		"id":"phase id 1",
     		"active":["pattern1","pattern2","pattern3"]
     	},
     	
