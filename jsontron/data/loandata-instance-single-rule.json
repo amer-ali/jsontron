@@ -1,17 +1,17 @@
           {          
               	"id":"rule1",
               	"abstract":false,
-                "context": "$.loan_data.loans[0].loan_id",
+                "context": "$.loan_data.loans",
                 "assert":[
                   {
                      "id":"assert id 1",
-                     "test": "loanid > 1 && loanid < 2234567",
-                     "message": "Assert 1: Loan ID cannot be less than 1 or greater than 2234567"
+                     "test": "jp.query(context,'$[0][0].loan_id') > 1 && jp.query(context,'$[0][0].loan_id') < 2234567",
+                     "message": "Assert 1: Loan ID cannot be less than 1 or greater than 2234567 ok"
                   },
                   {
                      "id":"assert id 2",
-                     "test": "loanid < 1 && loanid > 2234567",
-                     "message": "Assert 2: Loan ID cannot be less than 1 or greater than 223456"
+                     "test": "jp.query(context,'$[0][0].customer.customer_fname') == 'John'  && jp.query(context,'$[0][0].customer.customer_lname') == 'Doe'",
+                     "message": "Assert 2: Customer Name is not correct "
                   }  
                 ]              
           }

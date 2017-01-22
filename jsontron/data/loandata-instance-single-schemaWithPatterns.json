@@ -1,0 +1,93 @@
+{
+"schema":{
+	
+	"pattern":[
+      {
+      	"id":"pattern id 1",
+      	"title":"pattern title",
+      	"documents":"pathValue",
+      	"abstract":false,
+      	"rule":[
+          {          
+              	"id":"rule1",
+              	"abstract":false,
+                "context": "$.loan_data.loans",
+                "assert":[
+                  {
+                     "id":"assertid1",
+                     "test": "jp.query(context,'$[0][0].loan_id') > 1 && jp.query(context,'$[0][0].loan_id') < 2234567",
+                     "message": "Assert 1: Loan ID cannot be less than 1 or greater than 2234567 ok"
+                  },
+                  {
+                     "id":"assert id 2",
+                     "test": "jp.query(context,'$[0][0].customer.customer_fname') == 'Joh'  && jp.query(context,'$[0][0].customer.customer_lname') == 'Doe'",
+                     "message": "Assert 2: Customer Name is not correct "
+                  }  
+                ]              
+          },
+          {          
+              	"id":"rule2",
+              	"abstract":false,
+                "context": "$.loan_data.loans",
+                "assert":[
+                  {
+                     "id":"assert id 3",
+                     "test": "jp.query(context,'$[0][0].loan_id') > 1 && jp.query(context,'$[0][0].loan_id') < 2234567",
+                     "message": "Assert 3: Loan ID cannot be less than 1 or greater than 2234567 ok"
+                  },
+                  {
+                     "id":"assert id 4",
+                     "test": "jp.query(context,'$[0][0].customer.customer_fname') == 'John'  && jp.query(context,'$[0][0].customer.customer_lname') == 'Do'",
+                     "message": "Assert 4: Customer Name is not correct "
+                  }  
+                ]              
+          }   
+          
+          ]
+         },
+               {
+      	"id":"pattern id 2",
+      	"title":"pattern title",
+      	"documents":"pathValue",
+      	"abstract":false,
+      	"rule":[
+          {          
+              	"id":"rule3",
+              	"abstract":false,
+                "context": "$.loan_data.loans",
+                "assert":[
+                  {
+                     "id":"assertid5",
+                     "test": "jp.query(context,'$[0][0].loan_id') > 1 && jp.query(context,'$[0][0].loan_id') < 2234567",
+                     "message": "Assert 5: Loan ID cannot be less than 1 or greater than 2234567 ok"
+                  },
+                  {
+                     "id":"assert id 6",
+                     "test": "jp.query(context,'$[0][0].customer.customer_fname') == 'Joh'  && jp.query(context,'$[0][0].customer.customer_lname') == 'Doe'",
+                     "message": "Assert 6: Customer Name is not correct "
+                  }  
+                ]              
+          },
+          {          
+              	"id":"rule4",
+              	"abstract":false,
+                "context": "$.loan_data.loans",
+                "assert":[
+                  {
+                     "id":"assert id 7",
+                     "test": "jp.query(context,'$[0][0].loan_id') > 1 && jp.query(context,'$[0][0].loan_id') < 2234567",
+                     "message": "Assert 7: Loan ID cannot be less than 1 or greater than 2234567 ok"
+                  },
+                  {
+                     "id":"assert id 8",
+                     "test": "jp.query(context,'$[0][0].customer.customer_fname') == 'John'  && jp.query(context,'$[0][0].customer.customer_lname') == 'Do'",
+                     "message": "Assert 8: Customer Name is not correct "
+                  }  
+                ]              
+          }   
+          
+          ]
+         }
+         ]
+         }
+        }

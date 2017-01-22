@@ -18,7 +18,7 @@
 				"electronic":true,
 				"email":"john.doe@gmail.com",
 				"customer":{
-					"customer_id":"JD68945",
+					"customer_id":"68945",
 					"customer_fname":"John",
 					"customer_lname":"Doe",
 					"customer_address":" 4 Way Loop, New York, NY 10038"
