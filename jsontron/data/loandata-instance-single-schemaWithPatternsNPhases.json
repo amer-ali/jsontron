@@ -1,22 +1,27 @@
 {
 "schema":{
 
-
-	  "phase":[
+  	"id":"this is schema id",
+  	"title":"Schematron Title",
+  	"schemaVersion":"ISO Schematron 2016",
+  	"queryBinding":"jsonpath",
+  	"defaultPhase":"phaseid2",
+  	
+	 "phase":[
     	{
-    		"id":"phase id 1",
+    		"id":"phaseid1",
     		"active":["pattern1","pattern2","pattern3"]
     	},
     	
     	{
-    		"id":"phase id 2",
-    		"active":["pattern1","pattern2","pattern3"]
+    		"id":"phaseid2",
+    		"active":["pattern21","pattern22","pattern23"]
     	}
     ],
     
 	"pattern":[
       {
-      	"id":"pattern id 1",
+      	"id":"patternid1",
       	"title":"pattern title",
       	"documents":"pathValue",
       	"abstract":false,
@@ -59,7 +64,7 @@
           ]
          },
                {
-      	"id":"pattern id 2",
+      	"id":"patternid2",
       	"title":"pattern title",
       	"documents":"pathValue",
       	"abstract":false,

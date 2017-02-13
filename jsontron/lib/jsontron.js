@@ -39,6 +39,46 @@ console.log("LoanID2: "+ loanid2);
 console.log(loanid.length);
 //console.log(pattern2);
 
+/**
+ * Report function will contain an arry of errors
+ * @method addError will be called to add new erros
+ * 
+ * 
+ */
+var Report = function(){
+	
+	this.errors = [];
+	this.warnings = [];
+	
+	
+}
+
+Report.prototype.addError = function(instance, schema, attr,msg,detail){
+	
+	this.errors.push({
+		schInstance : instance,
+		schema : schema,
+		attribute: attr,
+		message : msg,
+		detail : detail
+	});
+	
+}
+
+Report.prototype.addWarning = function(instance, schema, attr,msg,detail){
+	
+	this.warnings.push({
+		schInstance : instance,
+		schema : schema,
+		attribute: attr,
+		message : msg,
+		detail : detail
+	});
+	
+}
+
+myReport = new Report(); // Report Array will hold all the errors during the processing
+
 
 var myAssert = {
         "id":"assert id 1",
@@ -149,7 +189,7 @@ var  validatePattern = function(pInstance, pattern){
 }
 
 //validatePattern(schInstance, myPattern);
-
+/**
 var parsePatterns = function(psSchema){
 	
 	var patterns = [];
@@ -158,13 +198,95 @@ var parsePatterns = function(psSchema){
 	return patterns;
 	
 }
+*/
+
+/**
+ * Parse patterns from a list of pattern ids or all patterns if no list is given
+ * @param {Schematron Schema} This is the Schematron Rules Schema file
+ * @param [Pattern ID Array] This optional parameter takes an array of pattern ids that will be parsed
+ * @return [ Patterns Array] Returns an array of pattern objects based on list of ids provided or all patterns in the schema if list is not provided or invalid list is provided
+ * @ISO:Pattern The Schematron schema should contain at least one pattern
+ */
+
+var parsePatterns = function(psSchema, patternsList){
+	//TODO: don't process the duplicate patterns, currently if the patternsList has duplicate patterns, it will process it twice
+	
+	let patterns = []; // Array to hold the parsed patterns
+	let tempPatterns = [];
+	try{
+	tempPatterns = psSchema.schema.pattern; // get all the patterns in the schema, then the list will be filtered based on the ids provided
+	
+	//console.log(patternsList.length);
+	//console.log(tempPatterns);
+	// @ISO:PATTERN the schema should have atleast 1 pattern defined
+	if(!tempPatterns || !Array.isArray(tempPatterns) || tempPatterns.length < 1){ // if no pattern found
+		
+		console.log("Invalid Schema : Need atleast 1 Pattern...");
+		console.log(typeof tempPatterns);
+		myReport.addError(this, psSchema, "Pattern", "No Pattern found", "The Schematron rules/schema file should contain atleast 1 pattern");
+		return; //FIXME: use proper return clause
+		
+	}
+	
+	//if patterns list undefine, not an array, empty or contains empty string, all patterns are returned
+	else if(!patternsList||!Array.isArray(patternsList) || patternsList.length < 1 || patternsList[0]==''){
+	
+		myReport.addWarning(this, psSchema, "Pattern", "Invalid pattern list", "Since no valid list is provided - All patterns will be processed");
+		patterns = tempPatterns;
+	}
+		
+	else{
+		try{
+		let processedPatterns = []; //keep track of valid patterns in the requested list
+		console.log("Patterns Requested: "+patternsList);
+		tempPatterns.forEach(function(oElement){
+		
+			patternsList.forEach(function(iElement){
+				try{
+				if(iElement == oElement.id){
+					patterns.push(oElement);
+					processedPatterns.push(iElement);
+					console.log("Parsing Pattern: " + oElement.id);
+			}
+				}
+				catch(e){
+					myReport.addError(this, psSchema, "Pattern", "Parsing Error: "+ e.message, e.stack);
+				}
+			
+		})
+	
+	})
+	console.log(patternsList.length + " Pattern(s) Requested. \n"+patterns.length + " Pattern(s) Processed. \n"+ (patternsList.length - patterns.length) + " Pattern(s)  Ignored.");
+		try{
+			let diffPatterns = patternsList.length - processedPatterns.length;
+			if(diffPatterns > 0){ // it means there some invalid patterns are requested
+				myReport.addError(this, psSchema, "Pattern", "Invalid Pattern IDs Requested", "Patterns Requested: "+patternsList + " Patterns Processed: "+processedPatterns);
+				
+			}
+			
+		}catch(e){
+			myReport.addError(this, psSchema, "Pattern", "Parsing Error: "+ e.message, e.stack);
+		}
+	}catch (e){
+		
+		myReport.addError(this, psSchema, "Pattern", "Parsing Error: "+ e.message, e.stack);
+	}
+	}
+	}catch(e){
+		myReport.addError(this, psSchema, "Pattern", "Parsing Error: "+ e.message, e.stack);
+	}
+	
+	console.log(patterns);
+	return patterns;
+	
+}
 
 //parsePatterns(myPatterns);
 
-var validatePatterns = function(psInstance, psSchema){
+var validatePatterns = function(psInstance, psSchema, patternsList){
 	
 	var psPatterns = [];
-	psPatterns = parsePatterns(psSchema);
+	psPatterns = parsePatterns(psSchema, patternsList);
 	
 	psPatterns.forEach(function(element){
 		
@@ -180,11 +302,95 @@ var validatePatterns = function(psInstance, psSchema){
 //validatePatterns(schInstance, myPatterns);
 
 console.log("Parsing the phase.....");
-var parsePhases = function(phSchema){
-	
+var parsePhases = function(phSchema, phaseList){
+	console.log(phaseList);
+	console.log(typeof phaseList);
 	var activePatterns = [];
 	var myPhases = [];
-	myPhases = phSchema.schema.phase;
+	let tempPhaseList = phSchema.schema.phase;
+	
+	//if schema doesn't have any phases defined, then all patterns are active
+	if(!tempPhaseList){
+		
+		let allPatterns = phSchema.schema.pattern;
+		allPatterns.forEach(function(element){
+			activePatterns.push(element.id);
+			
+		})
+		
+	}
+
+	else if (typeof phaseList == 'undefined'){
+		//no phase is mentioned so process all phases
+		myPhases = tempPhaseList;
+		console.log("Inside Undefined if");
+	}
+	else if(typeof phaseList == 'string' && phaseList.toUpperCase() =='ALL'){
+		
+		myPhases = tempPhaseList;
+		console.log("Inside ALL if");
+	
+		}
+	
+	else if (typeof phaseList == 'string' && phaseList.toUpperCase() =='DEFAULT'){
+		
+		console.log("Inside DEFAULT if");
+		let dPhase = phSchema.schema.defaultPhase;
+		console.log(dPhase);
+			if (!dPhase){ // If the defaultPhase is not defined or is empty, then all phases are active
+				myPhases = tempPhaseList;
+			}
+			else{
+			tempPhaseList.forEach(function(element){
+				
+				if(element.id == dPhase){
+					
+					myPhases.push(element);
+				}
+			
+		});
+			//if defaultPhase cannot be found in phaseList
+			if(myPhases.length < 1){
+				
+				console.log("Inside invalid defaultPhase inner if");
+				myPhases = tempPhaseList;
+			}
+			
+			}
+	}
+	
+	else if (Array.isArray(phaseList) && phaseList.length > 0){
+		
+		console.log("Inside Array if");
+		tempPhaseList.forEach(function(oElement){
+			
+			phaseList.forEach(function(iElement){
+				if(oElement.id == iElement){
+					
+					myPhases.push(oElement);
+					
+				}
+			})
+				
+		})
+		
+		//if no valid phase was found
+		if(myPhases.length < 1){
+			
+			console.log("Inside invalid array phase inner if");
+			myPhases = tempPhaseList;
+		}
+		
+	}
+	
+	// else if can't understand or find the phases in phase list return all phases
+	else{ //TODO: Check in ISO Specs what should be the response if no valid phases are found
+		
+		myPhases = tempPhaseList;
+		console.log("Inside last else");
+	}
+	
+	
 	myPhases.forEach(function(element){
 		
 		activePatterns = activePatterns.concat(element.active);
@@ -193,9 +399,25 @@ var parsePhases = function(phSchema){
 	
 	console.log(activePatterns);
 	
-	
+	return activePatterns;
 	
 }
 
-parsePhases(mySchema);
+
+
+//parsePhases(mySchema,["phaseid2"]);
+parsePatterns( mySchema,["patternid1", "blah"] );
+//validatePatterns(schInstance, mySchema, ["patternid1","patternid2"]);
+
+//myReport = new Report();
+//myReport.addError (schInstance, mySchema, "attrib", "This is error message", "This is detailed message");
+//myReport.addError (schInstance, mySchema, "attrib2", "This is error message2", "This is detailed message2");
+console.log(myReport);
+
+
+
+
+
+
+
 

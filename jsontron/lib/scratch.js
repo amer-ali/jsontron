@@ -22,7 +22,46 @@ var replacer = function (sstring){
 
 var mystr3 = str.replace(/(jpq:)/ig, replacer("teststring"));
 
-console.log("Raw String: " + str);
+//console.log("Raw String: " + str);
 //console.log("MyString: " + mystr);
-console.log("MyString 2: " + mystr2);
-console.log("MyString 3: " + mystr3);
+//console.log("MyString 2: " + mystr2);
+//console.log("MyString 3: " + mystr3);
+
+var testFunc = function(blah, blunk){
+	
+	console.log(blah);
+	console.log(blunk);
+	//if (typeof blunk == "undefined"){
+	if(!blunk){
+		
+		console.log("Blunk is: " + blunk);
+		
+	}
+//}
+}
+
+
+//testFunc("blaah",[]);
+
+//var mystr4 = "MYSTRING";
+//console.log((typeof mystr4 == 'string') && (mystr4.toUpperCase() == 'MYSTRING'));
+//console.log(mystr4.toUpperCase);
+
+//console.log(mystr4.toUpperCase());
+
+var testErrorReport = function(arg1, arg2){
+	
+	try{
+		result = blunks;
+		
+		
+	}
+	catch(e){
+		console.log(e.name + " "+ e.message + " " + e.stack);
+		console.log(this._uri);
+		
+	}
+	
+}
+
+testErrorReport('blah', 'blunk');
