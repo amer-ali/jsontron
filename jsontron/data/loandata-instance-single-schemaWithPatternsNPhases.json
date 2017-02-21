@@ -10,12 +10,12 @@
 	 "phase":[
     	{
     		"id":"phaseid1",
-    		"active":["pattern1","pattern2","pattern3"]
+    		"active":["patternid1","pattern2","pattern3"]
     	},
     	
     	{
     		"id":"phaseid2",
-    		"active":["pattern21","pattern22","pattern23"]
+    		"active":["patternid2","pattern22","pattern23"]
     	}
     ],
     

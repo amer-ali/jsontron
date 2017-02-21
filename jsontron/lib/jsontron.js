@@ -49,6 +49,7 @@ var Report = function(){
 	
 	this.errors = [];
 	this.warnings = [];
+	this.validations =[];
 	
 	
 }
@@ -77,6 +78,32 @@ Report.prototype.addWarning = function(instance, schema, attr,msg,detail){
 	
 }
 
+Report.prototype.addValidation = function(rule, context, assertionid, test, msg, result){
+	
+	this.validations.push({
+		schRule : rule,
+		ruleContext : context,
+		assertionid: assertionid,
+		assertionTest : test,
+		message : msg,
+		assertionValid : result
+	});
+	
+}
+
+Report.prototype.addValidationSchemaNInstance = function(instance, schema){
+	
+	this.validations.push({
+		schInstance : instance,
+		schema : schema
+		//TODO: Can add the meta values from the schema like schema id, schema version, query language, ISO Version
+		//attribute: attr,
+		//message : msg,
+		//detail : detail
+	});
+	
+}
+
 myReport = new Report(); // Report Array will hold all the errors during the processing
 
 
@@ -86,47 +113,96 @@ var myAssert = {
         "message": "Assert 1: Loan ID cannot be less than 1 or greater than 2234567"
      };
 
+
+/**
+ * 
+ * Parse Assert parses a given assertion and returns an object
+ * @param {Assert Object} The assert object from the rule that is to be parsed
+ * @return {Object containing id, result and message}
+ * 
+ */
 var parseAssert = function (assert){
 	
 	//console.log(ruleContext);
 	//console.log(jp.query(ruleContext, "$[0].loan_id"));
-	let mytest = assert.test;
-	console.log("MyTest Before: " + mytest);
-	mytest = mytest.replace(/context/ig,'parsedContext');
-	console.log ("MyTest After: "+ mytest);
+	try{
+		let mytest = assert.test;
+		console.log("MyTest Before: " + mytest);
+		mytest = mytest.replace(/context/ig,'parsedContext');
+		console.log ("MyTest After: "+ mytest);
+		
+		//let result = eval(jp.query(ruleContext, "$..loan_id") < 1 && jp.query(ruleContext, "$..loan_id") < 2234567);
+		var asrtResult = eval(mytest); // TODO: do strict eval for security reasons
+	}catch(e)
+	{
+		myReport.addError(this, assert, "Assert", "Error in Assert Parsing "+e.message, e.stack);
+	}
 	
-	//let result = eval(jp.query(ruleContext, "$..loan_id") < 1 && jp.query(ruleContext, "$..loan_id") < 2234567);
-	let result = eval(mytest); // TODO: do strict eval for security reasons
-	
-	return {"id":assert.id, "result":result, "message":assert.message};
+	return {"id":assert.id, "result":asrtResult, "message":assert.message};
 	
 }
 
 var ruleCtx = jp.query(schInstance, '$.loan_data.loans[1]');
 // var parsedAssert = parseAssert(myAssert);
 
-
+/**
+ * 
+ * Validate Assert validates a parsed assertion and returns a message based on the result of the assertion
+ * @param {Assert Object} The parsed assert object that was returned from parseAssert 
+ * @return {String assertion message}
+ * 
+ */
 var validateAssert = function (parsedAssert){
-	let msg = parsedAssert.result ? "successful" : parsedAssert.message;
-	console.log ("Test: "+ parsedAssert.result);
-	console.log ("Message: " + msg);
-
+	try{
+		var assrtMsg = parsedAssert.result ? "successful" : parsedAssert.message;
+		console.log ("Test: "+ parsedAssert.result);
+		console.log ("Message: " + assrtMsg);
+		}catch(e){
+			myReport.addError(this, parsedAssert, "Assert", "Error in Assert Validation "+e.message, e.stack);
+			
+	}
+		return assrtMsg;
 
 }
 
 //validateAssert(parsedAssert);
-
+/**
+ * 
+ * Parse Rule extracts a list of assertions from a given rule object
+ * @param {Rule object}
+ * @return [Array of assert objects]
+ * 
+ */
 var parseRule = function(rule){
 	
 	let asserts = [];
-	asserts = rule.assert;
-	return asserts;
+	try{
+		asserts = rule.assert;
+		if(asserts.length < 0){
+			myReport.addWarning(this, rule, "Rule", "Invalid Rule", "Rule doesn't have any assertions defined.");
+			}
+		}
+	catch(e){
+		myReport.addError(this, rule, "Rule", "Error in Rule Parsing "+e.message, e.stack);
+	}
+		return asserts;
 }
 
+
+/**
+ * 
+ * Validate Rule applies a rule to the given instance
+ * @param {JSON Instance object that is to be validated}
+ * @param {Rule object}
+ * TODO: Keep track of validated rules, so only first rule is fired in a single pattern
+ * 
+ */
 var  validateRule = function(instance, rule){
 	
 	// first parse the context
-	parsedContext = jp.query(instance, rule.context)
+	try {
+	parsedContext = jp.query(instance, rule.context);
+	console.log("===== ParsedContext=====");
 	console.log(parsedContext);
 	
 	// get all asserts for the rule
@@ -134,23 +210,46 @@ var  validateRule = function(instance, rule){
 	asrts = parseRule(rule);
 	
 	//parse and validate all asserts
-	asrts.forEach(function(element){
-		
-		console.log(element);
-		let parAssert = parseAssert(element);
-		validateAssert(parAssert);
-		
-			})
-	
+	if(Array.isArray(asrts) && asrts.length > 0 && asrts[0] !=''){
+		asrts.forEach(function(element){
+			
+			console.log(element);
+			try{
+				let parAssert = parseAssert(element);
+				let valAssert = validateAssert(parAssert);
+				myReport.addValidation(rule, parsedContext, parAssert.id, element.test, valAssert,parAssert.result);
+				}catch(e){
+					myReport.addError(instance, rule, "Rule", "Error in Rule Validation "+e.message, e.stack);
+					}
+		})
+
+	}
+	}catch(e){
+		myReport.addError(instance, rule, "Rule", "Error in Rule Validation "+e.message, e.stack);
+	}
 }
 
 console.log ("Starting to process the Patterns......");
 console.log ("======================================");
 
+/**
+ * 
+ * Parse Pattern extracts a list of rules from a given pattern object
+ * @param {pattern object}
+ * @return [Array of Rules objects]
+ * 
+ */
 var parsePattern = function(spattern){
 	//console.log(spattern);
 	let myRuleList = [];
+	try {
 	myRuleList = spattern.rule;
+	if(myRuleList.length < 0){
+		myReport.addWarning(this, spattern, "Pattern", "Invalid pattern", "Pattern doesn't have any rules defined.");
+		}
+	}catch(e){
+		myReport.addError(this, spattern, "Pattern", "Error in Pattern Parsing "+e.message, e.stack);
+	}
 	return myRuleList;
 	
 }
@@ -162,11 +261,12 @@ console.log ("======================================");
 
 //console.log(myPattern);
 
-//validateRule(schInstance, myRule);
+validateRule(schInstance, myRule);
 
 var  validatePattern = function(pInstance, pattern){
 	
 	let rls = [];
+	try{
 	rls = parsePattern(pattern);
 	console.log("Below are the rules: ")
 	console.log(rls);
@@ -174,7 +274,7 @@ var  validatePattern = function(pInstance, pattern){
 	
 	//parse and validate all asserts
 	rls.forEach(function(element){
-		
+		try{ //if one or more rules have issues, it should still validate the remaining ones
 		//console.log(element);
 		//let parRle = parsePattern(element);
 		console.log("Reading the rule:");
@@ -183,9 +283,13 @@ var  validatePattern = function(pInstance, pattern){
 		console.log(element.context);
 		console.log("The above is context");
 		validateRule(pInstance, element);
-		
+		}catch(e){
+			myReport.addError(psInstance, element, "Pattern:Rules", "Issue validating rule inside pattern "+e.message, e.stack);
+		}
 			})
-	
+	}catch(e){
+		myReport.addError(psInstance, pattern, "Pattern", "Pattern Validation Error "+e.message, e.stack);
+	}
 }
 
 //validatePattern(schInstance, myPattern);
@@ -282,47 +386,97 @@ var parsePatterns = function(psSchema, patternsList){
 }
 
 //parsePatterns(myPatterns);
+/**
+ * 
+ * Validate Patterns takes a list of pattern objects and validates
+ * @param {JSON instance that needs to be validated
+ * @param {Schematron Schema} This is the Schematron Rules Schema file
+ * @param [Pattern Object Array] This parameter takes an array of pattern object that will be validated
+ * 
+ */
 
 var validatePatterns = function(psInstance, psSchema, patternsList){
 	
 	var psPatterns = [];
+	try{
 	psPatterns = parsePatterns(psSchema, patternsList);
-	
-	psPatterns.forEach(function(element){
-		
-		console.log("Validating the pattern....");
-		//console.log(element);
-		validatePattern(psInstance, element);
-		console.log("Validated the pattern.");
+	if(psPatterns && Array.isArray(patternsList) && psPatterns.length > 1 && psPatterns[0] != ''){
+		psPatterns.forEach(function(element){
+			try{
+			console.log("Validating the pattern....");
+			//console.log(element);
+			validatePattern(psInstance, element);
+			console.log("Validated the pattern.");
+			}catch(e){
+				myReport.addError(psInstance, psSchema, "Pattern", "Pattern Validation Error: "+ e.message, e.stack);
+			}
 	})
 	
+	} else {
+		myReport.addError(psInstance, psSchema, "Pattern", "Pattern Validation Error-No Pattern was validated.", "Pattern Validation error");
+	}
+	
+	}catch (e){
+		myReport.addError(psInstance, psSchema, "Pattern", "Validation Error: "+ e.message, e.stack);
+	}
 	
 }
 
 //validatePatterns(schInstance, myPatterns);
 
+/**
+ * 
+ * parsePhases takes Schematron JSON schema and option phaseList argument and returns list of active pattern ids
+ * @param {Schematron JSON Schema } This is the Schematron Rules Schema file
+ * @param [Array of phase ids] Optional phase ids list
+ * @return [Array of active patterns] Returns a consolidated list of active patterns
+ * @ISO:Phase - #ALL is keyword that indicates all phases are active.
+ * @ISO:Phase - #DEFAULT is also a keyword that indicates that phase id mentioned in 'defaultPhase' property of schema is active
+ * @ISO:Phase - If no/invalid id is provided, all phases are active
+ * @ISO:Phase - if no phase is defined in schema (as it is optional), all patterns are active
+ * 
+ */
+
 console.log("Parsing the phase.....");
 var parsePhases = function(phSchema, phaseList){
 	console.log(phaseList);
 	console.log(typeof phaseList);
-	var activePatterns = [];
-	var myPhases = [];
-	let tempPhaseList = phSchema.schema.phase;
+	let activePatterns = []; //this will hold all the active patterns that will be return for processing
+	let allPatterns = []; // this is the list of all patterns in the schema
+	let myPhases = []; // this will hold the active phases if defined/provided
+	let tempPhaseList = []; //this is temp list of all the phases defined in the schema
+	
+	allPatterns = phSchema.schema.pattern;
+	if(!allPatterns){
+		
+		myReport.addError(this, phSchema, "Phase", "Parsing Error: No Pattern Found", "Schema should contain atleast one valid pattern");
+		return;
+		
+	}
+	 
+	tempPhaseList = phSchema.schema.phase;
 	
 	//if schema doesn't have any phases defined, then all patterns are active
 	if(!tempPhaseList){
 		
-		let allPatterns = phSchema.schema.pattern;
-		allPatterns.forEach(function(element){
+		//let allPatterns = phSchema.schema.pattern;
+		try{
+			allPatterns.forEach(function(element){
 			activePatterns.push(element.id);
 			
+			myReport.addWarning(this, phSchema, "Phase", "Parsing Warning. No phase found ","This schema doesn't have any phase defined . All Patterns will be processed.");
+
 		})
+	}catch(e){
+		myReport.addError(this, phSchema, "Phase", "Parsing Error: "+e.message, e.stack);
+	}
 		
 	}
 
 	else if (typeof phaseList == 'undefined'){
-		//no phase is mentioned so process all phases
+		//no phase is mentioned while invoking so process all phases
 		myPhases = tempPhaseList;
+		myReport.addWarning(this, phSchema, "Phase", "Parsing Warning. No phase was provided. ","No phase list was provided. All Patterns will be processed.");
 		console.log("Inside Undefined if");
 	}
 	else if(typeof phaseList == 'string' && phaseList.toUpperCase() =='ALL'){
@@ -339,13 +493,16 @@ var parsePhases = function(phSchema, phaseList){
 		console.log(dPhase);
 			if (!dPhase){ // If the defaultPhase is not defined or is empty, then all phases are active
 				myPhases = tempPhaseList;
+				myReport.addWarning(this, phSchema, "Phase", "Parsing Error: No Default Phase Found ", "No Default phase was found in the schema. All phases will be processed");
+				
 			}
 			else{
-			tempPhaseList.forEach(function(element){
+				try{
+				tempPhaseList.forEach(function(element){
 				
-				if(element.id == dPhase){
+					if(element.id == dPhase){
 					
-					myPhases.push(element);
+						myPhases.push(element);
 				}
 			
 		});
@@ -354,33 +511,49 @@ var parsePhases = function(phSchema, phaseList){
 				
 				console.log("Inside invalid defaultPhase inner if");
 				myPhases = tempPhaseList;
+				myReport.addWarning(this, phSchema, "Phase", "Parsing Error: No Default Phase Found ", "No Default phase was found in the schema. All phases will be processed");
 			}
 			
+				}catch(e){
+					myReport.addError(this, phSchema, "Phase", "Parsing Error: "+e.message, e.stack);
+				}
 			}
 	}
 	
 	else if (Array.isArray(phaseList) && phaseList.length > 0){
 		
 		console.log("Inside Array if");
-		tempPhaseList.forEach(function(oElement){
-			
-			phaseList.forEach(function(iElement){
-				if(oElement.id == iElement){
-					
-					myPhases.push(oElement);
+		try{
+			tempPhaseList.forEach(function(oElement){
+				
+				phaseList.forEach(function(iElement){
+					if(oElement.id == iElement){
+						
+						myPhases.push(oElement);
 					
 				}
 			})
 				
 		})
+			try{
+				if(phaseList.length > myPhases.length){
+					myReport.addWarning(this, phSchema, "Phase", "Parsing Error: Invalid Phases detected. ", "Phase (s) Provided: "+ phaseList +" Phases Processed: " + myPhases );
+				}
+			
+			}catch (e){
+				myReport.addWarning(this, phSchema, "Phase", "Parsing Error: "+e.message, e.stack );
+			}
 		
 		//if no valid phase was found
 		if(myPhases.length < 1){
 			
 			console.log("Inside invalid array phase inner if");
 			myPhases = tempPhaseList;
+			myReport.addWarning(this, phSchema, "Phase", "Parsing Error: No Valid Phase Specified ", "Phase list doesnt have any valid phases. All phases will be processed");
 		}
-		
+		}catch(e){
+			myReport.addError(this, phSchema, "Phase", "Parsing Error: "+e.message, e.stack);
+		}
 	}
 	
 	// else if can't understand or find the phases in phase list return all phases
@@ -390,12 +563,15 @@ var parsePhases = function(phSchema, phaseList){
 		console.log("Inside last else");
 	}
 	
-	
-	myPhases.forEach(function(element){
-		
-		activePatterns = activePatterns.concat(element.active);
-		
-	})
+	try{
+		myPhases.forEach(function(element){
+			
+			activePatterns = activePatterns.concat(element.active);
+			
+		})
+	}catch(e){
+		myReport.addError(this, phSchema, "Phase", "Parsing Error: "+e.message, e.stack);
+	}
 	
 	console.log(activePatterns);
 	
@@ -405,9 +581,11 @@ var parsePhases = function(phSchema, phaseList){
 
 
 
-//parsePhases(mySchema,["phaseid2"]);
-parsePatterns( mySchema,["patternid1", "blah"] );
+//parsePhases(mySchema,["phaseid2", "phaseid1"]);
+//parsePatterns( mySchema,["patternid1", "blah"] );
 //validatePatterns(schInstance, mySchema, ["patternid1","patternid2"]);
+
+validatePatterns(schInstance, mySchema, parsePhases(mySchema, ["phaseid1","phaseid2"]));
 
 //myReport = new Report();
 //myReport.addError (schInstance, mySchema, "attrib", "This is error message", "This is detailed message");
