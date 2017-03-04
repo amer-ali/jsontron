@@ -4,10 +4,10 @@
 			{ 
 				"loan_id":"1234567",
 				"loan_type":"FHA",
-				"customer_id":"JD689456",
+				"customer_id":"JD689457",
 				"data_time":"20100601120000",
-				"amount":300000,
-				"interest_rate":3.5,
+				"amount":500000,
+				"interest_rate":3.75,
 				"prime_rate":3.25,
 				"mip_rate":1.5,
 				"down_payment":5,
@@ -18,7 +18,7 @@
 				"electronic":true,
 				"email":"john.doe@gmail.com",
 				"customer":{
-					"customer_id":"JD68945",
+					"customer_id":"JD689457",
 					"customer_fname":"John",
 					"customer_lname":"Doe",
 					"customer_address":" 4 Way Loop, New York, NY 10038"
@@ -30,14 +30,14 @@
 			
 				{ 
 				"loan_id":"1234568",
-				"loan_type":"FHA",
+				"loan_type":"Traditional",
 				"customer_id":"JD689457",
 				"data_time":"20100601120000",
 				"amount":300000,
-				"interest_rate":3.5,
+				"interest_rate":3.75,
 				"prime_rate":3.25,
 				"mip_rate":1.5,
-				"down_payment":5,
+				"down_payment":25,
 				"loan_restricted":false,
 				"escrow":true,
 				"origination_id":"branch",
@@ -45,7 +45,33 @@
 				"electronic":true,
 				"email":"john.doe@gmail.com",
 				"customer":{
-					"customer_id":"JD68947",
+					"customer_id":"JD689457",
+					"customer_fname":"John",
+					"customer_lname":"Doe",
+					"customer_address":" 4 Way Loop, New York, NY 10038"
+						
+							}
+				
+			
+			},
+			{ 
+				"loan_id":"1234569",
+				"loan_type":"Jumbo",
+				"customer_id":"JD689457",
+				"data_time":"20100601120000",
+				"amount":3000000,
+				"interest_rate":3.5,
+				"prime_rate":3.25,
+				"mip_rate":1.5,
+				"down_payment":20,
+				"loan_restricted":false,
+				"escrow":true,
+				"origination_id":"branch",
+				"branch_id":"5463",
+				"electronic":true,
+				"email":"john.doe@gmail.com",
+				"customer":{
+					"customer_id":"JD689457",
 					"customer_fname":"John",
 					"customer_lname":"Doe",
 					"customer_address":" 4 Way Loop, New York, NY 10038"

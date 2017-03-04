@@ -16,14 +16,14 @@ var jp = require('jsonpath');
 
 //var schTRON = require("../data/schematron-instance-minimal-complex.json");
 var schInstance = require("../data/loandata-instance-simple.json");
-//var myRule = require("../data/loandata-instance-single-rule.json");
-//var myPattern = require("../data/loandata-instance-single-pattern.json");
-//var myPatterns = require("../data/loandata-instance-single-schemaWithPatterns.json");
+var myRule = require("../data/loandata-instance-single-rule.json");
+var myPattern = require("../data/loandata-instance-single-pattern.json");
+var myPatterns = require("../data/loandata-instance-single-schemaWithPatterns.json");
 //var mySchema = require("../data/loandata-instance-single-schemaWithPatternsNPhases.json");
 var mySchemaTest1 = require("../data/loandata-instance-single-schematest1.json");
 
 console.log(schInstance);
-//console.log(myRule);
+console.log(myRule);
 
 
 var loanid = jp.query(schInstance, '$.loan_data.loans[0].loan_id');
@@ -32,31 +32,12 @@ var loanid = jp.query(schInstance, '$.loan_data.loans[0].loan_id');
 //var pattern2 = jp.query(schTRON, '$..pattern');
 
 var loanid2 = jp.query(schInstance, '$.loan_data.loans[0].loan_id');
-var jumboLoan = jp.query(schInstance, "$.loan_data.loans[?(@.loan_type === 'Jumbo')]");
-//var fhaLoanAmount = jp.query(fhaLoan, '$..amount');
-var allLoans = jp.query(schInstance, '$.loan_data.loans[0]');
-var outerCustID = jp.query(allLoans, '$[?(@.customer_id == @.customer.customer_id)]') != false;
-var innerCustID = jp.query(allLoans, '$[0].customer.customer_id');
-//var equality = jp.query(allLoans, '$..[?(@.customer_id === @.customer.customer_id)]');
-var equality = jp.query(allLoans,'$[0].customer_id[0]') == jp.query(allLoans,'$[0].customer.customer_id[0]');
 
 
-console.log("Jumbo Loan");
-console.log (jumboLoan);
-//console.log("FHA Loan Amount");
-//console.log (fhaLoanAmount);
-console.log ("All loans context node set");
-console.log (allLoans);
-console.log("Outer Customer ID");
-console.log(outerCustID);
-console.log("Inner Customer ID");
-console.log(innerCustID);
-console.log("Equality");
-console.log(equality);
-//console.log("LoanID: "+ loanid);
-//console.log("LoanID2: "+ loanid2);
+console.log("LoanID: "+ loanid);
+console.log("LoanID2: "+ loanid2);
 //console.log("Result: "+ result);
-//console.log(loanid.length);
+console.log(loanid.length);
 //console.log(pattern2);
 
 /**
@@ -124,42 +105,6 @@ Report.prototype.addValidationSchemaNInstance = function(instance, schema){
 	
 }
 
-Report.prototype.finalValidationReport = function(errorList, validationList ){
-	
-	let finalValidationReport = [];
-	let validationFailures = [];
-	try{
-		if (validationList && Array.isArray(validationList)&& validationList.length >0){
-			
-			validationList.forEach(function(valElement){
-				console.log(valElement.assertionValid);
-				if(!valElement.assertionValid){
-					
-					validationFailures.push(valElement);
-					
-				}
-				
-			})
-			
-		}
-		
-		finalValidationReport = validationFailures.concat(errorList);
-		if (finalValidationReport.length < 1){
-			
-			console.log("**** THIS INSTANCE IS SEMANTICALLY VALID ****");
-			
-		}else{
-			console.log("**** THIS INSTANCE CONTAINS SEMANTIC VALIDATION ISSUES. PLEASE SEE BELOW ****");
-			console.log(finalValidationReport);
-		}
-		
-	}catch(e){
-		console.log(" ERROR IN VALIDATION REPORTING: "+e.message + e.stack);
-	}
-}
-
-
-
 myReport = new Report(); // Report Array will hold all the errors during the processing
 
 /**
@@ -184,15 +129,12 @@ var parseAssert = function (assert){
 	try{
 		let mytest = assert.test;
 		console.log("MyTest Before: " + mytest);
-		console.log(mytest);
 		//mytest = mytest.replace(/context/ig,'parsedContext');
 		//mytest = mytest.replace(/contextNode/ig,'cNode');
 		console.log ("MyTest After: "+ mytest);
 		
 		//let result = eval(jp.query(ruleContext, "$..loan_id") < 1 && jp.query(ruleContext, "$..loan_id") < 2234567);
 		var asrtResult = eval(mytest); // TODO: do strict eval for security reasons
-		//console.log("Evaluated Test");
-		console.log("Evaluated Test: "+ asrtResult);
 	}catch(e)
 	{
 		myReport.addError(this, assert, "Assert", "Error in Assert Parsing "+e.message, e.stack);
@@ -202,7 +144,7 @@ var parseAssert = function (assert){
 	
 }
 
-//var ruleCtx = jp.query(schInstance, '$.loan_data.loans[1]');
+var ruleCtx = jp.query(schInstance, '$.loan_data.loans[1]');
 // var parsedAssert = parseAssert(myAssert);
 
 /**
@@ -238,7 +180,7 @@ var parseRule = function(rule){
 	let asserts = [];
 	try{
 		asserts = rule.assert;
-		if(asserts.length < 1){
+		if(asserts.length < 0){
 			myReport.addWarning(this, rule, "Rule", "Invalid Rule", "Rule doesn't have any assertions defined.");
 			}
 		}
@@ -261,60 +203,30 @@ var  validateRule = function(instance, rule){
 	
 	// first parse the context
 	try {
-		//parsedContext = jp.query(instance, rule.context);
-		ruleParsedContext = jp.query(instance, rule.context);
-		console.log("===== Begin Rule ParsedContext=====");
-		console.log(ruleParsedContext);
-		console.log("===== End Rule ParsedContext=====");
-		//console.log(parsedContext);
-		//FIXME: Need to check empty array separately, a rule can still be valid if the context didn't return anything
-		if(ruleParsedContext && Array.isArray(ruleParsedContext) && ruleParsedContext.length == 0){
-			myReport.addWarning(instance, rule, "Rule Context", "Possible issue in Rule Validation: Empty Context NodeSet for rule.", "The context statement didnot return any nodes - Check Rule Context statement");
-			return;
-		}
-		else if(ruleParsedContext && Array.isArray(ruleParsedContext) && ruleParsedContext.length > 0){
-			//try{
-			ruleParsedContextNodeSet = ruleParsedContext; // all the asserts are in the first element of parsedContext nodeset
-			console.log("===== Begin Rule ParsedContext NodeSet=====");
-			console.log(ruleParsedContextNodeSet);
-			console.log("===== End Rule ParsedContext NodeSet=====");
-			if(ruleParsedContextNodeSet && Array.isArray(ruleParsedContextNodeSet) && ruleParsedContextNodeSet.length > 0){
-				
-				ruleParsedContextNodeSet.forEach(function(nsElement){
-					console.log("Context Node Element");
-					console.log(nsElement);
-					contextNode =[];
-					contextNode.push(nsElement);
-					console.log("Context Node Element Array");
-					console.log(contextNode);
+	//parsedContext = jp.query(instance, rule.context);
+	contextNode = jp.query(instance, rule.context);
+	console.log("===== ParsedContext=====");
+	console.log(contextNode);
+	//console.log(parsedContext);
+	
+	// get all asserts for the rule
+	let asrts = [];
+	asrts = parseRule(rule);
+	
+	//parse and validate all asserts
+	if(Array.isArray(asrts) && asrts.length > 0 && asrts[0] !=''){
+		asrts.forEach(function(element){
 			
-				// get all asserts for the rule
-					let asrts = [];
-					asrts = parseRule(rule);
-					
-					//parse and validate all asserts
-					if(Array.isArray(asrts) && asrts.length > 0 && asrts[0] !=''){
-						asrts.forEach(function(element){
-							
-							console.log(element);
-							try{
-								let parAssert = parseAssert(element);
-								let valAssert = validateAssert(parAssert);
-								myReport.addValidation(rule, contextNode, parAssert.id, element.test, valAssert,parAssert.result);
-								}catch(e){
-									myReport.addError(instance, rule, "Rule", "Error in Rule Validation "+e.message, e.stack);
-									}
-						})
-				
+			console.log(element);
+			try{
+				let parAssert = parseAssert(element);
+				let valAssert = validateAssert(parAssert);
+				myReport.addValidation(rule, contextNode, parAssert.id, element.test, valAssert,parAssert.result);
+				}catch(e){
+					myReport.addError(instance, rule, "Rule", "Error in Rule Validation "+e.message, e.stack);
 					}
-					else{
-						myReport.addError(instance, rule, "Rule Context", "Error in Rule Validation: Invalid Context "+e.message, e.stack);
-					}
-				})
-		
-			}else{myReport.addError(instance, rule, "Rule Context", "Error in Rule Validation: Invalid Context Node ", "The context node set doesn't contain valid node - Check Rule Context");}
-		}else{
-			myReport.addError(instance, rule, "Rule Context", "Error in Rule Validation: Invalid Context NodeSet", "The context node set is not valid - Check Rule Context statement");
+		})
+
 	}
 	}catch(e){
 		myReport.addError(instance, rule, "Rule", "Error in Rule Validation "+e.message, e.stack);
@@ -336,7 +248,7 @@ var parsePattern = function(spattern){
 	let myRuleList = [];
 	try {
 	myRuleList = spattern.rule;
-	if(myRuleList.length < 1){
+	if(myRuleList.length < 0){
 		myReport.addWarning(this, spattern, "Pattern", "Invalid pattern", "Pattern doesn't have any rules defined.");
 		}
 	}catch(e){
@@ -353,7 +265,7 @@ console.log ("======================================");
 
 //console.log(myPattern);
 
-//validateRule(schInstance, myRule);
+validateRule(schInstance, myRule);
 
 var  validatePattern = function(pInstance, pattern){
 	
@@ -492,7 +404,7 @@ var validatePatterns = function(psInstance, psSchema, patternsList){
 	var psPatterns = [];
 	try{
 	psPatterns = parsePatterns(psSchema, patternsList);
-	if(psPatterns && Array.isArray(patternsList) && psPatterns.length > 0 && psPatterns[0] != ''){
+	if(psPatterns && Array.isArray(patternsList) && psPatterns.length > 1 && psPatterns[0] != ''){
 		psPatterns.forEach(function(element){
 			try{
 			console.log("Validating the pattern....");
@@ -677,18 +589,13 @@ var parsePhases = function(phSchema, phaseList){
 //parsePatterns( mySchema,["patternid1", "blah"] );
 //validatePatterns(schInstance, mySchema, ["patternid1","patternid2"]);
 
-validatePatterns(schInstance, mySchemaTest1, parsePhases(mySchemaTest1, ["phaseid1"]));
-//validatePatterns(schInstance, mySchemaTest1, ["patternid1"]);
-
+validatePatterns(schInstance, mySchemaTest1, parsePhases(mySchemaTest1, ["phaseid1","phaseid2"]));
 
 //myReport = new Report();
 //myReport.addError (schInstance, mySchema, "attrib", "This is error message", "This is detailed message");
 //myReport.addError (schInstance, mySchema, "attrib2", "This is error message2", "This is detailed message2");
-
-
 console.log(myReport);
 
-myReport.finalValidationReport (myReport.errors, myReport.validations);
 
 
 
