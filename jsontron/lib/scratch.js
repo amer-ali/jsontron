@@ -64,4 +64,42 @@ var testErrorReport = function(arg1, arg2){
 	
 }
 
-testErrorReport('blah', 'blunk');
+//testErrorReport('blah', 'blunk');
+//var schInstance1 = require("../data/loandata-instance-simple.json");
+//var mySchRules1 = require("../data/loandata-instance-single-schematest2.json");
+var jp = require('jsonpath');
+var schInstance1 = require("../data/ibm-test-suite/3.6/eg3_6_bad1.json");
+var mySchRules1 = require("../data/ibm-test-suite/3.6/eg3_6-rules.json");
+var jsontron = require('./jsontron.js');
+
+ruleParsedContext = jp.query(schInstance1, "$..prologue.keyword");
+console.log(ruleParsedContext);
+
+console.log(ruleParsedContext.length);
+console.log(ruleParsedContext[0].length);
+//console.log(jp.parent(ruleParsedContext,'$..doc'));
+//console.log(jp.query(ruleParsedContext, '$..doc').length);
+
+
+
+//console.log(jp.query(ruleParsedContext, "$"));
+//console.log(jp.parent(ruleParsedContext,"$..doc"));
+//rslt = ruleParsedContext.length == 1 && Object.is(ruleParsedRoot,ruleParsedParent);
+//rslt = ruleParsedContext.length == 1 && ruleParsedRoot == ruleParsedParent;
+//console.log("The result of comparison is "+ rslt);
+//elemenOfParsedContext = ruleParsedContext.length == 1 && jp.query(ruleParsedContext, "$..doc").length>0;
+
+//console.log(elemenOfParsedContext);
+
+jsontron.JSONTRON.validate(schInstance1,mySchRules1,["phaseid1","phaseid2"]);
+
+/*
+var argv = require("minimist")(process.argv.slice(2));
+console.dir(argv);
+
+var schInstance2 = require(argv.i);
+var mySchRules2 = require(argv.r);
+var phaseLists2 = argv._;
+jsontron.JSONTRON.validate(schInstance2, mySchRules2, phaseLists2); **/
+//jsontron.JSONTRON.validate(argv.i, argv.r, argv._);
+

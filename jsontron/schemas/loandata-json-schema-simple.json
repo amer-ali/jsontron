@@ -113,8 +113,9 @@
               "customer"
             ],
              "dependencies": {
-    "credit_card": ["billing_address"],
-    "billing_address": ["credit_card"]
+			    "electronic" :["email"],       
+			    "credit_card": ["billing_address"],
+			    "billing_address": ["credit_card"]
   }
           }
         }

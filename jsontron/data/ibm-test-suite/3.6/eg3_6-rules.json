@@ -1,0 +1,33 @@
+{
+"schema":{
+
+  	"id":"eg3_6",
+  	"title":"Technical document schema",
+  	"schemaVersion":"ISO Schematron 2016",
+  	"queryBinding":"jsonpath",
+  	"defaultPhase":"phaseid1",
+  	
+	 "phase":[
+    	{
+    		"id":"phaseid1",
+    		"active":["Minimum_keywords"]
+    	}
+    ],
+    
+	"pattern":[
+      {
+      	"id":"Minimum_keywords",
+      	"title":"Minimum keywords",
+      	"rule":[
+          {          
+              	"id":"Minimum_keywords_rule",
+              	"abstract":false,
+                "context": "$..prologue.keyword",
+                "assert":[
+                  {
+                     "id":"Minimum_keywords_assert",
+                     "test":"contextNode[0].length > 2",
+                     "message": "At least three keywords are required."
+                  }
+                ]              
+          }]}]}}

@@ -1,7 +1,7 @@
 {
 "schema":{
 
-  	"id":"this is schema id",
+  	"id":"Loan Data Rules",
   	"title":"Schematron Title",
   	"schemaVersion":"ISO Schematron 2016",
   	"queryBinding":"jsonpath",
@@ -128,13 +128,130 @@
                   {
                      "id":"assertid81",
                      "test": "(jp.query(contextNode,'$..interest_rate') - jp.query(contextNode,'$..prime_rate')) >= .25",
-                     "message": "Assert 811: Interest Rate should be atleast .25 points more than Prime Rate"
+                     "message": "Assert 81: Interest Rate should be atleast .25 points more than Prime Rate"
+                  }
+                ]              
+          }
+          
+          ]
+         },
+               {
+      	"id":"patternid2",
+      	"title":"pattern title",
+      	"documents":"pathValue",
+      	"abstract":false,
+      	"rule":[
+          {          
+              	"id":"rule21",
+              	"abstract":false,
+                "context": "$.loan_data.loans.*",
+                "assert":[
+                  {
+                     "id":"assertid211",
+                     "test": "jp.query(contextNode,'$..loan_id') > 1 && jp.query(contextNode,'$..loan_id') < 2234567",
+                     "message": "Assert 211: Loan ID cannot be less than 1 or greater than 2234567 ok"
+                  },
+                  {
+                     "id":"assert id 212",
+                     "test": "jp.query(contextNode,'$..customer.customer_fname') == 'John'  && jp.query(contextNode,'$..customer.customer_lname') == 'Doe'",
+                     "message": "Assert 212: Customer Name is not correct "
+                  }  
+                ]              
+          },
+           {          
+              	"id":"rule22",
+              	"abstract":false,
+                "context": "$.loan_data.loans[?(@.loan_type === 'FHA')]",
+                "assert":[
+                  {
+                     "id":"assertid221",
+                     "test": "jp.query(contextNode,'$..amount') <= 500000",
+                     "message": "Assert 221: For FHA Loan, Amount cannot exceed $500K"
+                  },
+                  {
+                     "id":"assertid222",
+                     "test": "jp.query(contextNode,'$..mip_rate') > 0",
+                     "message": "Assert 222: For FHA loans, You must have MIP (Mortgage Insurance Premium)"
+                  }
+                
+                ]              
+          },
+          {          
+              	"id":"rule23",
+              	"abstract":false,
+                "context": "$.loan_data.loans[?(@.loan_type === 'Traditional')]",
+                "assert":[
+                  {
+                     "id":"assertid231",
+                     "test": "jp.query(contextNode,'$..amount') <= 1000000",
+                     "message": "Assert 231: For Traditional Loan, Amount cannot exceed $1MM"
+                  }
+                ]              
+          },
+           {          
+              	"id":"rule24",
+              	"abstract":false,
+                "context": "$.loan_data.loans[?(@.loan_type === 'Jumbo')]",
+                "assert":[
+                  {
+                     "id":"assertid241",
+                     "test": "jp.query(contextNode,'$..amount') >= 1000000",
+                     "message": "Assert 241: For Jumbo Loan, Amount cannot be less than $1MM"
+                  }
+                ]              
+          },
+          {          
+              	"id":"rule25",
+              	"abstract":false,
+                "context": "$.loan_data.loans[?(@.loan_type != 'FHA')]",
+                "assert":[
+                  {
+                     "id":"assertid251",
+                     "test": "jp.query(contextNode,'$..down_payment') >= 20",
+                     "message": "Assert 251: For non-FHA loans, Minimum 20% downpayment is required"
+                  }
+                ]              
+          },
+          {          
+              	"id":"rule26",
+              	"abstract":false,
+                "context": "$.loan_data.loans[?(@.origination_id === 'branch')]",
+                "assert":[
+                  {
+                     "id":"assertid261",
+                     "test": "jp.query(contextNode,'$..branch_id') != ''",
+                     "message": "Assert 261: Missing Branch ID"
+                  }
+                ]              
+          },
+          {          
+              	"id":"rule27",
+              	"abstract":false,
+                "context": "$.loan_data.loans.*",
+                "assert":[
+                  {
+                     "id":"assertid271",
+                     "test": "jp.query(contextNode,'$[?(@.customer_id == @.customer.customer_id)]') != false",
+                     "message": "Assert 271: Customer ID mismatch"
+                  }
+                ]              
+          },
+          {          
+              	"id":"rule28",
+              	"abstract":false,
+                "context": "$.loan_data.loans.*",
+                "assert":[
+                  {
+                     "id":"assertid281",
+                     "test": "(jp.query(contextNode,'$..interest_rate') - jp.query(contextNode,'$..prime_rate')) >= .25",
+                     "message": "Assert 281: Interest Rate should be atleast .25 points more than Prime Rate"
                   }
                 ]              
           }
           
           ]
          }
+         
          ]
          }
         }
