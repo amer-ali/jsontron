@@ -1,0 +1,21 @@
+{
+  "doc": {
+    "prologue": {
+      "title": "Faster than light travel",
+      "subtitle": "From fantasy to reality",
+      "author": [
+        {
+          "member": "yes",
+          "email": "cemereuwa@nasa.gov",
+          "name": "Chikezie Emereuwa"
+        },
+        {
+          "member": "yes",
+          "email": "okey.agu@navy.mil",
+          "name": "Okechukwu Agu"
+        }
+      ]
+    },
+    "section":{}
+  }
+}

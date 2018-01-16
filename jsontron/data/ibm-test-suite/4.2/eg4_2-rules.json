@@ -1,0 +1,33 @@
+{
+"schema":{
+
+  	"id":"eg4_1",
+  	"title":"Technical document schema",
+  	"schemaVersion":"ISO Schematron 2016",
+  	"queryBinding":"jsonpath",
+  	"defaultPhase":"phaseid1",
+  	
+	 "phase":[
+    	{
+    		"id":"phaseid1",
+    		"active":["Report_links"]
+    	}
+    ],
+    
+	"pattern":[
+      {
+      	"id":"Report_links",
+      	"title":"Report links Pattern",
+      	"rule":[
+          {          
+              	"id":"Report_links_rule",
+              	"abstract":false,
+                "context": "$..*",
+                "assert":[
+                  {
+                     "id":"Report_links_assert",
+                     "test":"((jp.query(contextNode, '$..link')).length >0)",
+                     "message": "element has a link."
+                  }
+                ]              
+          }]}]}}

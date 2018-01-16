@@ -1,0 +1,11 @@
+{
+  "doc": {
+  	"prologue":{},
+    "section": {
+      "text":"Placeholder for the emphasis text",
+      "emphasis": {
+        "content": "actual content"
+      }
+    }
+  }
+}
