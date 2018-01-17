@@ -1,0 +1,33 @@
+{
+"schema":{
+
+  	"id":"eg5_2",
+  	"title":"Technical document schema",
+  	"schemaVersion":"ISO Schematron 2016",
+  	"queryBinding":"jsonpath",
+  	"defaultPhase":"phaseid1",
+  	
+	 "phase":[
+    	{
+    		"id":"phaseid1",
+    		"active":["Section_minimum"]
+    	}
+    ],
+    
+	"pattern":[
+      {
+      	"id":"Section_minimum",
+      	"title":"Section Minimum Pattern",
+      	"rule":[
+          {          
+              	"id":"Section_minimum_rule",
+              	"abstract":false,
+                "context": "$..doc",
+                "assert":[
+                                    {
+                     "id":"Section_minimum_assert",
+                     "test":"((jp.query(contextNode, '$..section'))[0].length) >= (((jp.query(contextNode, '$..author')).length) * 3)",
+                     "message": "There must be at least three sections for each author."
+                  }
+                ]              
+          }]}]}}

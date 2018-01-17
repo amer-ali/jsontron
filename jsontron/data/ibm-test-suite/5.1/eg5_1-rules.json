@@ -1,0 +1,33 @@
+{
+"schema":{
+
+  	"id":"eg5_1",
+  	"title":"Special XHTML conventions",
+  	"schemaVersion":"ISO Schematron 2016",
+  	"queryBinding":"jsonpath",
+  	"defaultPhase":"phaseid1",
+  	
+	 "phase":[
+    	{
+    		"id":"phaseid1",
+    		"active":["Document_head"]
+    	}
+    ],
+    
+	"pattern":[
+      {
+      	"id":"Document_head",
+      	"title":"Document Head Pattern",
+      	"rule":[
+          {          
+              	"id":"Document_head_rule",
+              	"abstract":false,
+                "context": "$..html.head",
+                "assert":[
+                  {
+                     "id":"Document_head_assert",
+                     "test":"((jp.query(contextNode, '$..title')).length > 0)",
+                     "message": "Page does not have a title."
+                  }
+                ]              
+          }]}]}}

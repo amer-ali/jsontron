@@ -1,0 +1,18 @@
+{
+  "html": {
+    "head": {
+      "link": {
+        "rel": "stylesheet",
+        "type": "text/css",
+        "href": "std.css"
+      }
+    },
+    "body": {
+      "class": "std-body",
+      "div": {
+        "class": "std-top",
+        "text": "Top component"
+      }
+    }
+  }
+}

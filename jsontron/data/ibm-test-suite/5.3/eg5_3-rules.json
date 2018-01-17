@@ -1,0 +1,33 @@
+{
+"schema":{
+
+  	"id":"eg5_2",
+  	"title":"Technical document schema",
+  	"schemaVersion":"ISO Schematron 2016",
+  	"queryBinding":"jsonpath",
+  	"defaultPhase":"phaseid1",
+  	
+	 "phase":[
+    	{
+    		"id":"phaseid1",
+    		"active":["Main_contact"]
+    	}
+    ],
+    
+	"pattern":[
+      {
+      	"id":"Main_contact",
+      	"title":"Main contact Pattern",
+      	"rule":[
+          {          
+              	"id":"Main_contact_rule",
+              	"abstract":false,
+                "context": "$..doc",
+                "assert":[
+                                    {
+                     "id":"Main_contact_assert",
+                     "test":"(jp.query(contextNode, '$..author..email')).includes(((jp.query(contextNode, '$..maincontact.email'))[0]))",
+                     "message": "'email' attribute must match the e-mail of one of the authors"
+                  }
+                ]              
+          }]}]}}
