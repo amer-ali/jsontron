@@ -1,0 +1,21 @@
+{
+  "xdoc": {
+    "chapter": [
+      {
+        "id": "c1",
+        "title": "chapter title",
+        "para": "Chapter content"
+      },
+      {
+        "id": "c2",
+        "title": "chapter 2 title",
+        "para": "Content"
+      },
+      {
+        "id": "c3",
+        "title": "Title",
+        "para": "Chapter 3 content"
+      }
+    ]
+  }
+}

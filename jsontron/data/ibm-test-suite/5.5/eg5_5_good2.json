@@ -1,0 +1,16 @@
+{
+  "doc": {
+  	"prologue":{
+  		"title": "Faster than light travel"
+  		},
+    "section":{
+      "text": [
+        "Placeholder for the"
+      ],
+      "emphasis": {
+        "link": "http://nasa.gov/ftl/paper.xml",
+        "text": "actual content"
+      }
+    }
+  }
+}

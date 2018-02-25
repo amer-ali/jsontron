@@ -1,4 +1,4 @@
-//module.exports = require('../node_modules/jsonpath/lib/index');
+module.exports = require('../node_modules/jsonpath/lib/index');
  /* var cities = [
 	  { name: "London", "population": 8615246 },
 	  { name: "Berlin", "population": 3517424 },
@@ -23,7 +23,7 @@ var schInstance = require("../data/loandata-instance-simple.json");
 //var mySchemaTest1 = require("../data/loandata-instance-single-schematest1.json");
 var mySchemaTest2 = require("../data/loandata-instance-single-schematest2.json");
 
-//console.log(schInstance);
+console.log(schInstance);
 //console.log(myRule);
 
 
@@ -42,18 +42,18 @@ var innerCustID = jp.query(allLoans, '$[0].customer.customer_id');
 var equality = jp.query(allLoans,'$[0].customer_id[0]') == jp.query(allLoans,'$[0].customer.customer_id[0]');
 
 
-//console.log("Jumbo Loan");
-//console.log (jumboLoan);
+console.log("Jumbo Loan");
+console.log (jumboLoan);
 //console.log("FHA Loan Amount");
 //console.log (fhaLoanAmount);
-//console.log ("All loans context node set");
-//console.log (allLoans);
-//console.log("Outer Customer ID");
-//console.log(outerCustID);
-//console.log("Inner Customer ID");
-//console.log(innerCustID);
-//console.log("Equality");
-//console.log(equality);
+console.log ("All loans context node set");
+console.log (allLoans);
+console.log("Outer Customer ID");
+console.log(outerCustID);
+console.log("Inner Customer ID");
+console.log(innerCustID);
+console.log("Equality");
+console.log(equality);
 //console.log("LoanID: "+ loanid);
 //console.log("LoanID2: "+ loanid2);
 //console.log("Result: "+ result);
@@ -61,10 +61,8 @@ var equality = jp.query(allLoans,'$[0].customer_id[0]') == jp.query(allLoans,'$[
 //console.log(pattern2);
 
 /**
- * Report function will contain an arary of errors, warnings and validations
- * @method addError will be called to add new errors
- * @method addWarnings will be called to add any warnings
- * @method addValidations will be called to add the validations
+ * Report function will contain an arry of errors
+ * @method addError will be called to add new erros
  * 
  * 
  */
@@ -186,16 +184,16 @@ var parseAssert = function (assert){
 	//console.log(jp.query(ruleContext, "$[0].loan_id"));
 	try{
 		let mytest = assert.test;
-		//console.log("MyTest Before: " + mytest);
-		//console.log(mytest);
+		console.log("MyTest Before: " + mytest);
+		console.log(mytest);
 		//mytest = mytest.replace(/context/ig,'parsedContext');
 		//mytest = mytest.replace(/contextNode/ig,'cNode');
-		//console.log ("MyTest After: "+ mytest);
+		console.log ("MyTest After: "+ mytest);
 		
 		//let result = eval(jp.query(ruleContext, "$..loan_id") < 1 && jp.query(ruleContext, "$..loan_id") < 2234567);
 		var asrtResult = eval(mytest); // TODO: do strict eval for security reasons
 		//console.log("Evaluated Test");
-		//console.log("Evaluated Test: "+ asrtResult);
+		console.log("Evaluated Test: "+ asrtResult);
 	}catch(e)
 	{
 		myReport.addError(this, assert, "Assert", "Error in Assert Parsing "+e.message, e.stack);
@@ -218,8 +216,8 @@ var parseAssert = function (assert){
 var validateAssert = function (parsedAssert){
 	try{
 		var assrtMsg = parsedAssert.result ? "successful" : parsedAssert.message;
-		//console.log ("Test: "+ parsedAssert.result);
-		//console.log ("Message: " + assrtMsg);
+		console.log ("Test: "+ parsedAssert.result);
+		console.log ("Message: " + assrtMsg);
 		}catch(e){
 			myReport.addError(this, parsedAssert, "Assert", "Error in Assert Validation "+e.message, e.stack);
 			
@@ -266,9 +264,9 @@ var  validateRule = function(instance, rule){
 	try {
 		//parsedContext = jp.query(instance, rule.context);
 		ruleParsedContext = jp.query(instance, rule.context);
-		//console.log("===== Begin Rule ParsedContext=====");
-		//console.log(ruleParsedContext);
-		//console.log("===== End Rule ParsedContext=====");
+		console.log("===== Begin Rule ParsedContext=====");
+		console.log(ruleParsedContext);
+		console.log("===== End Rule ParsedContext=====");
 		//console.log(parsedContext);
 		//FIXME: Need to check empty array separately, a rule can still be valid if the context didn't return anything
 		if(ruleParsedContext && Array.isArray(ruleParsedContext) && ruleParsedContext.length == 0){
@@ -278,18 +276,18 @@ var  validateRule = function(instance, rule){
 		else if(ruleParsedContext && Array.isArray(ruleParsedContext) && ruleParsedContext.length > 0){
 			//try{
 			ruleParsedContextNodeSet = ruleParsedContext; // all the asserts are in the first element of parsedContext nodeset
-			//console.log("===== Begin Rule ParsedContext NodeSet=====");
-			//console.log(ruleParsedContextNodeSet);
-			//console.log("===== End Rule ParsedContext NodeSet=====");
+			console.log("===== Begin Rule ParsedContext NodeSet=====");
+			console.log(ruleParsedContextNodeSet);
+			console.log("===== End Rule ParsedContext NodeSet=====");
 			if(ruleParsedContextNodeSet && Array.isArray(ruleParsedContextNodeSet) && ruleParsedContextNodeSet.length > 0){
 				
 				ruleParsedContextNodeSet.forEach(function(nsElement){
-					//console.log("Context Node Element");
-					//console.log(nsElement);
+					console.log("Context Node Element");
+					console.log(nsElement);
 					contextNode =[];
 					contextNode.push(nsElement);
-					//console.log("Context Node Element Array");
-					//console.log(contextNode);
+					console.log("Context Node Element Array");
+					console.log(contextNode);
 			
 				// get all asserts for the rule
 					let asrts = [];
@@ -299,7 +297,7 @@ var  validateRule = function(instance, rule){
 					if(Array.isArray(asrts) && asrts.length > 0 && asrts[0] !=''){
 						asrts.forEach(function(element){
 							
-							//console.log(element);
+							console.log(element);
 							try{
 								let parAssert = parseAssert(element);
 								let valAssert = validateAssert(parAssert);
@@ -324,8 +322,8 @@ var  validateRule = function(instance, rule){
 	}
 }
 
-//console.log ("Starting to process the Patterns......");
-//console.log ("======================================");
+console.log ("Starting to process the Patterns......");
+console.log ("======================================");
 
 /**
  * 
@@ -350,9 +348,9 @@ var parsePattern = function(spattern){
 }
 
 //parsePattern(myPattern);
-//console.log ("======================================");
-//console.log ("End of processing the Patterns......");
-//console.log ("======================================");
+console.log ("======================================");
+console.log ("End of processing the Patterns......");
+console.log ("======================================");
 
 //console.log(myPattern);
 
@@ -363,20 +361,20 @@ var  validatePattern = function(pInstance, pattern){
 	let rls = [];
 	try{
 	rls = parsePattern(pattern);
-	//console.log("Below are the rules: ")
-	//console.log(rls);
-	//console.log("Rules have been parsed. ")
+	console.log("Below are the rules: ")
+	console.log(rls);
+	console.log("Rules have been parsed. ")
 	
 	//parse and validate all asserts
 	rls.forEach(function(element){
 		try{ //if one or more rules have issues, it should still validate the remaining ones
 		//console.log(element);
 		//let parRle = parsePattern(element);
-		//console.log("Reading the rule:");
-		//console.log(element);
-		//console.log("Rule reading done.");
-		//console.log(element.context);
-		//console.log("The above is context");
+		console.log("Reading the rule:");
+		console.log(element);
+		console.log("Rule reading done.");
+		console.log(element.context);
+		console.log("The above is context");
 		validateRule(pInstance, element);
 		}catch(e){
 			myReport.addError(psInstance, element, "Pattern:Rules", "Issue validating rule inside pattern "+e.message, e.stack);
@@ -420,8 +418,8 @@ var parsePatterns = function(psSchema, patternsList){
 	// @ISO:PATTERN the schema should have atleast 1 pattern defined
 	if(!tempPatterns || !Array.isArray(tempPatterns) || tempPatterns.length < 1){ // if no pattern found
 		
-		//console.log("Invalid Schema : Need atleast 1 Pattern...");
-		//console.log(typeof tempPatterns);
+		console.log("Invalid Schema : Need atleast 1 Pattern...");
+		console.log(typeof tempPatterns);
 		myReport.addError(this, psSchema, "Pattern", "No Pattern found", "The Schematron rules/schema file should contain atleast 1 pattern");
 		return; //FIXME: use proper return clause
 		
@@ -437,7 +435,7 @@ var parsePatterns = function(psSchema, patternsList){
 	else{
 		try{
 		let processedPatterns = []; //keep track of valid patterns in the requested list
-		//console.log("Patterns Requested: "+patternsList);
+		console.log("Patterns Requested: "+patternsList);
 		tempPatterns.forEach(function(oElement){
 		
 			patternsList.forEach(function(iElement){
@@ -475,7 +473,7 @@ var parsePatterns = function(psSchema, patternsList){
 		myReport.addError(this, psSchema, "Pattern", "Parsing Error: "+ e.message, e.stack);
 	}
 	
-	//console.log(patterns);
+	console.log(patterns);
 	return patterns;
 	
 }
@@ -498,10 +496,10 @@ var validatePatterns = function(psInstance, psSchema, patternsList){
 	if(psPatterns && Array.isArray(patternsList) && psPatterns.length > 0 && psPatterns[0] != ''){
 		psPatterns.forEach(function(element){
 			try{
-			//console.log("Validating the pattern....");
+			console.log("Validating the pattern....");
 			//console.log(element);
 			validatePattern(psInstance, element);
-			//console.log("Validated the pattern.");
+			console.log("Validated the pattern.");
 			}catch(e){
 				myReport.addError(psInstance, psSchema, "Pattern", "Pattern Validation Error: "+ e.message, e.stack);
 			}
@@ -532,10 +530,10 @@ var validatePatterns = function(psInstance, psSchema, patternsList){
  * 
  */
 
-//console.log("Parsing the phase.....");
+console.log("Parsing the phase.....");
 var parsePhases = function(phSchema, phaseList){
-	//console.log(phaseList);
-	//console.log(typeof phaseList);
+	console.log(phaseList);
+	console.log(typeof phaseList);
 	let activePatterns = []; //this will hold all the active patterns that will be return for processing
 	let allPatterns = []; // this is the list of all patterns in the schema
 	let myPhases = []; // this will hold the active phases if defined/provided
@@ -572,23 +570,20 @@ var parsePhases = function(phSchema, phaseList){
 		//no phase is mentioned while invoking so process all phases
 		myPhases = tempPhaseList;
 		myReport.addWarning(this, phSchema, "Phase", "Parsing Warning. No phase was provided. ","No phase list was provided. All Patterns will be processed.");
-		//console.log("Inside Undefined if");
+		console.log("Inside Undefined if");
 	}
-	
-	//else if(typeof phaseList == 'string' && phaseList.toUpperCase() =='ALL'){
-	else if(Array.isArray(phaseList) && phaseList.includes('#ALL')){
+	else if(typeof phaseList == 'string' && phaseList.toUpperCase() =='ALL'){
 		
 		myPhases = tempPhaseList;
-		//console.log("Inside ALL if");
+		console.log("Inside ALL if");
 	
 		}
 	
-	//else if (typeof phaseList == 'string' && phaseList.toUpperCase() =='DEFAULT'){
-	else if (Array.isArray(phaseList) && phaseList.includes('#DEFAULT')){
+	else if (typeof phaseList == 'string' && phaseList.toUpperCase() =='DEFAULT'){
 		
-		//console.log("Inside DEFAULT if");
+		console.log("Inside DEFAULT if");
 		let dPhase = phSchema.schema.defaultPhase;
-		//console.log(dPhase);
+		console.log(dPhase);
 			if (!dPhase){ // If the defaultPhase is not defined or is empty, then all phases are active
 				myPhases = tempPhaseList;
 				myReport.addWarning(this, phSchema, "Phase", "Parsing Error: No Default Phase Found ", "No Default phase was found in the schema. All phases will be processed");
@@ -607,7 +602,7 @@ var parsePhases = function(phSchema, phaseList){
 			//if defaultPhase cannot be found in phaseList
 			if(myPhases.length < 1){
 				
-				//console.log("Inside invalid defaultPhase inner if");
+				console.log("Inside invalid defaultPhase inner if");
 				myPhases = tempPhaseList;
 				myReport.addWarning(this, phSchema, "Phase", "Parsing Error: No Default Phase Found ", "No Default phase was found in the schema. All phases will be processed");
 			}
@@ -620,7 +615,7 @@ var parsePhases = function(phSchema, phaseList){
 	
 	else if (Array.isArray(phaseList) && phaseList.length > 0){
 		
-		//console.log("Inside Array if");
+		console.log("Inside Array if");
 		try{
 			tempPhaseList.forEach(function(oElement){
 				
@@ -645,7 +640,7 @@ var parsePhases = function(phSchema, phaseList){
 		//if no valid phase was found
 		if(myPhases.length < 1){
 			
-			//console.log("Inside invalid array phase inner if");
+			console.log("Inside invalid array phase inner if");
 			myPhases = tempPhaseList;
 			myReport.addWarning(this, phSchema, "Phase", "Parsing Error: No Valid Phase Specified ", "Phase list doesnt have any valid phases. All phases will be processed");
 		}
@@ -658,7 +653,7 @@ var parsePhases = function(phSchema, phaseList){
 	else{ //TODO: Check in ISO Specs what should be the response if no valid phases are found
 		
 		myPhases = tempPhaseList;
-		//console.log("Inside last else");
+		console.log("Inside last else");
 	}
 	
 	try{
@@ -671,7 +666,7 @@ var parsePhases = function(phSchema, phaseList){
 		myReport.addError(this, phSchema, "Phase", "Parsing Error: "+e.message, e.stack);
 	}
 	
-	//console.log(activePatterns);
+	console.log(activePatterns);
 	
 	return activePatterns;
 	
@@ -682,19 +677,8 @@ var parsePhases = function(phSchema, phaseList){
 //parsePhases(mySchema,["phaseid2", "phaseid1"]);
 //parsePatterns( mySchema,["patternid1", "blah"] );
 //validatePatterns(schInstance, mySchema, ["patternid1","patternid2"]);
-JSONTRON = {
-		validate : function (schInstance, schRules,activePhaseList){
-			
-			
-			myActivePhases = parsePhases(schRules, activePhaseList);
-			validatePatterns(schInstance, schRules, myActivePhases);
-			console.log(myReport);
-		
-			myReport.finalValidationReport (myReport.errors, myReport.validations);
-			//console.log (str1 + " "+str2);
-		}
-}
-//validatePatterns(schInstance, mySchemaTest2, parsePhases(mySchemaTest2, ["phaseid1","phaseid2"]));
+
+validatePatterns(schInstance, mySchemaTest2, parsePhases(mySchemaTest2, ["phaseid1","phaseid2"]));
 //validatePatterns(schInstance, mySchemaTest1, ["patternid1"]);
 
 
@@ -703,12 +687,9 @@ JSONTRON = {
 //myReport.addError (schInstance, mySchema, "attrib2", "This is error message2", "This is detailed message2");
 
 
-//console.log(myReport);
+console.log(myReport);
 
-//myReport.finalValidationReport (myReport.errors, myReport.validations);
-this.JSONTRON = JSONTRON;
-exports.JSONTRON = JSONTRON;
-//exports.module = this;
+myReport.finalValidationReport (myReport.errors, myReport.validations);
 
 
 

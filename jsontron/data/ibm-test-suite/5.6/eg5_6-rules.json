@@ -1,34 +1,36 @@
 {
 "schema":{
 
-  	"id":"eg3_1",
+  	"id":"eg5_6",
   	"title":"Technical document schema",
   	"schemaVersion":"ISO Schematron 2016",
   	"queryBinding":"jsonpath",
-  	"defaultPhase":"phaseid1",
+  	"defaultPhase":"phase1",
   	
 	 "phase":[
     	{
-    		"id":"phaseid1",
+    		"id":"phase1",
     		"active":["Document_root"]
     	}
     ],
     
 	"pattern":[
-      {
+
+                {
       	"id":"Document_root",
-      	"title":"pattern title",
+      	"title":"Document_root",
       	"rule":[
           {          
-              	"id":"doc_root",
+              	"id":"document_root_rule",
               	"abstract":false,
                 "context": "$",
                 "assert":[
                   {
                      "id":"doc_root_assert",
-                     "test":"contextNode.length ==1 && contextNode[0] == jp.parent(contextNode, '$..doc')",
+                     "test":"(contextNode.length ==1) && jp.query(contextNode, '$..[?(@.doc)]') && (contextNode[0] == jp.parent(contextNode, '$..doc'))",
                      "message": "Root element should be 'doc'."
                   }
                 ]              
-          }]}]}}
+          }]}
           
+          ]}}

@@ -1,0 +1,17 @@
+{
+  "doc": {
+    "prologue": {
+      "title": "Faster than light travel",
+      "subtitle": "From fantasy to reality",
+      "author": {
+        "member": "yes",
+        "email": "cemereuwa@nasa.gov",
+        "name": "Chikezie Emereuwa",
+        "bio": "Chikezie Emereuwa is a quantum engineer and NASA researcher",
+        "affiliation": "NASA"
+      },
+      "section":
+            "Where does the section element go again?"
+    }
+  }
+}

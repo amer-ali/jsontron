@@ -68,20 +68,30 @@ var testErrorReport = function(arg1, arg2){
 //var schInstance1 = require("../data/loandata-instance-simple.json");
 //var mySchRules1 = require("../data/loandata-instance-single-schematest2.json");
 var jp = require('jsonpath');
-var schInstance1 = require("../data/ibm-test-suite/4.5/eg4_5_bad1.json");
-var mySchRules1 = require("../data/ibm-test-suite/4.5/eg4_5-rules.json");
+var schInstance1 = require("../data/ibm-test-suite/5.6/eg5_6_good1.json");
+var mySchRules1 = require("../data/ibm-test-suite/5.6/eg5_6-rules.json");
 var jsontron = require('./jsontron.js');
 
-contextNode = jp.query(schInstance1, "$..doc");
+contextNode = jp.query(schInstance1, "$");
 console.log(contextNode);
 
 //contextNodeN = jp.nodes(schInstance1, "$..[?(@.prologue)]");
 //console.log(contextNodeN);
-
-
+docrt = (contextNode.length ==1) && jp.query(contextNode, '$..[?(@.doc)]') && (contextNode[0] == jp.parent(contextNode, '$..doc'));
+console.log(docrt);
+console.log("above was doc root");
 //military = (jp.query(contextNode, '$..[?(@.email=="okey.agu.navy.mil")]'));
-link = (jp.query(contextNode, '$..[?(@.prologue)]')).length > 0 ;
-console.log(link);
+//link = ((jp.query(contextNode, '$..section'))) ;
+//linkk = ((jp.query(contextNode, '$..section'))[0].length) ;
+//link1 = (((jp.query(contextNode, '$..author')))) ;
+//link11 = (((jp.query(contextNode, '$..author'))).length) ;
+//link2 = ((jp.query(contextNode, '$..maincontact.email'))[0]) in (jp.query(contextNode, '$..author..email')) ;
+//link2 =  ((jp.query(contextNode, '$..section'))[0].length) >= (((jp.query(contextNode, '$..author')).length) * 3) ;
+//console.log(link);
+//console.log("section length: " + linkk);
+//console.log(link1)
+//console.log("author length: " +link11);
+//console.log(link2);
 //console.log(contextNode[0].length);
 //allowedChild = contextNode[0] in ['member', 'email','name','bio','affiliation'];
 //console.log(allowedChild);
@@ -113,8 +123,9 @@ console.log(link);
 
 //console.log(elemenOfParsedContext);
 
-jsontron.JSONTRON.validate(schInstance1,mySchRules1,["phaseid1","phaseid2"]);
+//jsontron.JSONTRON.validate(schInstance1,mySchRules1,["phaseid1","phaseid2"]);
 
+jsontron.JSONTRON.validate(schInstance1,mySchRules1,['#DEFAULT']);
 /*
 var argv = require("minimist")(process.argv.slice(2));
 console.dir(argv);
