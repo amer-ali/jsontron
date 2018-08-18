@@ -1,0 +1,11 @@
+{
+  "name": "jsontron",
+  "version": "0.8.0",
+  "description": "Schematron based JSON Validator",
+  "main": "JSONValidator",
+  "scripts": {
+    "test": "echo 'Error: no test specified' && exit 1"
+  },
+  "author": "Amer Ali",
+  "license": "MIT"
+}
