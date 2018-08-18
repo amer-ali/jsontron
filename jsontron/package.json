@@ -7,5 +7,30 @@
     "test": "echo 'Error: no test specified' && exit 1"
   },
   "author": "Amer Ali",
-  "license": "MIT"
+  "license": "MIT",
+  "directories": {
+    "doc": "docs",
+    "example": "examples",
+    "test": "tests"
+  },
+  "dependencies": {
+    "jsonpath": "^0.2.9",
+    "minimist": "^1.2.0",
+    "JSV": "^4.0.2"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amer-ali/jsontron.git"
+  },
+  "keywords": [
+    "schematron",
+    "json",
+    "json-validator",
+    "semantic-validator"
+  ],
+  "bugs": {
+    "url": "https://github.com/amer-ali/jsontron/issues"
+  },
+  "homepage": "https://github.com/amer-ali/jsontron#readme"
 }
