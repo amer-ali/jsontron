@@ -15,3 +15,6 @@ archive/
 
 # testing a file
 myfile.txt
+
+# testing a dir
+testdir/*
