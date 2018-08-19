@@ -2,7 +2,7 @@
   "name": "jsontron",
   "version": "0.8.2",
   "description": "Schematron based JSON Validator",
-  "main": "JSONValidator",
+  "main": "lib/jsontron.js",
   "scripts": {
     "test": "echo 'Error: no test specified' && exit 1"
   },
