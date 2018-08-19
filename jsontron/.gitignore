@@ -16,4 +16,4 @@ archive1/
 .project
 
 # scratch file
-scratch.js
+scratch*
