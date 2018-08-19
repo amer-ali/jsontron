@@ -6,6 +6,7 @@ backup/
 
 # Archive directory
 archive/
+archive1/
 
 # setting files
 .setting/
