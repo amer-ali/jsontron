@@ -1,0 +1,8 @@
+# Log files
+*.log
+
+# Backup directory
+backup/
+
+# Archive directory
+archive/
