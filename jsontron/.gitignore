@@ -8,13 +8,8 @@ backup/
 archive/
 
 # setting files
-/.setting
+.setting/
 
 # Project files
 *.project
 
-# testing a file
-myfile.txt
-
-# testing a dir
-testdir/*
