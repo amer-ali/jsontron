@@ -13,5 +13,7 @@ archive1/
 .setting/
 
 # Project files
-*.project
+.project
 
+# scratch file
+scratch.js
