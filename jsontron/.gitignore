@@ -7,4 +7,8 @@ backup/
 # Archive directory
 archive/
 
-# other files
+# setting files
+*.setting
+
+# Project files
+*.project
