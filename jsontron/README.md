@@ -7,7 +7,7 @@ JSON Semantic Rules Engine.
 $ npm -i jsontron
 
 
-## Command Line Usage
+## Usage: Command Line 
 
 
 	//go to the lib folder of jsontron modules
@@ -24,7 +24,9 @@ $ npm -i jsontron
 	$ node JSONValidator.js -i ../data/dissertation/loandata.json -r ../data/dissertation/phase/loandat-rulees_dissertation_singlePhase.json
 
 
-##  Usage
+
+
+## Usage: Inside other modules/scripts
 
 
 	
