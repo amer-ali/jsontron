@@ -3,8 +3,13 @@
 Schematron based JSON Semantic Validator.
 JSON Semantic Rules Engine.
 
+
 ## Installation
 $ npm -i jsontron
+
+
+    Note: If you have not installed node and npm. Please follow instructions at below site to install node and npm
+    https://docs.npmjs.com/getting-started/installing-node#installing-npm-from-the-nodejs-site
 
 
 ## Usage: Command Line 
