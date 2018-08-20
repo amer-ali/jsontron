@@ -86,3 +86,34 @@ $ npm -i jsontron
           
           
     jsontron.JSONTRON.validate(myInstance, myRules);
+    
+    
+
+
+## Examples: Using IBM Examples from Command Line 
+
+
+	//IBM Schematron examples translated from XML to JSON are bundled with the module in data/ibm-test-suite folder
+	
+	$ node JSONValidator.js -i ..\data\ibm-test-suite\3.1\eg3_1_good1.json -r ..\data\ibm-test-suite\3.1\eg3_1-rules.json
+	
+### Output
+
+    Parsing Pattern: Document_root
+	 1 Pattern(s) Requested.
+    1 Pattern(s) Processed.
+    0 Pattern(s)  Ignored.
+     Report {
+       errors: [],
+       warnings: [],
+       validations:
+          [ { schRule: [Object],
+           ruleContext: [Object],
+           assertionid: 'doc_root_assert',
+           assertionTest: 'contextNode.length ==1 && contextNode[0] == jp.parent(contextNode, \'$..doc\')',
+           message: 'successful',
+           assertionValid: true } ] }
+    true
+    **** THIS INSTANCE IS SEMANTICALLY VALID ****
+    
+	 
