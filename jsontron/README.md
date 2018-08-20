@@ -25,22 +25,22 @@ $ npm -i jsontron
 
 
 ### Output
-Parsing Pattern: patternid1
-1 Pattern(s) Requested.
-1 Pattern(s) Processed.
-0 Pattern(s)  Ignored.
-Report {
-  errors: [],
-  warnings: [],
-  validations:
-   [ { schRule: [Object],
-       ruleContext: [Object],
-       assertionid: 'assertidFHA21',
-       assertionTest: 'jp.query(contextNode,\'$..amount\') <= 500000',
-       message: 'successful',
-       assertionValid: true } ] }
-true
-**** THIS INSTANCE IS SEMANTICALLY VALID ****
+    Parsing Pattern: patternid1
+    1 Pattern(s) Requested.
+    1 Pattern(s) Processed.
+    0 Pattern(s)  Ignored.
+    Report {
+      errors: [],
+      warnings: [],
+      validations:
+        [ { schRule: [Object],
+           ruleContext: [Object],
+           assertionid: 'assertidFHA21',
+           assertionTest: 'jp.query(contextNode,\'$..amount\') <= 500000',
+           message: 'successful',
+           assertionValid: true } ] }
+     true
+     **** THIS INSTANCE IS SEMANTICALLY VALID ****
 
 
 
