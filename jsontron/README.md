@@ -95,6 +95,8 @@ $ npm -i jsontron
 
 	//IBM Schematron examples translated from XML to JSON are bundled with the module in data/ibm-test-suite folder
 	
+	// Below is an example using IBM Example 3.1
+	
 	$ node JSONValidator.js -i ..\data\ibm-test-suite\3.1\eg3_1_good1.json -r ..\data\ibm-test-suite\3.1\eg3_1-rules.json
 	
 ### Output
