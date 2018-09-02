@@ -1,0 +1,161 @@
+{
+"schema":{
+
+  	"id":"Book Data Context Tests",
+  	"title":"Schematron Semantic Validation",
+  	"schemaVersion":"ISO Schematron 2016",
+  	"queryBinding":"jsonpath",
+  	"defaultPhase":"author_total",
+  	
+	 "phase":[
+
+    	{
+    		"id":"author_total",
+    		"active":["author_total_pattern"]
+    	},
+    	    	{
+    		"id":"author_known",
+    		"active":["authors_known_pattern"]
+    	},
+    	    	{
+    		"id":"author_unknown",
+    		"active":["author_unknown_pattern"]
+    	},
+    	{
+    		"id":"store_merchandise",
+    		"active":["store_merchandise_pattern"]
+    	},
+    	{
+    		"id":"store_discount",
+    		"active":["store_discount_pattern"]
+    	}
+    ],
+    
+	"pattern":[
+
+      {
+      	"id":"author_total_pattern",
+      	"title":"Book Data Total Number of Authors Pattern",
+      	"abstract":false,
+      	"rule":[
+
+                   {          
+              	   	"id":"rule1",
+              	"abstract":false,
+                "context": "$.store.book",
+                "assert":[
+                  {
+                     "id":"assertid1",
+                     "test": "jp.query(contextNode,'$..author').length == 4",
+                     "message": "Assert 21: There should be total 4 authors"
+                  }
+                ]              
+          }
+          
+          ]
+         },
+         
+               {
+      	"id":"authors_known_pattern",
+      	"title":"Book Data Known Authors Pattern",
+      	"abstract":false,
+      	"rule":[
+          
+                    {          
+              	   	"id":"rule2",
+              	"abstract":false,
+                "context": "$.store.book[*].author",
+                "assert":[
+                  {
+                     "id":"assertid21",
+                     "test": "jp.query(contextNode,'$[0]')[0].includes('Nigel') ||jp.query(contextNode,'$[0]')[0].includes('Waugh')|| jp.query(contextNode,'$[0]')[0].includes('Melville') || jp.query(contextNode,'$[0]')[0].includes('Tolkien') ",
+                     "message": "Assert 1: Author should be either Nigel, Waugh, Melville or Tolkien"
+                  }
+                ]              
+          }
+          
+          ]
+         },
+               {
+      	"id":"author_unknown_pattern",
+      	"title":"Book Data Unknown Author Pattern",
+      	"abstract":false,
+      	"rule":[
+          
+                              {          
+              	   	"id":"rule3",
+              	"abstract":false,
+                "context": "$.store.book[*].author",
+                "assert":[
+                  {
+                     "id":"assertid21",
+                     "test": "jp.query(contextNode,'$[0]')[0].includes('Milton') === false  ",
+                     "message": "Assert 1: Milton should not be author of any books"
+                  }
+                ]              
+          }
+          
+          ]
+         },
+       {
+      	"id":"store_merchandise_pattern",
+      	"title":"Book Data Author Pattern",
+      	"abstract":false,
+      	"rule":[
+          
+                {          
+              	 "id":"rule3",
+              	"abstract":false,
+                "context": "$.store.book",
+                "assert":[
+                  {
+                     "id":"assertid_correctAuthor",
+                     "test": "(jp.query(authors, '$..[?(@.title == 'Sword of Honour' && @.author == 'Evelyn Waugh')]'))",
+                     "message": "Assert CorrectAuthor: The book Sword of Honour was written by Evelyn Waugh"
+                  }
+                ]              
+          }
+          
+          ]
+         },
+         
+         {
+      	"id":"store_discount_pattern",
+      	"title":"Book Data Discount Limit Pattern",
+      	"abstract":false,
+      	"rule":[
+          
+                {          
+              	 "id":"rule3",
+              	"abstract":false,
+                "context": "$..[?(@.price)]",
+                "assert":[
+                  {
+                     "id":"assertid31",
+                     "test": "(jp.query(contextNode,'$..[?(@.discount > 5 )]')) == false ",
+                     "message": "Assert 1: The maximum allowed discount is 5 dollars"
+                  }
+                ]              
+          },
+                          {          
+              	 "id":"rule4",
+              	"abstract":false,
+                "context": "$..[?(@.price)]",
+                "assert":[
+                  {
+                     "id":"assertid31",
+                     "test": "(jp.query(contextNode,'$..[?(@.discount > @.price*.5 )]')) == false ",
+                     "message": "Assert 1: The maximum allowed discount is 50 %"
+                  }
+                ]              
+          }
+          
+          
+          ]
+         }
+              
+         ]
+         
+         
+         }
+        }

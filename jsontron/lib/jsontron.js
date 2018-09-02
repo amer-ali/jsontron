@@ -70,9 +70,12 @@ var equality = jp.query(allLoans,'$[0].customer_id[0]') == jp.query(allLoans,'$[
  */
 var Report = function(){
 	
+	
 	this.errors = [];
 	this.warnings = [];
 	this.validations =[];
+	this.finalValidationReport =[];
+	this.valid = false;
 	
 	
 }
@@ -127,15 +130,15 @@ Report.prototype.addValidationSchemaNInstance = function(instance, schema){
 	
 }
 
-Report.prototype.finalValidationReport = function(errorList, validationList ){
+Report.prototype.setFinalValidationReport = function(errorList, validationList, interimReport ){
 	
-	let finalValidationReport = [];
+	//let finalValidationReport = [];
 	let validationFailures = [];
 	try{
 		if (validationList && Array.isArray(validationList)&& validationList.length >0){
 			
 			validationList.forEach(function(valElement){
-				console.log(valElement.assertionValid);
+				//console.log(valElement.assertionValid);
 				if(!valElement.assertionValid){
 					
 					validationFailures.push(valElement);
@@ -146,15 +149,17 @@ Report.prototype.finalValidationReport = function(errorList, validationList ){
 			
 		}
 		
-		finalValidationReport = validationFailures.concat(errorList);
-		if (finalValidationReport.length < 1){
+		interimReport.finalValidationReport = validationFailures.concat(errorList);
+		//return finalValidationReport;
+		
+		//if (finalValidationReport.length < 1){
 			
-			console.log("**** THIS INSTANCE IS SEMANTICALLY VALID ****");
+			//console.log("**** THIS INSTANCE IS SEMANTICALLY VALID ****");
 			
-		}else{
-			console.log("**** THIS INSTANCE CONTAINS SEMANTIC VALIDATION ISSUES. PLEASE SEE BELOW ****");
-			console.log(finalValidationReport);
-		}
+		//}else{
+			//console.log("**** THIS INSTANCE CONTAINS SEMANTIC VALIDATION ISSUES. PLEASE SEE BELOW ****");
+			//console.log(finalValidationReport);
+		//}
 		
 	}catch(e){
 		console.log(" ERROR IN VALIDATION REPORTING: "+e.message + e.stack);
@@ -194,8 +199,8 @@ var parseAssert = function (assert){
 		
 		//let result = eval(jp.query(ruleContext, "$..loan_id") < 1 && jp.query(ruleContext, "$..loan_id") < 2234567);
 		var asrtResult = eval(mytest); // TODO: do strict eval for security reasons
-		//console.log("Evaluated Test");
-		//console.log("Evaluated Test: "+ asrtResult);
+		console.log("Evaluated Test");
+		console.log("Evaluated Test: "+ asrtResult);
 	}catch(e)
 	{
 		myReport.addError(this, assert, "Assert", "Error in Assert Parsing "+e.message, e.stack);
@@ -266,9 +271,9 @@ var  validateRule = function(instance, rule){
 	try {
 		//parsedContext = jp.query(instance, rule.context);
 		ruleParsedContext = jp.query(instance, rule.context);
-		//console.log("===== Begin Rule ParsedContext=====");
-		//console.log(ruleParsedContext);
-		//console.log("===== End Rule ParsedContext=====");
+		console.log("===== Begin Rule ParsedContext=====");
+		console.log(ruleParsedContext);
+		console.log("===== End Rule ParsedContext=====");
 		//console.log(parsedContext);
 		//FIXME: Need to check empty array separately, a rule can still be valid if the context didn't return anything
 		if(ruleParsedContext && Array.isArray(ruleParsedContext) && ruleParsedContext.length == 0){
@@ -683,14 +688,35 @@ var parsePhases = function(phSchema, phaseList){
 //parsePatterns( mySchema,["patternid1", "blah"] );
 //validatePatterns(schInstance, mySchema, ["patternid1","patternid2"]);
 JSONTRON = {
-		validate : function (schInstance, schRules,activePhaseList){
+		validate : function (schInstance, schRules, activePhaseList){
 			
-			
+			myReport = new Report();
 			myActivePhases = parsePhases(schRules, activePhaseList);
 			validatePatterns(schInstance, schRules, myActivePhases);
-			console.log(myReport);
+			//console.log(myReport);
+			//myReport.valid = true;
+			//console.log(myReport);
+			
+			//myReport.finalValidationList = validationFailures.concat(errorList);
+			//return finalValidationReport;
+			
+			myReport.setFinalValidationReport (myReport.errors, myReport.validations, myReport);
+			
+			if (myReport.finalValidationReport.length < 1){
+				
+				myReport.valid = true;
+				console.log("**** THIS INSTANCE IS SEMANTICALLY VALID ****");
+				
+			}else{
+				myReport.valid = false;
+				console.log("**** THIS INSTANCE CONTAINS SEMANTIC VALIDATION ISSUES. PLEASE SEE FULL REPORT BY ENABLING DEBUG WITH -d OPTION ****");
+				//console.log(myReport.finalValidationReport);
+			}
+			
+			//console.log(myReport);
+			return myReport;
 		
-			myReport.finalValidationReport (myReport.errors, myReport.validations);
+			//myReport.finalValidationReport (myReport.errors, myReport.validations);
 			//console.log (str1 + " "+str2);
 		}
 }
@@ -710,6 +736,7 @@ this.JSONTRON = JSONTRON;
 exports.JSONTRON = JSONTRON;
 //exports.module = this;
 
+//Command Line processing
 
 
 

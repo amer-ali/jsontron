@@ -26,7 +26,7 @@
                 "assert":[
                   {
                      "id":"doc_root_assert",
-                     "test":"contextNode.length ==1 && contextNode[0] == jp.parent(contextNode, '$..doc')",
+                     "test":"contextNode.length ==1 && contextNode[0] == 'doc'",
                      "message": "Root element should be 'doc'."
                   }
                 ]              
