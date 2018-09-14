@@ -57,8 +57,35 @@ test("Schematron Validation", function () {
 
 */
 
+var jsontron;
+
+var myfunc = (function(){
+	jsontron = require('../lib/jsontron.js').JSONTRON;
+	test("Initial Test", function(){
+		//var schRule = require('../data/dissertation/phase/loandata-rules_dissertation_singlePhase.json');
+		equal(jsontron.JSONTRON.validate(schInstanceMaster, schRule).valid, true, "Single Phase");
+		equal(trueOrfalse(2), 4, "sq of 2 is 4");
+		
+	})
+	
+});
+//myfunc;
+
+//= require('../lib/jsontron.js');
+//var schInstanceMaster = require('../data/loandata.json');
+
+/**test("Initial Test", function(){
+	//var schRule = require('../data/dissertation/phase/loandata-rules_dissertation_singlePhase.json');
+	equal(jsontron.JSONTRON.validate(schInstanceMaster, schRule).valid, true, "Single Phase");
+	equal(trueOrfalse(2), 4, "sq of 2 is 4");
+	
+})
+
+*/
+
 // testingfile = require ("../index.js");
 test("Schematron Validation", function () {
+	//myfunc;
 	equal(trueOrfalse(2), 4, "sq of 2 is 4");
 	equal(trueOrfalse(4), 16, "sq of 4 is 16");
 	//ok(trueOrfalse, "This is true or false test");

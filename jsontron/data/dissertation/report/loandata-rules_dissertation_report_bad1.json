@@ -28,7 +28,7 @@
       	"id":"precheck_pattern",
       	"title":"Loan Amount Pattern",
       	"abstract":false,
-      	"rule":[
+      	"rules":[
           {          
               	   	"id":"rule-pre",
               	"abstract":false,
@@ -55,7 +55,7 @@
                 "assert":[
                   {
                      "id":"assertid31",
-                     "test": "jp.query(contextNode,'$..amount') <= 1000000",
+                     "test": "jp.query(contextNodes,'$..amount') <= 1000000",
                      "message": "Assert 31: For Traditional Loan, Amount cannot exceed $1MM"
                   },
                                     {
@@ -74,7 +74,7 @@
       	"title":"Jumbo Loan Min Pattern",
       	"documents":"pathValue",
       	"abstract":false,
-      	"rule":[
+      	"rules":[
           {          
               	"id":"rule4",
               	"abstract":false,
@@ -87,6 +87,7 @@
                   }]}]},
                   
         {
+        
       	"id":"loan_jumbo_max_pattern",
       	"title":"Jumbo Loan Upper Limit Pattern",
       	"documents":"pathValue",

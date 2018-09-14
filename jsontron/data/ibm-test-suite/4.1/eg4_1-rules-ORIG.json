@@ -10,24 +10,24 @@
 	 "phase":[
     	{
     		"id":"phaseid1",
-    		"active":["Report_links"]
+    		"active":["Military_authors"]
     	}
     ],
     
 	"pattern":[
       {
-      	"id":"Report_links",
-      	"title":"Report links Pattern",
+      	"id":"Military_authors",
+      	"title":"Military Authors Pattern",
       	"rule":[
           {          
-              	"id":"Report_links_rule",
+              	"id":"Military_authors_rule",
               	"abstract":false,
-                "context": "$..*",
+                "context": "$..author",
                 "assert":[
                   {
-                     "id":"Report_links_assert",
-                     "test":"((jp.query(contextNode, '$..link')).length > 0)",
-                     "message": "element has a link."
+                     "id":"Military_authors_assert",
+                     "test":"jp.query(contextNode, '$[0][?(@.email.endsWith(mil))]')",
+                     "message": "Author appears to be military personnel"
                   }
                 ]              
           }]}]}}

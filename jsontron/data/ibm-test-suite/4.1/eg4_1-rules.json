@@ -26,7 +26,7 @@
                 "assert":[
                   {
                      "id":"Military_authors_assert",
-                     "test":"!((jp.query(contextNode, '$..*'))[0].endsWith('.mil'))",
+                     "test":"contextNode[0].endsWith('mil')",
                      "message": "Author appears to be military personnel"
                   }
                 ]              

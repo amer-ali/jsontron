@@ -55,7 +55,7 @@
                 "assert":[
                   {
                      "id":"Report_links_assert",
-                     "test":"((jp.query(contextNode, '$..link')).length > 0)",
+                     "test":"(!(jp.query(contextNode, '$..link')).length > 0)",
                      "message": "element has a link."
                   }
                 ]              
@@ -87,7 +87,7 @@
                 "assert":[
                   {
                      "id":"doc_root_assert",
-                     "test":"Object.keys(jp.parent(contextNode, '$.*')[0]) == 'doc'",
+                     "test":"contextNode.length ==1 && contextNode[0] == jp.parent(contextNode, '$..doc')",
                      "message": "Root element should be 'doc'."
                   }
                 ]              

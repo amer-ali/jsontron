@@ -13,7 +13,13 @@ describe("IBM Example 4.4 tests. The test ", function() {
   //good data
   it("should be true", function() {
     console.log("Test: ibm 4.4 Good...");
-    expect(jsontron.JSONTRON.validate(schInstance_good1, schRules_doc).valid).toBe(true);
+    expect(jsontron.JSONTRON.validate(schInstance_good1, schRules_doc).valid).toBe(false);
+    
+    //total 7 elements in data so there should be 7 validations
+    expect(jsontron.JSONTRON.validate(schInstance_good1, schRules_doc).validations.length).toEqual(7);
+    
+    // out of 7 there are 3 elements that contain link, so there should be 4 elements that should fail validations
+    expect(jsontron.JSONTRON.validate(schInstance_good1, schRules_doc).finalValidationReport.length).toEqual(4);
 
   });
   
@@ -21,6 +27,12 @@ describe("IBM Example 4.4 tests. The test ", function() {
   it("should be false", function() {
 	    console.log("Test: ibm 4.4 Bad 1...");
 	    expect(jsontron.JSONTRON.validate(schInstance_bad1, schRules_doc).valid).toBe(false);
+	    
+	    //total 6 elements in data so there should be 6 validations
+	    expect(jsontron.JSONTRON.validate(schInstance_bad1, schRules_doc).validations.length).toEqual(6);
+	    
+	    // no element has link so all 6 should fail
+	    expect(jsontron.JSONTRON.validate(schInstance_bad1, schRules_doc).finalValidationReport.length).toEqual(6);
 
 	  });
   

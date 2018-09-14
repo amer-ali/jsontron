@@ -26,7 +26,7 @@
                 "assert":[
                   {
                      "id":"Author_elements_assert",
-                     "test":"(jp.query(contextNode, '$..bio').length + jp.query(contextNode, '$..affiliation').length + jp.query(contextNode, '$..name').length) == jp.query(contextNode, '$[0].*').length",
+                     "test":"jp.query(contextNode,'$[0][?(@.name || @.bio || @.affiliation)]') != false",
                      "message": "Only 'name', 'bio' and 'affiliation' elements are allowed as children of 'author'"
                   }
                 ]              
