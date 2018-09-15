@@ -1,3 +1,14 @@
+/**
+ * This module is called from command line
+ * SYNTAX:  $node JSONValidator -i instancefile -r rulesfile [-d ] [#DEFAULT | #ALL | phase list]')
+ * where
+ * -i is json document that needs to be validated
+ * - r is the rules file that needs to be applied 
+ * -d is optional and will turn on debug
+ * #DEFAULT is keyword to activate default phase
+ * #ALL is keyword to activiate all phases
+ * phase list is space separated list of phases that you wan to activate
+ */
 
 try {
 var jsontron = require('./jsontron.js');
@@ -17,14 +28,7 @@ myRpt = jsontron.JSONTRON.validate(schInstance, mySchRules, phaseLists);
 
 
 if (argv.d){ // if debug is enabled
-	//console.log("Total Validations: " + myRpt.validations.length);
-	//console.log("Total Errors Found: " + myRpt.errors.length);
-	//console.log("Total Warnings Found: " + myRpt.warnings.length);
-	//if (myRpt.finalValidationReport.length > 0){
-		
-		//console.log("Validation Issues found: ");
-		//console.log(myRpt.finalValidationReport);
-	//}
+
 	console.log("Total Errors Found: " + myRpt.errors.length);
 	console.log("Total Warnings Found: " + myRpt.warnings.length);
 	console.log("Total Validations: " + myRpt.validations.length);
