@@ -8,8 +8,12 @@ JSON Semantic Rules Engine.
 $ npm -i jsontron
 
 
+
     Note: If you have not installed node and npm. Please follow instructions at below site to install node and npm
     https://docs.npmjs.com/getting-started/installing-node#installing-npm-from-the-nodejs-site
+
+
+
 
 
 ## Usage: Command Line 
@@ -22,11 +26,21 @@ $ npm -i jsontron
 	//run JSONValidator with instance doc, rules doc and optional phase list
 	//#ALL and #DEFAULT are special key words meant to invoke all or default phases respectively
 	
-	$ node JSONValidator.js -i {instance doc} -r { rules doc} [#ALL | #DEFAULT | Phase List]
+	
+	$ node JSONValidator -i {instance doc} -r { rules doc} [#ALL | #DEFAULT | Phase List] [-d]
+	
+	where:
+	 i is json instance document to be validated
+	 r is rules file
+	 #ALL | #DEFAULT | Phase list  specifies the phase (s)
+	 d is to enable debug
+	 
 	
 	//example
 	$ cd ../node_modules/jsontron/lib
-	$ node JSONValidator.js -i ../data/dissertation/loandata.json -r ../data/dissertation/phase/loandat-rulees_dissertation_singlePhase.json
+	
+	$ node JSONValidator -i ../data/dissertation/loandata.json -r ../data/dissertation/phase/loandat-rulees_dissertation_singlePhase.json
+	
 
 
 ### Output
@@ -90,8 +104,16 @@ $ npm -i jsontron
           }]}]}};
           
           
-    jsontron.JSONTRON.validate(myInstance, myRules);
+    //without phase
+    var myReport = jsontron.JSONTRON.validate(myInstance, myRules);
+    var valid = myReport.valid;
     
+    //with phase
+    var myReport = jsontron.JSONTRON.validate(myInstance, myRules, ['phaseid1']);
+    var valid = myReport.valid;
+    [Note: the phase(s) have to be in array format like ['phaseid1'] or ['phaseid2'] or ['phaseid1', 'phaseid2'] or ['#DEFAULT']   ]
+    
+  
     
 
 
@@ -102,7 +124,7 @@ $ npm -i jsontron
 	
 	// Below is an example using IBM Example 3.1
 	
-	$ node JSONValidator.js -i ..\data\ibm-test-suite\3.1\eg3_1_good1.json -r ..\data\ibm-test-suite\3.1\eg3_1-rules.json
+	$ node JSONValidator -i ..\data\ibm-test-suite\3.1\eg3_1_good1.json -r ..\data\ibm-test-suite\3.1\eg3_1-rules.json
 	
 ### Output
 
