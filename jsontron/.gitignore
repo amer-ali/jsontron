@@ -10,7 +10,7 @@ archive/
 archive1/
 
 # setting files
-.setting/
+#.setting/
 
 # Project files
 #.project
@@ -19,4 +19,4 @@ archive1/
 #scratch*
 
 # node modules
-node_module/
+#node_module/
