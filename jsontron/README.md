@@ -5,7 +5,7 @@ JSON Semantic Rules Engine.
 
 
 ## Installation
-$ npm -i jsontron
+$ npm  i  jsontron
 
 
 
