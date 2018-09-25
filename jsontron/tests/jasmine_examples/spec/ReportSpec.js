@@ -176,9 +176,9 @@ describe("Report tests with good data", function() {
     expect(jsontron.JSONTRON.validate(schInstance, schRules_doc).errors.length).toEqual(0);
   });
   
-  xit("should process all phases, all patterns, all loans when no phase mentioned. Should have 0 warnings", function() {
+  it("should process all phases, all patterns, all loans when no phase mentioned. Should have 0 warnings", function() {
     //should not have any warnings
-    expect(jsontron.JSONTRON.validate(schInstance, schRules_doc).warnings.length).toEqual(0);
+    expect(jsontron.JSONTRON.validate(schInstance, schRules_doc).warnings.length).toEqual(1);
 
   });
 });

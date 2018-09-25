@@ -415,7 +415,7 @@ var parsePatterns = function(psSchema, patternsList){
 		})
 	
 	})
-	console.log(patternsList.length + " Pattern(s) Requested. \n"+patterns.length + " Pattern(s) Processed. \n"+ (patternsList.length - patterns.length) + " Pattern(s)  Ignored.");
+	console.log(patternsList.length + " Pattern(s) Requested. "+patterns.length + " Pattern(s) Processed. "+ (patternsList.length - patterns.length) + " Pattern(s)  Ignored.");
 		try{
 			let diffPatterns = patternsList.length - processedPatterns.length;
 			if(diffPatterns > 0){ // it means there some invalid patterns are requested

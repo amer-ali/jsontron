@@ -26,7 +26,7 @@
 	"pattern":[
       {
       	"id":"precheck_pattern",
-      	"title":"Loan Amount Pattern",
+      	"title":"FHA MIP Pattern",
       	"abstract":false,
       	"rule":[
           {          
@@ -95,6 +95,6 @@
                      "test": "jp.query(contextNode,'$..amount') <= 5000000",
                      "message": "Assert 44: For Jumbo Loan, Amount cannot be more than $5MM"
                   }]}]}        
-         ]
-         }
-        }
+         ]}}
+         
+         

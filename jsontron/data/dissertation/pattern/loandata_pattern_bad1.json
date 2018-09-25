@@ -23,9 +23,7 @@
 					"customer_lname":"Doe",
 					"customer_address":" 4 Way Loop, New York, NY 10038"
 						
-							}
-				
-			
+			}
 			},
 			
 				{ 
@@ -51,8 +49,6 @@
 					"customer_address":" 4 Way Loop, New York, NY 10038"
 						
 							}
-				
-			
 			},
 			{ 
 				"loan_id":"1234569",
@@ -74,20 +70,8 @@
 					"customer_id":"JD689457",
 					"customer_fname":"John",
 					"customer_lname":"Doe",
-					"customer_address":" 4 Way Loop, New York, NY 10038"
-						
-							}
-				
-			
+					"customer_address":" 4 Way Loop, New York, NY 10038"			
 			}
-		
-		
-		
-		]
-		
-		}
-	
-	
-	}
+			}]}}
 
 

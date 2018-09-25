@@ -11,11 +11,11 @@
  */
 
 try {
-var jsontron = require('./jsontron.js');
+var jsontron = require('../lib/jsontron.js');
 
 //var Jasmine = require("jasmine");
  var argv = require("minimist")(process.argv.slice(2));
-console.dir(argv);
+//console.dir(argv);
 
 var schInstance;
 var mySchRules;
@@ -23,7 +23,9 @@ var mySchRules;
 schInstance = require(argv.i);
 mySchRules = require(argv.r);
 var phaseLists = argv._;
+console.log("Starting Semantic Validation .........");
 myRpt = jsontron.JSONTRON.validate(schInstance, mySchRules, phaseLists);
+console.log("Completed Semantic Validation .........");
 //console.log(myRpt);
 
 
