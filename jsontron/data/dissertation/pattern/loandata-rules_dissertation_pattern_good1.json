@@ -45,7 +45,7 @@
          },
       {
       	"id":"patternid1",
-      	"title":"Loan Amount Pattern",
+      	"title":"Traditional Loan Amount Pattern",
       	"abstract":false,
       	"rule":[
           {          
