@@ -13,6 +13,8 @@
 try {
 var jsontron = require('../lib/jsontron.js');
 
+//var contextNode = jp.query(instanceDocument, "$..doc");
+
 //var Jasmine = require("jasmine");
  var argv = require("minimist")(process.argv.slice(2));
 //console.dir(argv);

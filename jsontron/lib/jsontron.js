@@ -615,7 +615,7 @@ var parsePhases = function(phSchema, phaseList){
 				phaseList.forEach(function(iElement){
 					if(oElement.id == iElement){
 						
-						myPhases.push(oElement);
+							myPhases.push(oElement);
 					
 				}
 			})
@@ -657,7 +657,9 @@ var parsePhases = function(phSchema, phaseList){
 	try{
 		myPhases.forEach(function(element){
 			
-			activePatterns = activePatterns.concat(element.active);
+			//activePatterns = activePatterns.concat(element.active);
+			myActivePatterns = activePatterns.concat(element.active);
+			activePatterns = [... new Set(myActivePatterns)];
 			
 		})
 		
@@ -703,7 +705,7 @@ JSONTRON = {
 
 this.JSONTRON = JSONTRON;
 exports.JSONTRON = JSONTRON;
-//exports.module = this;
+exports.module = this;
 
 
 

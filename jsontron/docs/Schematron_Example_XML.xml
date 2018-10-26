@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://purl.oclc.org/dsdl/schematron" >
+<title> School Rules Book </title>
+<phase id="higher-school-classes">
+	<active pattern="high-school"/>
+</phase>
+<phase id="lower-school-classes">
+	<active pattern="primary-school"/>
+	<active pattern="middle-school"/>
+</phase>
+<pattern id="primary-school">
+	<rule context="student">
+		<assert test="bag">Give the student a bag</assert>
+		<report test="phone">Electronic devices are prohibited </report>
+	</rule>
+</pattern>
+<pattern id="middle-school">
+	<rule context="student">
+			<assert test="bag">Give the student a bag</assert>
+			 <assert test="book">Student needs books</assert>
+			 <report test="phone">Electronic devices are prohibited </report>
+	</rule>
+</pattern>
+<pattern id="high-school">
+	<rule context="student">
+			<assert test="bag">Give the student a bag</assert>
+			 <assert test="book">Student needs books</assert>
+			 <report test="phone">Turn off the phone</report>
+	</rule>
+</pattern>
+</schema>
+
