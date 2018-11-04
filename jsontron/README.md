@@ -19,9 +19,9 @@ $ npm  i  jsontron
 ## Usage: Command Line 
 
 
-	//go to the lib folder of jsontron modules
+	//go to the bin folder of jsontron module
 	
-	$ cd $JSONTRON_ROOT/lib
+	$ cd $JSONTRON_ROOT/bin
 	 
 	//run JSONValidator with instance doc, rules doc and optional phase list
 	//#ALL and #DEFAULT are special key words meant to invoke all or default phases respectively
@@ -35,11 +35,17 @@ $ npm  i  jsontron
 	 #ALL | #DEFAULT | Phase list  specifies the phase (s)
 	 d is to enable debug
 	 
+	 //alternatively you can set an environment variable for JSONValidator like below
+	 //in Windows
+	 
+	 $ set JSONValidator = $JSONTRON_ROOT/bin/JSONValidator
+	 
 	
 	//example
-	$ cd ../node_modules/jsontron/lib
+	$ cd ../node_modules/jsontron/data/dissertation/phase
 	
-	$ node JSONValidator -i ../data/dissertation/loandata.json -r ../data/dissertation/phase/loandat-rulees_dissertation_singlePhase.json
+	$ node %JSONValidator% -i loandata.json -r loandat-rulees_dissertation_singlePhase.json
+	
 	
 
 
@@ -123,8 +129,9 @@ $ npm  i  jsontron
 	//IBM Schematron examples translated from XML to JSON are bundled with the module in data/ibm-test-suite folder
 	
 	// Below is an example using IBM Example 3.1
+	$cd $JSONTRON_ROOT\data\ibm-test-suite\3.1
 	
-	$ node JSONValidator -i ..\data\ibm-test-suite\3.1\eg3_1_good1.json -r ..\data\ibm-test-suite\3.1\eg3_1-rules.json
+	$ node JSONValidator -i eg3_1_good1.json -r eg3_1-rules.json
 	
 ### Output
 
