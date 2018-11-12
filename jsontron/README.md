@@ -152,4 +152,7 @@ $ npm  i  jsontron
     true
     **** THIS INSTANCE IS SEMANTICALLY VALID ****
     
-	 
+
+### Keywords
+
+Schematron JSON Semantic-Validator JSON Co-constraints JSON-Rules-Engine 

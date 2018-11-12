@@ -1,6 +1,6 @@
 {
   "name": "jsontron",
-  "version": "0.8.14",
+  "version": "0.8.15",
   "description": "Schematron based JSON Validator",
   "main": "lib/jsontron.js",
   "scripts": {
