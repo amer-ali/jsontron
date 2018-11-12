@@ -1,0 +1,107 @@
+{
+"schema":{
+
+  	"id":"Loan Data Rules",
+  	"title":"Schematron Semantic Validation",
+  	"schemaVersion":"ISO Schematron 2016",
+  	"queryBinding":"jsonpath",
+  	"defaultPhase":"precheck",
+  	
+	 "phase":[
+    	{
+    		"id":"precheck",
+    		"active":["precheck_pattern"]
+    	},
+    	{
+    		"id":"traditional",
+    		"active":["loan_traditional_pattern"]
+    	},
+    	{
+    		"id":"jumbo",
+    		"active":["loan_jumbo_min_pattern", "loan_jumbo_max_pattern"]
+    	}
+ 	
+    ],
+    
+	"pattern":[
+      {
+      	"id":"precheck_pattern",
+      	"title":"Loan Amount Pattern",
+      	"abstract":false,
+      	"rule":[
+          {          
+              	   	"id":"rule-pre",
+              	"abstract":false,
+                "context": "$.loan_data.loans[?(@.loan_type === 'FHA')]",
+                "assert":[
+                  {
+                     "id":"assertid31",
+                     "test": "jp.query(contextNode, '$..mip_rate') > 0",
+                     "message": "Assert 31: FHA loan can't have zero mortgage insurance premium"
+                  }
+                ]              
+          }
+          ]
+         },
+      {
+      	"id":"loan_traditional_pattern",
+      	"title":"Traditional Loan Amount Pattern",
+      	"abstract":false,
+      	"rule":[
+          {          
+              	   	"id":"rule3",
+              	"abstract":false,
+                "context": "$.loan_data.loans[?(@.loan_type === 'Traditional')]",
+                "assert":[
+                  {
+                     "id":"assertid31",
+                     "test": "jp.query(contextNode,'$..amount') <= 1000000",
+                     "message": "Assert 31: For Traditional Loan, Amount cannot exceed $1MM"
+                  },
+                                    {
+                     "id":"assertid32",
+                     "test": "jp.query(contextNode,'$..amount') >= 100000",
+                     "message": "Assert 32: For Traditional Loan, Amount cannot be less than $100K"
+                  }
+                ]              
+          }
+          ]
+         },
+         
+         
+               {
+      	"id":"loan_jumbo_min_pattern",
+      	"title":"Jumbo Loan Min Pattern",
+      	"documents":"pathValue",
+      	"abstract":false,
+      	"rule":[
+          {          
+              	"id":"rule4",
+              	"abstract":false,
+                "context": "$.loan_data.loans[?(@.loan_type === 'Jumbo')]",
+                "assert":[
+                  {
+                     "id":"assertid41",
+                     "test": "jp.query(contextNode,'$..amount') >= 1000000",
+                     "message": "Assert 41: For Jumbo Loan, Amount cannot be less than $1MM"
+                  }]}]},
+                  
+        {
+      	"id":"loan_jumbo_max_pattern",
+      	"title":"Jumbo Loan Upper Limit Pattern",
+      	"documents":"pathValue",
+      	"abstract":false,
+      	"rule":[
+          {          
+              	"id":"rule44",
+              	"abstract":false,
+                "context": "$.loan_data.loans[?(@.loan_type === 'Jumbo')]",
+                "assert":[
+                  {
+                     "id":"assertid44",
+                     "test": "jp.query(contextNode,'$..amount') <= 5000000",
+                     "message": "Assert 44: For Jumbo Loan, Amount cannot be more than $5MM"
+                  }]}]}        
+         ]
+         }
+        }

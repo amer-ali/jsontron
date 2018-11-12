@@ -29,7 +29,8 @@
     "schematron",
     "json",
     "json-validator",
-    "semantic-validator"
+    "semantic-validator",
+    "rules-engine"
   ],
   "bugs": {
     "url": "https://github.com/amer-ali/jsontron/issues"

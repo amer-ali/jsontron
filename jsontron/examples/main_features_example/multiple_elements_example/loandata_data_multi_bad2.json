@@ -1,0 +1,23 @@
+{
+	"loan_data":{
+		"loans":[
+			{ 
+				"loan_id":"1234567",
+				"loan_type":"FHA",
+				"customer_id":"JD689457",
+				"amount":500000,
+				"interest_rate":3.75,
+				"prime_rate":3.25
+			},			
+				{ 
+				"loan_id":"1234568",
+				"loan_type":"Traditional",
+				"customer_id":"JD689457",
+				"amount":3000000,
+				"interest_rate":3.75,
+				"prime_rate":3.25
+			}]}
+}
+
+
+   

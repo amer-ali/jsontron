@@ -1,0 +1,33 @@
+{
+"schema":{
+
+  	"id":"eg3_3",
+  	"title":"Technical document schema",
+  	"schemaVersion":"ISO Schematron 2016",
+  	"queryBinding":"jsonpath",
+  	"defaultPhase":"phaseid1",
+  	
+	 "phase":[
+    	{
+    		"id":"phaseid1",
+    		"active":["Extraneous_docs"]
+    	}
+    ],
+    
+	"pattern":[
+      {
+      	"id":"Extraneous_docs",
+      	"title":"Extraneous Docs",
+      	"rule":[
+          {          
+              	"id":"extraneous_doc_rule",
+              	"abstract":false,
+                "context": "$",
+                "assert":[
+                  {
+                     "id":"extraneous_doc_assert",
+                     "test":"jp.query(contextNode,'$..doc').length ==1 && contextNode[0] == jp.parent(contextNode, '$..doc')",
+                     "message": "The 'doc' element is only allowed at the document root."
+                  }
+                ]              
+          }]}]}}

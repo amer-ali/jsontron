@@ -1,0 +1,96 @@
+{
+"schema":{
+
+  	"id":"eg5_5",
+  	"title":"Technical document schema",
+  	"schemaVersion":"ISO Schematron 2016",
+  	"queryBinding":"jsonpath",
+  	"defaultPhase":"quick-check",
+  	
+	 "phase":[
+    	{
+    		"id":"quick-check",
+    		"active":["rightdoc"]
+    	},
+    	{
+    		"id":"full-check",
+    		"active":["rightdoc","extradocs","majelements"]
+    	},
+    	{
+    		"id":"process-links",
+    		"active":["report_link"]
+    	}
+    ],
+    
+	"pattern":[
+                {
+      	"id":"majelements",
+      	"title":"Major elements Pattern",
+      	"rule":[
+          {          
+              	"id":"Major_elementss_rule",
+              	"abstract":false,
+                "context": "$..doc",
+                "assert":[
+                  {
+                     "id":"Major_elements_assert_prologue",
+                     "test":"jp.query(contextNode, '$..[?(@.prologue)]').length > 0",
+                     "message": "element must have a prologue"
+                  },
+                                    {
+                     "id":"Major_elements_assert_section",
+                     "test":"jp.query(contextNode, '$..[?(@.section)]').length > 0",
+                     "message": "element must have a section"
+                  }
+                ]              
+          }]},
+                {
+      	"id":"report_link",
+      	"title":"Report links Pattern",
+      	"rule":[
+          {          
+              	"id":"Report_links_rule",
+              	"abstract":false,
+                "context": "$..*",
+                "assert":[
+                  {
+                     "id":"Report_links_assert",
+                     "test":"((jp.query(contextNode, '$..link')).length > 0)",
+                     "message": "element has a link."
+                  }
+                ]              
+          }]},
+                {
+      	"id":"extradocs",
+      	"title":"Extraneous Docs",
+      	"rule":[
+          {          
+              	"id":"extraneous_doc_rule",
+              	"abstract":false,
+                "context": "$",
+                "assert":[
+                  {
+                     "id":"extraneous_doc_assert",
+                     "test":"jp.query(contextNode,'$..doc').length ==1 && contextNode[0] == jp.parent(contextNode, '$..doc')",
+                     "message": "The 'doc' element is only allowed at the document root."
+                  }
+                ]              
+          }]},
+                {
+      	"id":"rightdoc",
+      	"title":"pattern title",
+      	"rule":[
+          {          
+              	"id":"rightdoc_rule",
+              	"abstract":false,
+                "context": "$",
+                "assert":[
+                  {
+                     "id":"doc_root_assert",
+                     "test":"Object.keys(jp.parent(contextNode, '$.*')[0]) == 'doc'",
+                     "message": "Root element should be 'doc'."
+                  }
+                ]              
+          }]}
+          
+          ]}}

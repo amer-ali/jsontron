@@ -1,0 +1,33 @@
+{
+"schema":{
+
+  	"id":"eg3_9",
+  	"title":"Technical document schema",
+  	"schemaVersion":"ISO Schematron 2016",
+  	"queryBinding":"jsonpath",
+  	"defaultPhase":"phaseid1",
+  	
+	 "phase":[
+    	{
+    		"id":"phaseid1",
+    		"active":["Author_elements"]
+    	}
+    ],
+    
+	"pattern":[
+      {
+      	"id":"Author_elements",
+      	"title":"Author elements Pattern",
+      	"rule":[
+          {          
+              	"id":"Author_elements_rule",
+              	"abstract":false,
+                "context": "$..author",
+                "assert":[
+                  {
+                     "id":"Author_elements_assert",
+                     "test":"(jp.query(contextNode, '$..bio').length + jp.query(contextNode, '$..affiliation').length + jp.query(contextNode, '$..name').length) == jp.query(contextNode, '$[0].*').length",
+                     "message": "Only 'name', 'bio' and 'affiliation' elements are allowed as children of 'author'"
+                  }
+                ]              
+          }]}]}}

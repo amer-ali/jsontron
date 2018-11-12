@@ -1,0 +1,39 @@
+{
+"schema":{
+
+  	"id":"eg3_2",
+  	"title":"Technical document schema",
+  	"schemaVersion":"ISO Schematron 2016",
+  	"queryBinding":"jsonpath",
+  	"defaultPhase":"phaseid1",
+  	
+	 "phase":[
+    	{
+    		"id":"phaseid1",
+    		"active":["Major_Elements"]
+    	}
+    ],
+    
+	"pattern":[
+      {
+      	"id":"Major_Elements",
+      	"title":"Major Elements",
+      	"rule":[
+          {          
+              	"id":"prologue_section",
+              	"abstract":false,
+                "context": "$..doc",
+                "assert":[
+                  {
+                     "id":"doc_prologue_assert",
+                     "test":"contextNode[0].prologue != null",
+                     "message": "The 'Doc' element should have 'prologue' child."
+                  },
+                  {
+                     "id":"doc_section_assert",
+                     "test":"contextNode[0].section != null",
+                     "message": "The 'Doc' element should have 'section' child."
+                  }
+                ]              
+          }]}]}}
+          

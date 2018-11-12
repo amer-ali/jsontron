@@ -1,0 +1,33 @@
+{
+"schema":{
+
+  	"id":"eg4_1",
+  	"title":"Technical document schema",
+  	"schemaVersion":"ISO Schematron 2016",
+  	"queryBinding":"jsonpath",
+  	"defaultPhase":"phaseid1",
+  	
+	 "phase":[
+    	{
+    		"id":"phaseid1",
+    		"active":["Title_with_subtitle"]
+    	}
+    ],
+    
+	"pattern":[
+      {
+      	"id":"Title_with_subtitle",
+      	"title":"Title_with_subtitle Pattern",
+      	"rule":[
+          {          
+              	"id":"Title_with_subtitle_rule",
+              	"abstract":false,
+                "context": "$..prologue",
+                "assert":[
+                  {
+                     "id":"Title_with_subtitle_assert",
+                     "test":"(((Object.keys(contextNode[0])).indexOf('subtitle')) - ((Object.keys(contextNode[0])).indexOf('title'))) == 1",
+                     "message": "Title must be immediately followed by subtitle"
+                  }
+                ]              
+          }]}]}}

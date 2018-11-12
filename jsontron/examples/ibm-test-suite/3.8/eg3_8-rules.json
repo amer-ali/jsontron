@@ -1,0 +1,33 @@
+{
+"schema":{
+
+  	"id":"eg3_8",
+  	"title":"Technical document schema",
+  	"schemaVersion":"ISO Schematron 2016",
+  	"queryBinding":"jsonpath",
+  	"defaultPhase":"phaseid1",
+  	
+	 "phase":[
+    	{
+    		"id":"phaseid1",
+    		"active":["Useful_title"]
+    	}
+    ],
+    
+	"pattern":[
+      {
+      	"id":"Useful_title",
+      	"title":"Useful Title Patterns",
+      	"rule":[
+          {          
+              	"id":"Useful_title_rule",
+              	"abstract":false,
+                "context": "$..title",
+                "assert":[
+                  {
+                     "id":"Useful_title_assert",
+                     "test":"contextNode[0].length > 0",
+                     "message": "Title may not be empty"
+                  }
+                ]              
+          }]}]}}

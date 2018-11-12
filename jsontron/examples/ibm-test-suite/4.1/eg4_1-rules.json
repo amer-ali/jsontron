@@ -1,0 +1,33 @@
+{
+"schema":{
+
+  	"id":"eg4_1",
+  	"title":"Technical document schema",
+  	"schemaVersion":"ISO Schematron 2016",
+  	"queryBinding":"jsonpath",
+  	"defaultPhase":"phaseid1",
+  	
+	 "phase":[
+    	{
+    		"id":"phaseid1",
+    		"active":["Military_authors"]
+    	}
+    ],
+    
+	"pattern":[
+      {
+      	"id":"Military_authors",
+      	"title":"Military Authors Pattern",
+      	"rule":[
+          {          
+              	"id":"Military_authors_rule",
+              	"abstract":false,
+                "context": "$..author..email",
+                "assert":[
+                  {
+                     "id":"Military_authors_assert",
+                     "test":"contextNode[0].endsWith('.mil')",
+                     "message": "Author appears to be military personnel"
+                  }
+                ]              
+          }]}]}}

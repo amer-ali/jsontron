@@ -1,0 +1,83 @@
+   {
+   	"schema":{
+   		
+   		   "id":"Loan Data Rules",
+   			"title":"Schematron Semantic Validation",
+   			"schemaVersion":"ISO Schematron 2016",
+   			"queryBinding":"jsonpath",
+   			
+   			"defaultPhase":"phaseid1",
+  	
+    		"phase": [
+    	      {
+    			"id":"phaseid1",
+    		 	"active":["patternid1"]
+    	      },
+    	      {
+    			"id":"phaseid2",
+    		 	"active":["patternid2"]
+    	      }
+    	      
+    	      		],
+   			
+   			
+   			"pattern":[
+   						{
+      	           		  "id":"patternid1",
+      	                  "title":"Interest Rate Pattern",
+      	                  "abstract":false,
+      	                  
+      	                  "rule":[
+      	                  			{
+      	                  			    "id":"RateRule1",
+              	    					"abstract":false,
+              	    					
+              	    					"context": "$.loan_data.loans.*",
+              	    					"assert":[
+                	    					{
+                								"id":"assertidINT21",
+                  								"test": "(jp.query(contextNode,'$..interest_rate')) >= 3.75",
+                								"message": "assertidINT21: Interest Rate cannot be less than 3.75 Percent"
+                     						},
+                     						{
+                								"id":"assertidPRI21",
+                  								"test": "(jp.query(contextNode,'$..prime_rate')) <= 5",
+                								"message": "assertidPRI21: Prime Rate cannot be more than 5 Percent"
+                     						}
+
+                     						]
+              	    					
+      	                  			
+      	                  			}
+      	                  
+      	                  		]
+      	                 },
+      	                 
+      	             { 
+      	             	"id":"patternid2",
+      	            	"title":"Traditional Loan Max",
+      	            	"abstract":false,
+      	            	
+        				"rule":[
+                  					{          
+              	    					"id":"TRADMaxRule1",
+              	    					"abstract":false,
+                     					"context": "$.loan_data.loans[?(@.loan_type === 'Traditional')]",
+
+               					"assert":[
+                	    			{
+                						"id":"assertidINT21",
+                  						"test": "(jp.query(contextNode,'$..amount')) <= 1000000",
+                						"message": "Assert 1: Traditional loan cannot be more than $1MM "
+                     				}
+                     					]
+                     				}
+                     			]
+                     	}
+
+   						]
+   		
+   			}
+   }
+
+   

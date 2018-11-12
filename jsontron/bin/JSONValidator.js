@@ -43,7 +43,7 @@ if (argv.d){ // if debug is enabled
 	console.log("Total Errors Found: " + myRpt.errors.length);
 	console.log("Total Warnings Found: " + myRpt.warnings.length);
 	console.log("Total Validations: " + myRpt.validations.length);
-	console.log("Total Failded Assertions: " + myRpt.finalValidationReport.length);
+	console.log("Total Failed Assertions: " + myRpt.finalValidationReport.length);
 	console.log("Full Validation Report : ");
 	console.log(myRpt);
 	

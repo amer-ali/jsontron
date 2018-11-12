@@ -1,0 +1,54 @@
+{
+"schema":{
+
+  	"id":"Loan Data Rules",
+  	"title":"Schematron Semantic Validation",
+  	"schemaVersion":"ISO Schematron 2016",
+  	"queryBinding":"jsonpath",
+  	"defaultPhase":"phaseid1",
+  	
+	 "phase":[
+    	{
+    		"id":"phaseid1",
+    		"active":["patternid1"]
+    	},
+    	{
+    	    "id":"phaseid2",
+    		"active":["patternid2"]
+    	}
+    ],
+    
+	"pattern":[
+      {
+      	"id":"patternid1",
+      	"title":"FHA Loan Amount Pattern",
+      	"abstract":false,
+      	"rule":[
+          {          
+              	"id":"FHArule1",
+              	"abstract":false,
+                "context": "$.loan_data.loans[?(@.loan_type === 'FHA')]",
+                "assert":[
+                  {
+                     "id":"assertidFHA21",
+                     "test": "jp.query(contextNode,'$..amount') <= 500000",
+                     "message": "Assert 1: For FHA Loan, Amount cannot exceed $500K"
+                  }
+  			]}]},
+  			
+  		{
+      	"id":"patternid2",
+      	"title":"Prime and Interest Rate Pattern",
+      	"abstract":false,
+      	"rule":[
+          {          
+              	"id":"RateRule1",
+              	"abstract":false,
+                "context": "$.loan_data.loans.*",
+                "assert":[
+                  {
+                     "id":"assertid21",
+                     "test": "(jp.query(contextNode,'$..interest_rate') - jp.query(contextNode,'$..prime_rate')) >= .25",
+                     "message": "Assert 21: Interest Rate should be atleast .25 points more than Prime Rate"
+                  }
+    ]}]}]}}

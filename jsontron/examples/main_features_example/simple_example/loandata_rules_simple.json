@@ -1,0 +1,52 @@
+   {
+   	"schema":{
+   		
+   		   "id":"Loan Data Rules",
+   			"title":"Schematron Semantic Validation",
+   			"schemaVersion":"ISO Schematron 2016",
+   			"queryBinding":"jsonpath",
+   			
+   			"defaultPhase":"phaseid1",
+  	
+    		"phase": [
+    	      {
+    			"id":"phaseid1",
+    		 	"active":["patternid1"]
+    	      }
+    	      
+    	      		],
+   			
+   			
+   			"pattern":[
+   						{
+      	           		  "id":"patternid1",
+      	                  "title":"Interest Rate Pattern",
+      	                  "abstract":false,
+      	                  
+      	                  "rule":[
+      	                  			{
+      	                  			    "id":"RateRule1",
+              	    					"abstract":false,
+              	    					
+              	    					"context": "$.loan_data.loans.*",
+              	    					"assert":[
+                	    					{
+                								"id":"assertidINT21",
+                  								"test": "(jp.query(contextNode,'$..interest_rate')) >= 3.75",
+                								"message": "assertidINT21: Interest Rate cannot be less than 3.75 Percent"
+                     						}
+
+                     						]
+              	    					
+      	                  			
+      	                  			}
+      	                  
+      	                  		]
+      	                 }
+   						
+   						]
+   		
+   			}
+   }
+
+   

@@ -1,0 +1,38 @@
+{
+"schema":{
+
+  	"id":"eg3_7",
+  	"title":"Technical document schema",
+  	"schemaVersion":"ISO Schematron 2016",
+  	"queryBinding":"jsonpath",
+  	"defaultPhase":"phaseid1",
+  	
+	 "phase":[
+    	{
+    		"id":"phaseid1",
+    		"active":["Author_attributes"]
+    	}
+    ],
+    
+	"pattern":[
+      {
+      	"id":"Author_attributes",
+      	"title":"Author Attributes Pattern",
+      	"rule":[
+          {          
+              	"id":"Author_attributes_rule",
+              	"abstract":false,
+                "context": "$..author",
+                "assert":[
+                  {
+                     "id":"Author_attributes_assert_email",
+                     "test":"('email' in contextNode[0])",
+                     "message": "Author must have e-mail attribute."
+                  },
+                  {
+                     "id":"Author_attributes_assert_member",
+                     "test":"('member' in contextNode[0]) && ((jp.query(contextNode, '$..member'))[0] == ('yes')||(jp.query(contextNode, '$..member'))[0] == ('no'))",
+                     "message": "author must have member attribute with 'yes' or 'no' value."
+                  }
+                ]              
+          }]}]}}

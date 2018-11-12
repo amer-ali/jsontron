@@ -1,0 +1,40 @@
+{
+"schema":{
+
+  	"id":"eg4_1",
+  	"title":"Technical document schema",
+  	"schemaVersion":"ISO Schematron 2016",
+  	"queryBinding":"jsonpath",
+  	"defaultPhase":"phaseid1",
+  	
+	 "phase":[
+    	{
+    		"id":"phaseid1",
+    		"active":["Major_elements"]
+    	}
+    ],
+    
+	"pattern":[
+      {
+      	"id":"Major_elements",
+      	"title":"Major elements Pattern",
+      	"rule":[
+          {          
+              	"id":"Major_elementss_rule",
+              	"abstract":false,
+                "context": "$..doc",
+                "assert":[
+                  {
+                     "id":"Major_elements_assert_prologue",
+                     "test":"jp.query(contextNode, '$..[?(@.prologue)]').length > 0",
+                     "message": "element must have a prologue"
+                  },
+                                    {
+                     "id":"Major_elements_assert_section",
+                     "test":"jp.query(contextNode, '$..[?(@.section)]').length > 0",
+                     "message": "element must have a section"
+                  }
+                ]              
+          }]}]}}
+          
+          
