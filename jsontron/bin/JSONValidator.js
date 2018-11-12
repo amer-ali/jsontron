@@ -25,11 +25,11 @@ var mySchRules;
 
 
 instance = argv.i
-schInstance = require(currDir +"\\"+ instance);
+schInstance = require(currDir +"//"+ instance);
 
 
 rules = argv.r
-mySchRules = require(currDir +"\\"+ rules);
+mySchRules = require(currDir +"//"+ rules);
 
 var phaseLists = argv._;
 console.log("Starting Semantic Validation .........");
