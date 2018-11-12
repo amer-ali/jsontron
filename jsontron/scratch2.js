@@ -1,6 +1,8 @@
 var jsontron = require("../lib/jsontron.js");
 myInstance = { "doc": {} };
 myRules = {
+		
+}
 "schema":{
 
   	"id":"eg3_1",
