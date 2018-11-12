@@ -19,7 +19,7 @@ $ npm  i  jsontron
 ## Usage: Command Line 
 
 
-	//go to the bin folder of jsontron module
+	//go to the bin folder of jsontron module..
 	
 	$ cd $JSONTRON_ROOT/bin
 	 
