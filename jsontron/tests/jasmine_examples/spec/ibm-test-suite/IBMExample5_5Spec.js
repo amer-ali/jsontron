@@ -119,7 +119,7 @@ describe("IBM Example 5.5 tests. Process Link Phase. The test ", function() {
 	    expect(jsontron.JSONTRON.validate(schInstance_good1, schRules_doc, ['process-link']).valid).toBe(false);
 	    
 	    //total 14 validations
-	    expect(jsontron.JSONTRON.validate(schInstance_good1, schRules_doc, ['process-link']).validations.length).toEqual(16);
+	    expect(jsontron.JSONTRON.validate(schInstance_good1, schRules_doc, ['process-link']).validations.length).toEqual(15);
 	    
 	    // 3 failed validations
 	    expect(jsontron.JSONTRON.validate(schInstance_good1, schRules_doc, ['process-link']).finalValidationReport.length).toEqual(11);
@@ -132,7 +132,7 @@ describe("IBM Example 5.5 tests. Process Link Phase. The test ", function() {
 	    expect(jsontron.JSONTRON.validate(schInstance_good2, schRules_doc, ['process-link']).valid).toBe(false);
 	    
 	    //total 14 validations
-	    expect(jsontron.JSONTRON.validate(schInstance_good2, schRules_doc, ['process-link']).validations.length).toEqual(14);
+	    expect(jsontron.JSONTRON.validate(schInstance_good2, schRules_doc, ['process-link']).validations.length).toEqual(13);
 	    
 	    // 3 failed validations
 	    expect(jsontron.JSONTRON.validate(schInstance_good2, schRules_doc, ['process-link']).finalValidationReport.length).toEqual(6);
@@ -145,10 +145,10 @@ describe("IBM Example 5.5 tests. Process Link Phase. The test ", function() {
 	    expect(jsontron.JSONTRON.validate(schInstance_bad1, schRules_doc, ['process-link']).valid).toBe(false);
 	    
 	    //total 14 validations
-	    expect(jsontron.JSONTRON.validate(schInstance_bad1, schRules_doc, ['process-link']).validations.length).toEqual(15);
+	    expect(jsontron.JSONTRON.validate(schInstance_bad1, schRules_doc, ['process-link']).validations.length).toEqual(14);
 	    
 	    // 3 failed validations
-	    expect(jsontron.JSONTRON.validate(schInstance_bad1, schRules_doc, ['process-link']).finalValidationReport.length).toEqual(13);
+	    expect(jsontron.JSONTRON.validate(schInstance_bad1, schRules_doc, ['process-link']).finalValidationReport.length).toEqual(12);
 
 	  });
 	  
@@ -158,7 +158,7 @@ describe("IBM Example 5.5 tests. Process Link Phase. The test ", function() {
 	    expect(jsontron.JSONTRON.validate(schInstance_bad2, schRules_doc, ['process-link']).valid).toBe(false);
 	    
 	    //total 14 validations
-	    expect(jsontron.JSONTRON.validate(schInstance_bad2, schRules_doc, ['process-link']).validations.length).toEqual(15);
+	    expect(jsontron.JSONTRON.validate(schInstance_bad2, schRules_doc, ['process-link']).validations.length).toEqual(14);
 	    
 	    // 3 failed validations
 	    expect(jsontron.JSONTRON.validate(schInstance_bad2, schRules_doc, ['process-link']).finalValidationReport.length).toEqual(11);
@@ -172,7 +172,7 @@ describe("IBM Example 5.5 tests. Process Link Phase. The test ", function() {
 	    expect(jsontron.JSONTRON.validate(schInstance_bad3, schRules_doc, ['process-link']).valid).toBe(false);
 	    
 	    //total 14 validations
-	    expect(jsontron.JSONTRON.validate(schInstance_bad3, schRules_doc, ['process-link']).validations.length).toEqual(12);
+	    expect(jsontron.JSONTRON.validate(schInstance_bad3, schRules_doc, ['process-link']).validations.length).toEqual(11);
 	    
 	    // 3 failed validations
 	    expect(jsontron.JSONTRON.validate(schInstance_bad3, schRules_doc, ['process-link']).finalValidationReport.length).toEqual(5);
@@ -186,7 +186,7 @@ describe("IBM Example 5.5 tests. Process Link Phase. The test ", function() {
 	    expect(jsontron.JSONTRON.validate(schInstance_bad4, schRules_doc, ['process-link']).valid).toBe(false);
 	    
 	    //total 14 validations
-	    expect(jsontron.JSONTRON.validate(schInstance_bad4, schRules_doc, ['process-link']).validations.length).toEqual(16);
+	    expect(jsontron.JSONTRON.validate(schInstance_bad4, schRules_doc, ['process-link']).validations.length).toEqual(15);
 	    
 	    // 3 failed validations
 	    expect(jsontron.JSONTRON.validate(schInstance_bad4, schRules_doc, ['process-link']).finalValidationReport.length).toEqual(11);

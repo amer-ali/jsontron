@@ -38,6 +38,7 @@
       	"title":"Book Data Total Number of Authors Pattern",
       	"abstract":false,
       	"rule":[
+
                    {          
               	   	"id":"rule1",
               	"abstract":false,
@@ -66,8 +67,8 @@
                 "context": "$.store.book[*].author",
                 "assert":[
                   {
-                     "id":"assertid21",         
-                     "test": "jp.query(contextNode,'$[0]')[0].includes('Nigel') ||jp.query(contextNode,'$[0]')[0].includes('Waugh')|| jp.query(contextNode,'$[0]')[0].includes('Melville') || jp.query(contextNode,'$[0]')[0].includes('Tolkien') ",                   
+                     "id":"assertid21",
+                     "test": "jp.query(contextNode,'$[0]')[0].includes('Nigel') ||jp.query(contextNode,'$[0]')[0].includes('Waugh')|| jp.query(contextNode,'$[0]')[0].includes('Melville') || jp.query(contextNode,'$[0]')[0].includes('Tolkien') ",
                      "message": "Assert 1: Author should be either Nigel, Waugh, Melville or Tolkien"
                   }
                 ]              
@@ -87,8 +88,8 @@
                 "context": "$.store.book[*].author",
                 "assert":[
                   {
-                     "id":"assertid21",                     
-                     "test": "jp.query(contextNode,'$[0]')[0].includes('Milton') === false  ",                     
+                     "id":"assertid21",
+                     "test": "jp.query(contextNode,'$[0]')[0].includes('Milton') === false  ",
                      "message": "Assert 1: Milton should not be author of any books"
                   }
                 ]              
@@ -98,7 +99,7 @@
          },
        {
       	"id":"store_books_pattern",
-      	"title":"Book Data Pattern",
+      	"title":"Book Data Author Pattern",
       	"abstract":false,
       	"rule":[
           
@@ -108,9 +109,9 @@
                 "context": "$.store",
                 "assert":[
                   {
-                     "id":"assertid_book",                     
+                     "id":"assertid_correctAuthor",
                      "test": "jp.query(contextNode, '$..[?(@.book)]')",
-                     "message": "Assert Book: The Store has books"
+                     "message": "Assert CorrectAuthor: The Store has books"
                   }
                 ]              
           }
@@ -130,8 +131,8 @@
                 "context": "$..[?(@.price)]",
                 "assert":[
                   {
-                     "id":"assertid31",                     
-                     "test": "(jp.query(contextNode,'$..[?(@.discount > 5 )]')) == false ",                     
+                     "id":"assertid31",
+                     "test": "(jp.query(contextNode,'$..[?(@.discount > 5 )]')) == false ",
                      "message": "Assert 1: The maximum allowed discount is 5 dollars"
                   }
                 ]              
@@ -142,8 +143,8 @@
                 "context": "$..[?(@.price)]",
                 "assert":[
                   {
-                     "id":"assertid31",                     
-                     "test": "(jp.query(contextNode,'$..[?(@.discount > @.price*.5 )]')) == false ",                     
+                     "id":"assertid31",
+                     "test": "(jp.query(contextNode,'$..[?(@.discount > @.price*.5 )]')) == false ",
                      "message": "Assert 1: The maximum allowed discount is 50 %"
                   }
                 ]              

@@ -1,0 +1,28 @@
+{
+	"loan_data":{
+		"loans":[
+			{ 
+				"loan_id":"1234567",
+				"loan_type":"FHA",
+				"customer_id":"JD689457",
+				"data_time":"20100601120000",
+				"amount":500000,
+				"interest_rate":3.75,
+				"prime_rate":3.25,
+				"mip_rate":1.5,
+				"down_payment":5
+			},			
+				{ 
+				"loan_id":"1234568",
+				"loan_type":"Traditional",
+				"customer_id":"JD689457",
+				"data_time":"20100601120000",
+				"amount":300000,
+				"interest_rate":3.75,
+				"prime_rate":3.25,
+				"mip_rate":1.5,
+				"down_payment":20	
+			}]}
+	}
+
+

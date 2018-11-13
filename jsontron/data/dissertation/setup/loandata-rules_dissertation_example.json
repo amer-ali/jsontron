@@ -1,0 +1,33 @@
+{
+"schema":{
+
+  	"id":"Loan Data Rules",
+  	"title":"Schematron Semantic Validation",
+  	"schemaVersion":"ISO Schematron 2016",
+  	"queryBinding":"jsonpath",
+  	"defaultPhase":"phaseid1",
+  	
+	 "phase":[
+    	{
+    		"id":"phaseid1",
+    		"active":["patternid1"]
+    	}
+    ],
+    
+	"pattern":[
+      {
+      	"id":"patternid1",
+      	"title":"Loan Amount Pattern",
+      	"abstract":false,
+      	"rule":[
+          {          
+              	"id":"FHArule1",
+              	"abstract":false,
+                "context": "$.loan_data.loans[?(@.loan_type === 'FHA')]",
+                "assert":[
+                  {
+                     "id":"assertidFHA21",
+                     "test": "jp.query(contextNode,'$..amount') <= 500000",
+                     "message": "Assert 1: For FHA Loan, Amount cannot exceed $500K"
+                  }
+                ]}]}]}}
