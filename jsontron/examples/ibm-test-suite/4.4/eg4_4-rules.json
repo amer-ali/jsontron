@@ -22,7 +22,7 @@
           {          
               	"id":"Report_links_rule",
               	"abstract":false,
-                "context": "$..*",
+                "context": "$",
                 "assert":[
                   {
                      "id":"Report_links_assert",
