@@ -1,0 +1,1472 @@
+<html>
+<p style="text-align: center;"><strong><em>Tutorial on Jsontron for JSON Semantic Validation</em></strong></p>
+<p style="text-align: center;">Dr. Amer Ali Dr. Lixin Tao</p>
+<p style="text-align: center;">School of Computer Science and Information Systems</p>
+<p style="text-align: center;">Pace University</p>
+<p style="text-align: center;">Westchester</p>
+<p style="text-align: center;">November 14, 2018</p>
+<p>Table of Contents</p>
+<p><a href="#_Toc529726088">1 Introduction. 2</a></p>
+<p><a href="#_Toc529726089">1.1 Constraint Specification in Schematron. 3</a></p>
+<p><a href="#_Toc529726090">1.2 Element <em>schema</em>. 3</a></p>
+<p><a href="#_Toc529726091">1.3 Element <em>phase</em>. 3</a></p>
+<p><a href="#_Toc529726092">1.4 Element <em>pattern</em>. 3</a></p>
+<p><a href="#_Toc529726093">1.5 Element <em>rule</em>. 4</a></p>
+<p><a href="#_Toc529726094">1.6 Element <em>assert</em> or <em>report</em> 4</a></p>
+<p><a href="#_Toc529726095">2 Setting Up and Running Jsontron. 4</a></p>
+<p><a href="#_Toc529726096">2.1 Installing <em>node.js</em>. 4</a></p>
+<p><a href="#_Toc529726097">2.2 Installing module <em>jsontron</em>. 5</a></p>
+<p><a href="#_Toc529726098">2.3 Module <em>jsontron</em> structure. 6</a></p>
+<p><a href="#_Toc529726099">2.4 Test run module <em>jsontron</em>. 9</a></p>
+<p><a href="#_Toc529726100">3 How to Specify a Semantic Rule. 10</a></p>
+<p><a href="#_Toc529726101">3.1 Prerequisites. 10</a></p>
+<p><a href="#_Toc529726102">3.2 Data. 10</a></p>
+<p><a href="#_Toc529726103">3.3 Simple Example. 10</a></p>
+<p><a href="#_Toc529726104">3.4 Adding multiple assert, rule, pattern and phase elements. 21</a></p>
+<p><a href="#_Toc529726105">3.5 Loan Data Main Example. 24</a></p>
+<p><a href="#_Toc529726106">3.6 Examples for phase, pattern, rule, assert, context, assert and report elements. 26</a></p>
+<p><a href="#_Toc529726107">3.7 Stack Overflow Meeting Times Dilemma Example. 27</a></p>
+<p><a href="#_Toc529726108">4 IBM Schematron Tutorial 28</a></p>
+<p><a href="#_Toc529726109">4.1 Prerequisites. 28</a></p>
+<p><a href="#_Toc529726110">4.2 Schematron overview and example 29</a></p>
+<p><a href="#_Toc529726111">4.3 Basics of rules, patterns, and assertions. 30</a></p>
+<p><a href="#_Toc529726112">4.4 Reports and communications control 50</a></p>
+<p><a href="#_Toc529726113">4.5 Intermediate Schematron features. 55</a></p>
+<p><a href="#_Toc529726114">5 References. 64</a></p>
+<h1>1 Introduction</h1>
+<p>Schematron is a rule-based XML validation schema language for making assertions about the presence or absence of patterns in XML trees. It is different from XML syntax schema languages like XML Schema, RELAX NG or DTD. Schematron is capable of specifying validation rules that syntax-based schema languages cannot. For instance, it can control the contents of an element via its siblings. The fundamental difference from other languages is that Schematron is not based on grammar, but it is based on finding tree patterns in XML documents and that makes it suitable for finding and validating structures that are difficult to be represented in grammar-based languages.</p>
+<p>Rick Jelliffe [1] invented Schematron while working (1999-2001) at Academia Sinica, Taipei, Taiwan. He described Schematron as &ldquo;a feather duster to reach the corners that other schema languages cannot reach&rdquo;.</p>
+<p>Schematron has been standardized by the ISO as &ldquo;Information technology, Document Schema Definition Languages (DSDL), Part 3: Rule-based validation, Schematron (ISO/IEC 19757-3:2016)&rdquo; [2]. ISO formally describes Schematron as below:</p>
+<p>&ldquo;Considered as a document type, a Schematron schema contains natural-language assertions concerning a set of documents, marked up with various elements and attributes for testing these natural-language assertions, and for simplifying and grouping assertions.</p>
+<p>Considered theoretically, a Schematron schema reduces to a non-chaining rule system whose terms are Boolean functions invoking an external query language on the instance and other visible XML documents, with syntactic features to reduce specification size and to allow efficient implementation.</p>
+<p>Considered analytically, Schematron has two characteristic high-level abstractions: the pattern and the phase. These allow the representation of non-regular, non-sequential constraints that ISO/IEC 19757-2 [Regular-grammar-based validation &mdash; RELAX NG] [3] cannot specify and various dynamic or contingent constraints.&rdquo;</p>
+<p>Schematron is used in many use cases like business rules validation, data reporting, general validation, quality control, quality assurance, firewalling, filtering, constraint checking, naming and design rules checking, statistical consistency, data exploration, transformation testing, feature extraction, house-style-rules checking.</p>
+<p>Schematron is used across many sectors and industries. Some of its users are:</p>
+<ul>
+	<li>US National Emergency Management System (NEMSYS)</li>
+	<li>NASA Planetary Data System</li>
+	<li>National Environmental Information Exchange Network the US</li>
+	<li>Australian Bureau of Meteorology</li>
+	<li>Japanese Local Government</li>
+	<li>Open Vulnerability and Assessment Language (OVAL) US Dept Homeland Security</li>
+	<li>PEPPOL Pan-European Public Procurement Online</li>
+	<li>European Commission e-trustex secure document transfer platform</li>
+	<li>HM Revenue and Customs (PDF) the UK</li>
+	<li>Aeronautical Information Exchange Rule Checker EUROCONTROL</li>
+	<li>W3C Service Modeling Language SML</li>
+	<li>Inline XBRL Validation</li>
+	<li>ACORD Reinsurance and large commercial</li>
+	<li>Associated Press</li>
+	<li>US National Information Exchange Model Tools</li>
+</ul>
+<h2>1.1 Constraint Specification in Schematron</h2>
+<p>The power of Schematron lies in its simplicity and abstraction. There are only a few essential elements but they allow specifying constraints that are not possible in other schema languages. Below are essential building blocks of a Schematron schema:</p>
+<h2>1.2 Element <em>schema</em></h2>
+<p>This is the top-level element of a Schematron schema. All other elements are enclosed inside the schema element. This element has several optional attributes like <em>title</em>, <em>schemaVersion</em>, <em>queryBinding</em> and <em>defaultPhase</em>. Some of these optional elements will be explained later.</p>
+<h2>1.3 Element <em>phase</em></h2>
+<p>The is a higher level of abstraction and specifies a group of patterns to be activated to cater to variation in schemas. It supports progressive validation. &lsquo;#ALL&rsquo; and &lsquo;#DEFAULT&rsquo; are special phases that activate all and the default phase respectively. The phase element will be discussed more later.</p>
+<h2>1.4 Element <em>pattern</em></h2>
+<p>The <em>pattern</em> element contains a set of <em>rule</em> elements. This is a higher level abstraction to encompass related rules. It has several optional attributes that will be discussed later.</p>
+<h2>1.5 Element <em>rule</em></h2>
+<p>A <em>rule</em> element contains one or more assertions that need to be applied to a given context. The <em>rule</em> element has a required <em>context</em> attribute that returns the nodes on which the assertions need to be applied. A query language like XPath is used to select the nodes via the <em>context</em> expression.</p>
+<h2>1.6 Element <em>assert</em> or <em>report</em></h2>
+<p>The <em>assert</em> and <em>report</em> elements contain a <em>test</em> attribute that is the condition to be tested on the <em>context</em> nodes. The content of the <em>assert</em> or <em>report</em> element is the message that is returned as a result of the test. The <em>assert</em> element will display the message if the test fails whereas the <em>report</em> element will display the message if the test passes. Similar to attribute context, the value of attribute <em>test</em> is expressed in a query language such as XPath. The value of attribute <em>context</em> is an XPath statement to express &lsquo;where&rsquo; to test, and the value of attribute test is an XPath statement to express &lsquo;what&rsquo; to test.</p>
+<p>This tutorial introduces a Schematron-based semantic validator, <em>Jsontron</em>, explains how to set it up and its basic features through a series of hands-on labs in parallel to the IBM Schematron tutorial [4].</p>
+<h1>2 Setting Up and Running Jsontron</h1>
+<h2>2.1 Installing <em>node.js</em></h2>
+<p>Download and install <em>node.js</em> from https://nodejs.org/en/download/</p>
+<ul>
+	<li>You should see installer in your downloads folder or where you saved it.</li>
+	<li>Double-click the installer and follow instructions to install <em>node</em></li>
+	<li><em>NPM</em> (Node Package Manager) gets installed as part of <em>node</em> You don&rsquo;t need to do anything extra for <em>npm</em> installation.</li>
+</ul>
+<p>Open a command prompt and verify that <em>node</em> and <em>npm</em> have been properly installed</p>
+<p><strong>Note</strong>: Default installer puts <em>node</em> and <em>npm</em> on environment variable PATH so you can access them from anywhere.</p>
+<p><strong>Note</strong>: The default installer sets up a Node.js command prompt that you can access from Programs menu if you are using Windows. You can use a normal command prompt as well as long as <em>node</em> and <em>npm</em> are on PATH.</p>
+<p><strong>Setup <em>Node</em> and <em>NPM</em> on Ubuntu</strong></p>
+<ul>
+	<li>Run &ldquo;sudo apt install nodejs&rdquo; to install <em>node</em>.</li>
+	<li>If you see error &ldquo;E: Could not get lock /var/lib/dpkg/lock - open (11: Resource temporarily unavailable)&rdquo;, run &ldquo;sudo rm /var/lib/apt/lists/lock&rdquo; first.</li>
+	<li>Run &ldquo;sudo apt install npm&rdquo; in install <em>npm</em>.</li>
+	<li>Run &ldquo;node &ndash;v&rdquo; and &ldquo;npm &ndash;v&rdquo; to verify your installation.</li>
+</ul>
+<h2>2.2 Installing module <em>jsontron</em></h2>
+<ul>
+	<li>Create a new folder <em>jsontron</em>.</li>
+	<li>Open terminal window in folder <em>jsontron</em>, and run command: <em>npm i jsontron</em></li>
+</ul>
+<ul>
+	<li>You will see a new directory called node_modules created. That is where all node modules are installed.</li>
+	<li>Later you can also update folder <em>jsontron</em> by running <em>npm update jsontron</em> in the current <em>node</em> root folder.</li>
+</ul>
+<h2>2.3 Module <em>jsontron</em> structure</h2>
+<ul>
+	<li>Go to folder <em>node_modules</em>, and you will see many modules installed in folder <em>node_modules</em> along with module <em>jsontron</em>. This is because <em>npm</em> automatically installs all the dependencies.</li>
+</ul>
+<ul>
+	<li>Go to folder <em>jsontron</em>, and you will find the following contents.</li>
+</ul>
+<ul>
+	<li>Folder <em>data</em> contains all data for examples. The dissertation example data is in folder <em>dissertation</em> and IBM example data is in folder <em>ibm-test-suite</em>.</li>
+</ul>
+<ul>
+	<li>In folder <em>dissertation</em>, you will find data for main use cases like the main example, assert, context, pattern, phase, and report.</li>
+</ul>
+<ul>
+	<li>If you go to one of the example folders like <em>assert</em>, you will see the good instance, bad instance and rules file.</li>
+</ul>
+<p>loandata-rules_* is rules file.</p>
+<p>loandata-dataForAssert_bad* is instance document with bad data.</p>
+<p>loandata-dataForAssert_good* is instance document with good data.</p>
+<ul>
+	<li>Folder <em>jsontron/lib</em> contains the main source code for module <em>jsontron</em></li>
+</ul>
+<ul>
+	<li>Folder <em>jsontron/bin</em> contains the command-line invocation code of the program, <em>JSONValidator.js</em>.</li>
+</ul>
+<ul>
+	<li>Folder <em>jsontron/tests</em> contains the command-line invocation scripts for all the tests.</li>
+</ul>
+<ul>
+	<li>The data for tests are in folder jsontron/data.</li>
+</ul>
+<h2>2.4 Setting up jsontron environment variables on Windows</h2>
+<p>Please set up a new OS environment variable JSONTRON_HOME pointing to the root folder of the jsontron module. In our example, you can do so in the current Windows terminal window by running command</p>
+<p>set JSONTRON_HOME= C:\jsontron\node_modules\jsontron</p>
+<p>Please create a new environment variable JSONValidator and set its value as below.</p>
+<p>set JSONValidator=%JSONTRON_HOME%\bin\JSONValidator.js</p>
+<p>To avoid repeated setting up these two environment variables, add them in Windows <em>Environment Variables</em> pane:</p>
+<p>Start a new Windows terminal window, run commands &ldquo;echo %JSONTRON_HOME%&rdquo; and &ldquo;echo %JSONValidator%&rdquo;, make sure you get the same output as below:</p>
+<h2>2.5 Setting up jsontron environment variables on Linux</h2>
+<p>Assume you have set up <strong>jsontron</strong> in <em>~/jsontron</em>. Open terminal window in ~. Run <em>sudo gedit .bashrc</em> to add the following two lines at the bottom of file <em>~/.bashrc</em>:</p>
+<p>Save and exit <em>~/.bashrc</em>. Run <em>source ~/.bashrc</em> to active the edited environments. Verify your new environments:</p>
+<h2>2.6 Test run module <em>jsontron</em></h2>
+<p>Change terminal window work folder to &ldquo;jsontron/node_modules/jsontron/data/dissertation/pattern&rdquo; by</p>
+<p>&ldquo;cd %JSONTRON_HOME%\data\dissertation\pattern&rdquo; (Windows) or</p>
+<p>&ldquo;cd $JSONTRON_HOME/data/dissertation/pattern&rdquo; (Linux).</p>
+<p>On Windows, run the following semantic validation command:</p>
+<p>node %JSONValidator% -i loandata_pattern_good1.json -r loandata-rules_dissertation_pattern_good1.json</p>
+<p>On Linux, run the following semantic validation command:</p>
+<p>node $JSONValidator -i loandata_pattern_good1.json -r loandata-rules_dissertation_pattern_good1.json</p>
+<p>In the remainder of this tutorial, we assume you are using a Linux system. You can easily revise our commands for Windows, as shown above.</p>
+<h1>3 How to Specify a Semantic Rule</h1>
+<p>In this tutorial, we will go through the steps you need to take to specify a Schematron rule for the system that we developed in this study.</p>
+<h2>3.1 Prerequisites</h2>
+<p>A working knowledge of JSON, JSONPath, and JavaScript is assumed.</p>
+<h2>3.2 Data</h2>
+<p>All the files for the examples in this tutorial are located at below location:</p>
+<p>&nbsp;&gt;&gt; $JSONTRON_HOME/examples/main_features_examples</p>
+<h2>3.3 Simple Example</h2>
+<p>First let&rsquo;s use a simple example to construct a JSON Schematron rules file.</p>
+<p>Let&rsquo;s assume a Bank gets JSON documents below for loan and wants to validate these documents for a few rules.</p>
+<p><strong>Business Rules</strong>:</p>
+<ol>
+	<li>For all loan types, the interest rate cannot be less than 3.75%.</li>
+</ol>
+<p><strong>Specifying the Schematron Rules</strong>:</p>
+<p>Below is a simple rule file that validates the first business rule.</p>
+<p>A few things to note about this Schematron Rules File:</p>
+<ul>
+	<li><em>schema</em> is the top-level element</li>
+	<li><em>schema</em> and <em>pattern</em> are the mandatory elements.</li>
+	<li><em>context</em> expression is behind the scene 2nd argument of jsonpath query() method</li>
+</ul>
+<p>jp.query(contextNode, '$.loan_data.loans.*')</p>
+<ul>
+	<li>In the test expression, <em>contextNode</em> is a keyword in this implementation and represents the node-set returned from the <em>context</em> expression, and <em>jsonpath</em> methods are used as shown above.</li>
+</ul>
+<p><strong>Step 1: Specify Schema Element</strong></p>
+<p>Top level element in Schematron rules file is a &lsquo;schema&rsquo; element that is an object element.</p>
+<p>{</p>
+<p>"schema":{}</p>
+<p>}</p>
+<p><strong>Step 2: Specify Schema Meta Data</strong></p>
+<p>Schema element has several meta data elements like &lsquo;id&rsquo;, &lsquo;title&rsquo;, &lsquo;schemaVersion&rsquo;, and &lsquo;queryBinding&rsquo;. These are optional elements but can hold important information.</p>
+<p>Let&rsquo;s add these optional elements to our schema:</p>
+<p>{</p>
+<p>"schema":{</p>
+<p>&nbsp;</p>
+<p>"id":<em>"Loan Data Rules"</em>,</p>
+<p>"title":<em>"Schematron Semantic Validation"</em>,</p>
+<p>"schemaVersion":<em>"ISO Schematron 2016"</em>,</p>
+<p>"queryBinding":<em>"jsonpath"</em></p>
+<p>&nbsp;</p>
+<p>}</p>
+<p>}</p>
+<p>&nbsp;</p>
+<p><strong>Step 3: Add a mandatory &lsquo;pattern&rsquo; element</strong></p>
+<p>A pattern element contains a collection of rules. A schema can contain multiple patterns. We will use an array element to hold multiple pattern objects. Let&rsquo;s first add an empty pattern array to our schema:</p>
+<p>{</p>
+<p>"schema":{</p>
+<p>&nbsp;</p>
+<p>"id":<em>"Loan Data Rules"</em>,</p>
+<p>"title":<em>"Schematron Semantic Validation"</em>,</p>
+<p>"schemaVersion":<em>"ISO Schematron 2016"</em>,</p>
+<p>"queryBinding":<em>"jsonpath"</em>,</p>
+<p>&nbsp;</p>
+<p>"pattern":[]</p>
+<p>&nbsp;</p>
+<p>}</p>
+<p>}</p>
+<p><strong>Step 4: Add our first pattern object into the pattern array</strong></p>
+<p>Unlike XML to which you can add multiple elements with same tag name, in JSON you need use an array to hold multiple elements.</p>
+<p>In XML you can use something like:</p>
+<p>&lt;schema&gt;</p>
+<p>&lt;pattern&gt; pattern 1 &lt;/pattern&gt;</p>
+<p>&lt;pattern&gt; pattern 2 &lt;/pattern&gt;</p>
+<p>&lt;pattern&gt; pattern 3 &lt;/pattern&gt;</p>
+<p>&lt;/schema&gt;</p>
+<p>In JSON, since the object contains key/value pairs, therefore, the key has to be unique. So you will use an array instead and each member of array will be a pattern object:</p>
+<p>{ "schema": {</p>
+<p>"patter":[</p>
+<p>{"patterned": "pattern1"},</p>
+<p>{"patterned": "pattern2"},</p>
+<p>{"patterned": "pattern3"}</p>
+<p>]</p>
+<p>}}</p>
+<p>Now let&rsquo;s add our first pattern object to our collection of patterns:</p>
+<p>{</p>
+<p>"schema":{</p>
+<p>&nbsp;</p>
+<p>"id":<em>"Loan Data Rules"</em>,</p>
+<p>"title":<em>"Schematron Semantic Validation"</em>,</p>
+<p>"schemaVersion":<em>"ISO Schematron 2016"</em>,</p>
+<p>"queryBinding":<em>"jsonpath"</em>,</p>
+<p>&nbsp;</p>
+<p>"pattern":[</p>
+<p>{</p>
+<p>"id":<em>"patternid1"</em>,</p>
+<p>"title":<em>"Interest Rate Pattern"</em>,</p>
+<p>"abstract":false</p>
+<p>}</p>
+<p>&nbsp;</p>
+<p>]</p>
+<p>&nbsp;</p>
+<p>}</p>
+<p>}</p>
+<p><strong>Step 5: Add a rule to the pattern</strong></p>
+<p>As mentioned above, a pattern is a collection of rules. We will again use an array to hold multiple rule elements for the same reason that we explained in the pattern array case. Let&rsquo;s add a rule array to our pattern.</p>
+<p>{</p>
+<p>"schema":{</p>
+<p>&nbsp;</p>
+<p>"id":<em>"Loan Data Rules"</em>,</p>
+<p>"title":<em>"Schematron Semantic Validation"</em>,</p>
+<p>"schemaVersion":<em>"ISO Schematron 2016"</em>,</p>
+<p>"queryBinding":<em>"jsonpath"</em>,</p>
+<p>&nbsp;</p>
+<p>"pattern":[</p>
+<p>{</p>
+<p>"id":<em>"patternid1"</em>,</p>
+<p>"title":<em>"Interest Rate Pattern"</em>,</p>
+<p>"abstract":false,</p>
+<p>&nbsp;</p>
+<p>"rule":[]</p>
+<p>}</p>
+<p>&nbsp;</p>
+<p>]</p>
+<p>&nbsp;</p>
+<p>}</p>
+<p>}</p>
+<p><strong>Step 6: Add our first rule object to the rule array with meta data</strong></p>
+<p>Similar to a pattern array, a rule array contains a comma separated list of rule objects. A rule contains a &lsquo;context&rsquo; and collection of assertions that are tested against the context. Let&rsquo;s add our first rule object with some meta data. We will discuss &lsquo;context&rsquo; and assertion elements in the following sections.</p>
+<p>{</p>
+<p>"schema":{</p>
+<p>&nbsp;</p>
+<p>"id":<em>"Loan Data Rules"</em>,</p>
+<p>"title":<em>"Schematron Semantic Validation"</em>,</p>
+<p>"schemaVersion":<em>"ISO Schematron 2016"</em>,</p>
+<p>"queryBinding":<em>"jsonpath"</em>,</p>
+<p>&nbsp;</p>
+<p>"pattern":[</p>
+<p>{</p>
+<p>"id":<em>"patternid1"</em>,</p>
+<p>"title":<em>"Interest Rate Pattern"</em>,</p>
+<p>"abstract":false,</p>
+<p>&nbsp;</p>
+<p>"rule":[</p>
+<p>{</p>
+<p>"id":<em>"RateRule1"</em>,</p>
+<p>"abstract":false</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>}</p>
+<p>&nbsp;</p>
+<p>]</p>
+<p>}</p>
+<p>&nbsp;</p>
+<p>]</p>
+<p>&nbsp;</p>
+<p>}</p>
+<p>}</p>
+<p><strong>Step 7: Add a &lsquo;context&rsquo; to the rule</strong></p>
+<p>A JSON instance document is a collection of contexts. In the rule element, we use a query language statement to select a node set from the instance document so that we can run our assertions against that node set. This selected node set is called &lsquo;context&rsquo;. Our business rule 1 at the beginning says:</p>
+<p><em>&ldquo;For all loan types, the interest rate cannot be less than 3.75%.&rdquo;</em></p>
+<p>So here we have to select all loan elements/objects from the instance document so that we can check the interest rates of each loan. We will use the JSONPath query below to select all loans from the instance document:</p>
+<p>"<strong>context</strong>": <em>"$.loan_data.loans.*"</em></p>
+<p>A few important things to note about the &lsquo;context&rsquo; element:</p>
+<ul>
+	<li>The value of the context element is the JSONPath query() method&rsquo;s second argument. So internally it will be used as:</li>
+</ul>
+<p>&nbsp;</p>
+<p>where variable &lsquo;contextNode&rsquo; will hold the nodeset returned, &lsquo;jp&rsquo; is a JSONPath object, &lsquo;JSONInstanceDocument&rsquo; is the instance document and our context query is the second argument to the jp.query() method.</p>
+<ul>
+	<li>The query will return an array containing the nodes that were selected by the query. In this case it will return all elements of all the loans in the loan_data instance document. &ldquo;$&rdquo; represents root, that is similar to &lsquo;/&rsquo; in XPath queries.</li>
+	<li>The context query can return an empty node set. If that is the case, as per Schematron specification, the implementation will return as if validation has passed.</li>
+</ul>
+<p>{</p>
+<p>"schema":{</p>
+<p>&nbsp;</p>
+<p>"id":<em>"Loan Data Rules"</em>,</p>
+<p>"title":<em>"Schematron Semantic Validation"</em>,</p>
+<p>"schemaVersion":<em>"ISO Schematron 2016"</em>,</p>
+<p>"queryBinding":<em>"jsonpath"</em>,</p>
+<p>&nbsp;</p>
+<p>"pattern":[</p>
+<p>{</p>
+<p>"id":<em>"patternid1"</em>,</p>
+<p>"title":<em>"Interest Rate Pattern"</em>,</p>
+<p>"abstract":false,</p>
+<p>&nbsp;</p>
+<p>"rule":[</p>
+<p>{</p>
+<p>"id":<em>"RateRule1"</em>,</p>
+<p>"abstract":false,</p>
+<p>&nbsp;</p>
+<p>"context": <em>"$.loan_data.loans.*"</em></p>
+<p>&nbsp;</p>
+<p>}</p>
+<p>&nbsp;</p>
+<p>]</p>
+<p>}</p>
+<p>&nbsp;</p>
+<p>]</p>
+<p>&nbsp;</p>
+<p>}</p>
+<p>}</p>
+<p><strong>Step 8: Add assertions to the rule</strong></p>
+<p>We have selected the context node set in the previous step. Now we need to add assertions that will be applied to the context node set. A rule can contain multiple assertions. So similar to pattern and rule elements, we will use an array element to hold the assertions. In Schematron there are two types of assertions; &lsquo;assert&rsquo; and &lsquo;report&rsquo;. An &lsquo;assert&rsquo; will print the message if the test fails whereas in case of &lsquo;report&rsquo; it will print the message if the test passes. For simplicity&rsquo;s sake, we have used only &lsquo;assert&rsquo; element in this implementation as adding &lsquo;report&rsquo; is trivial. Let&rsquo;s first add an assert array to the rule element to hold multiple assertions.</p>
+<p>{</p>
+<p>"schema":{</p>
+<p>&nbsp;</p>
+<p>"id":<em>"Loan Data Rules"</em>,</p>
+<p>"title":<em>"Schematron Semantic Validation"</em>,</p>
+<p>"schemaVersion":<em>"ISO Schematron 2016"</em>,</p>
+<p>"queryBinding":<em>"jsonpath"</em>,</p>
+<p>&nbsp;</p>
+<p>"pattern":[</p>
+<p>{</p>
+<p>"id":<em>"patternid1"</em>,</p>
+<p>"title":<em>"Interest Rate Pattern"</em>,</p>
+<p>"abstract":false,</p>
+<p>&nbsp;</p>
+<p>"rule":[</p>
+<p>{</p>
+<p>"id":<em>"RateRule1"</em>,</p>
+<p>"abstract":false,</p>
+<p>&nbsp;</p>
+<p>"context": <em>"$.loan_data.loans.*"</em>,</p>
+<p>"assert":[]</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>}</p>
+<p>&nbsp;</p>
+<p>]</p>
+<p>}</p>
+<p>&nbsp;</p>
+<p>]</p>
+<p>&nbsp;</p>
+<p>}</p>
+<p>}</p>
+<p><strong>Step 9: Add an assert object with test and message to assert array</strong></p>
+<p>Other than &lsquo;id&rsquo;, an assert object contains a &lsquo;test&rsquo; and a &lsquo;message&rsquo; element. Understanding how the test element works in conjunction with &lsquo;context&rsquo; is the key to understand this specification and implementation. The &lsquo;context&rsquo; element in step 7 above is purely a JSONPath expression. However, in case of the &lsquo;test&rsquo; element in an assertion, you can use JSONPath expression or a plain JavaScript expression or a combination of both. In step 7 we selected all nodes for all the loan items. In this step we will select the &lsquo;interest_rate&rsquo; elements and then test whether those are equal or greater than 3.75%. The test will look like below:</p>
+<p>"test": <em>"(jp.query(contextNode,'$..interest_rate')) &gt;= 3.75"</em></p>
+<p>A few important things to note about this test expression. The first portion of the test is a JSONPath query method. [<em>jp.query(contextNode,'$..interest_rate')</em> ]. In this method &lsquo;contextNode&rsquo; is a keyword in this implementation. It holds the output node set returned by the context expression from step 7. The method states that select interest_rate elements and then check whether each of those interest_rate elements have value greater than or equal to 3.75 [ <em>&gt;= 3.75 </em>]. This portion of the test expression is plain JavaScript. So overall we use JSONPath query method to select all the interest_rate elements and then use JavaScript expression to implement our business rule. If the test returns false (the test fails) then a human readable &lsquo;message&rsquo; is printed.</p>
+<p>"message": <em>"Assert assertidINT21: Interest Rate cannot be less than 3.75 Percent"</em></p>
+<p>Another important thing to note about the test expression is that unlike the &lsquo;context&rsquo; expression where only the second argument of query method is used, we use the full query method.</p>
+<p>The reason for allowing JavaScript expressions and using full JSONPath methods is to overcome the problem we have with JSONPath that it has limited functions as compared to XPath. Now let&rsquo;s add our first assertion to the rule:</p>
+<p>{</p>
+<p>"schema":{</p>
+<p>&nbsp;</p>
+<p>"id":<em>"Loan Data Rules"</em>,</p>
+<p>"title":<em>"Schematron Semantic Validation"</em>,</p>
+<p>"schemaVersion":<em>"ISO Schematron 2016"</em>,</p>
+<p>"queryBinding":<em>"jsonpath"</em>,</p>
+<p>&nbsp;</p>
+<p>"pattern":[</p>
+<p>{</p>
+<p>"id":<em>"patternid1"</em>,</p>
+<p>"title":<em>"Interest Rate Pattern"</em>,</p>
+<p>"abstract":false,</p>
+<p>&nbsp;</p>
+<p>"rule":[</p>
+<p>{</p>
+<p>"id":<em>"RateRule1"</em>,</p>
+<p>"abstract":false,</p>
+<p>&nbsp;</p>
+<p>"context": <em>"$.loan_data.loans.*"</em>,</p>
+<p>"assert":[</p>
+<p>{</p>
+<p>"id":<em>"assertidINT21"</em>,</p>
+<p>"test": <em>"(jp.query(contextNode,'$..interest_rate') &gt;= 3.75"</em>,</p>
+<p>"message": <em>Assert assertidINT21: Interest Rate cannot be less than 3.75 Percent</em></p>
+<p>}</p>
+<p>]</p>
+<p>&nbsp;</p>
+<p>}</p>
+<p>&nbsp;</p>
+<p>]</p>
+<p>}</p>
+<p>&nbsp;</p>
+<p>]</p>
+<p>} }</p>
+<p>We have completed adding a pattern to our Schematron schema. Now let&rsquo;s add a &lsquo;phase&rsquo; element to the schema.</p>
+<p><strong>Step 10: Add a phase element to the schema</strong></p>
+<p>A &lsquo;phase&rsquo; is a mechanism in Schematron used to dynamically activate the patterns of choice. A phase element is an array similar to pattern, rule and assert as it may need to hold more than one phase objects. There are a few peculiar things about the phase element.</p>
+<ul>
+	<li>#ALL is a special keyword that can be used at invocation time to activate all phases.</li>
+	<li>#DEFAULT is a special keyword that can be used to activate the default phase</li>
+	<li>&lsquo;defaultPhase&rsquo; is the property in the schema to nominate a phase as a default phase</li>
+</ul>
+<p>Now let&rsquo;s add a phase to the schema and make it as a default phase.</p>
+<p>{</p>
+<p>"schema":{</p>
+<p>&nbsp;</p>
+<p>"id":<em>"Loan Data Rules"</em>,</p>
+<p>"title":<em>"Schematron Semantic Validation"</em>,</p>
+<p>"schemaVersion":<em>"ISO Schematron 2016"</em>,</p>
+<p>"queryBinding":<em>"jsonpath"</em>,</p>
+<p>&nbsp;</p>
+<p>"defaultPhase":<em>"phaseid1"</em>,</p>
+<p>&nbsp;</p>
+<p>"phase": [</p>
+<p>{</p>
+<p>"id":<em>"phaseid1"</em>,</p>
+<p>"active":[<em>"patternid1"</em>]</p>
+<p>}],</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>"pattern":[</p>
+<p>{</p>
+<p>"id":<em>"patternid1"</em>,</p>
+<p>"title":<em>"Interest Rate Pattern"</em>,</p>
+<p>"abstract":false,</p>
+<p>&nbsp;</p>
+<p>"rule":[</p>
+<p>{</p>
+<p>"id":<em>"RateRule1"</em>,</p>
+<p>"abstract":false,</p>
+<p>&nbsp;</p>
+<p>"context": <em>"$.loan_data.loans.*"</em>,</p>
+<p>"assert":[</p>
+<p>{</p>
+<p>"id":<em>"assertidINT21"</em>,</p>
+<p>"test": <em>"(jp.query(contextNode,'$..interest_rate') &gt;= 3.75"</em>,</p>
+<p>"message": <em>"Assert 1: Interest Rate cannot be less than 3.75 Percent"</em></p>
+<p>}</p>
+<p>]}]}]}}</p>
+<p>Our simple schema is now complete. Let&rsquo;s run this schema with good and bad data.</p>
+<p>The rules file and instance documents are located at:</p>
+<p>&gt;&gt; $JSONTRON_HOME/examples/main_features_examples/simple_example</p>
+<p>loandata_rules_simple.json</p>
+<p>loandata_data_simple_good1.json</p>
+<p>loandata_rules_simple.json</p>
+<p>We are now ready to run the simple example. Follow the below steps to run the example.</p>
+<p>Make sure you are in the above <em>simple_example</em> folder.</p>
+<p>Run: <strong>node $JSONValidator -i loandata_data_simple_good1.json -r loandata_rules_simple.json</strong></p>
+<p>The instance document loandata_data_simple_good1.json has been successfully validated.</p>
+<p>Now let&rsquo;s run the same rule against the bad instance document:</p>
+<p>Run: <strong>node $JSONValidator -i loandata_data_simple_bad1.json -r loandata_rules_simple.json</strong></p>
+<p>The message tells us that the document is not valid against the rules. Let&rsquo;s use the debug option to get the detailed message:</p>
+<p>Run: <strong>node $JSONValidator -i loandata_data_simple_bad1.json -r loandata_rules_simple.json -d</strong></p>
+<p>A few things to note about the detailed report.</p>
+<ul>
+	<li>It is generated by the <em>-d </em>option at the end of the command</li>
+	<li>&lsquo;Total Errors Found&rsquo; denotes the number of system errors like missing files or ill formed documents. These are not validation errors but program errors.</li>
+	<li>&lsquo;Total Warnings Found&rsquo; denotes any issue that are not fatal but need attention like a context expression returning empty node set.</li>
+	<li>&lsquo;Total Validations&rsquo; denotes how many assertion tests were executed against how many nodes. In this case there were two loan items against which one assertion was executed so total 2 validations. [2 nodes x 1 assert]. It includes all validations whether passed or failed. It is denoted by validations array in the report.</li>
+	<li>&lsquo;Total Failed Assertions&rdquo; denotes the failed validations. It is denoted by the &lsquo;finalValidationReport&rsquo; array in the report.</li>
+	<li>The last line in the report is &lsquo;valid&rsquo; Boolean attribute. The report has one passed validation and one failed validation, but overall the validation has failed so this attribute will return &lsquo;false&rsquo;. All validations have to pass and there shouldn&rsquo;t be any warnings or errors for this &lsquo;valid&rsquo; attribute to be set to &lsquo;true&rsquo;.</li>
+</ul>
+<h2>3.4 Adding multiple assert, rule, pattern and phase elements</h2>
+<p>As mentioned earlier, the <em>assert</em>, <em>rule</em>, <em>pattern</em> and <em>phase</em> elements are array elements and can contain multiple items of their own type respectively. In this example, we will extend the rules schema from example 3.3 and add an assert, a rule, a pattern, and a phase element to the schema.</p>
+<p><strong>Business Rules</strong>:</p>
+<ol start="2">
+	<li>For all loan types, the prime rate cannot be more than 5%.</li>
+	<li>Traditional loan type&rsquo;s maximum amount cannot be more than $1 million</li>
+</ol>
+<p><strong>Data</strong>:</p>
+<p>The data for this example is found in the following folder:</p>
+<p>&gt;&gt; $JSONTRON_HOME/examples/main_features_examples/multiple_elements_example</p>
+<p>loandata_rules_multi.json</p>
+<p>loandata_data_multi_good1.json</p>
+<p>loandata_rules_multi.json</p>
+<p><strong>Extending schema rules</strong></p>
+<p>We have two new business rules that we need to incorporate into our Schematron schema that we developed in example 3.3.</p>
+<ul>
+	<li>For <strong>business rule # 2</strong>, since the context is the same so we will add another assert object in the same rule.
+		<ul>
+			<li>The <strong>context</strong> expression will be similar to example 3.3</li>
+		</ul>
+	</li>
+</ul>
+<p>"context": <em>"$.loan_data.loans.*"</em></p>
+<ul>
+	<li>The <strong>test</strong> will be similar but instead of interest_rate, it will be applied to prime_rate nodes and upper limit for prime_rate will be 5% as per business rule</li>
+</ul>
+<p>"test":<em> "(jp.query(contextNode,'$..prime_rate')) &lt;= 5"</em></p>
+<ul>
+	<li>For <strong>business rule # 3</strong>, since it is applicable to &lsquo;Traditional&rsquo; loan types, therefore, we will put it in a separate pattern (patternid2) that in turn will contain a new rule with a new context and assertion.
+		<ul>
+			<li>The <strong>context</strong> expression will select the &ldquo;Traditional&rdquo; loans only instead of all loans</li>
+		</ul>
+	</li>
+</ul>
+<p>"context": <em>"$.loan_data.loans[?(@.loan_type === 'Traditional')]"</em></p>
+<ul>
+	<li>The <strong>test</strong> will now apply to the selected &ldquo;Traditional&rdquo; loan types only and will emit a message if it exceeds $1M as per business rule</li>
+</ul>
+<p>"test": <em>"(jp.query(contextNode,'$..amount') &lt;= 1000000"</em></p>
+<ul>
+	<li>Since another pattern is added, we can separate all loans and traditional loan related patterns in different phases by adding another phase (phaseid2) to contain &lsquo;patternid2&rsquo;</li>
+</ul>
+<p>{</p>
+<p>"schema":{</p>
+<p>&nbsp;</p>
+<p>"id":<em>"Loan Data Rules"</em>,</p>
+<p>"title":<em>"Schematron Semantic Validation"</em>,</p>
+<p>"schemaVersion":<em>"ISO Schematron 2016"</em>,</p>
+<p>"queryBinding":<em>"jsonpath"</em>,</p>
+<p>"defaultPhase":<em>"phaseid1"</em>,</p>
+<p>"phase": [</p>
+<p>{</p>
+<p>"id":<em>"phaseid1"</em>,</p>
+<p>"active":[<em>"patternid1"</em>]</p>
+<p>},</p>
+<p>{</p>
+<p>"id":<em>"phaseid2"</em>,</p>
+<p>"active":[<em>"patternid2"</em>]</p>
+<p>}],</p>
+<p>&nbsp;</p>
+<p>"pattern":[</p>
+<p>{</p>
+<p>"id":<em>"patternid1"</em>,</p>
+<p>"title":<em>"Interest Rate Pattern"</em>,</p>
+<p>"abstract":false,</p>
+<p>"rule":[</p>
+<p>{</p>
+<p>"id":<em>"RateRule1"</em>,</p>
+<p>"abstract":false,</p>
+<p>"context": <em>"$.loan_data.loans.*"</em>,</p>
+<p>"assert":[</p>
+<p>{</p>
+<p>"id":<em>"assertidINT21"</em>,</p>
+<p>"test": <em>"(jp.query(contextNode,'$..interest_rate')) &gt;= 3.75"</em>,</p>
+<p>"message": <em>"assertidINT21: Interest Rate cannot be less than 3.75 %"</em></p>
+<p>}, {</p>
+<p>"id":<em>"assertidPRI21"</em>,</p>
+<p>"test": <em>"(jp.query(contextNode,'$..prime_rate')) &lt;= 5"</em>,</p>
+<p>"message": <em>"assertidPRI21: Prime Rate cannot be more than 5 %"</em></p>
+<p>}]}]},</p>
+<p>&nbsp;</p>
+<p>{</p>
+<p>"id":<em>"patternid2"</em>,</p>
+<p>"title":<em>"Traditional Loan Max"</em>,</p>
+<p>"abstract":false,</p>
+<p>"rule":[</p>
+<p>{</p>
+<p>"id":<em>"TRADMaxRule1"</em>,</p>
+<p>"abstract":false,</p>
+<p>"context": <em>"$.loan_data.loans[?(@.loan_type === 'Traditional')]"</em>,</p>
+<p>"assert":[</p>
+<p>{</p>
+<p>"id":<em>"assertidINT21"</em>,</p>
+<p>"test": <em>"(jp.query(contextNode,'$..amount')) &lt;= 1000000"</em>,</p>
+<p>"message": <em>"Assert 1: Traditional loan cannot be more than $1MM "</em></p>
+<p>}</p>
+<p>]}]}]}</p>
+<p>}</p>
+<p>Let&rsquo;s run this example with good data.</p>
+<p>Run: <strong>node $JSONValidator -i loandata_data_multi_good1.json -r loandata_rules_multi.json</strong></p>
+<p>Let&rsquo;s run the example with only one phase (phaseid1).</p>
+<p>Run: <strong>node $JSONValidator -i loandata_data_multi_good1.json -r loandata_rules_multi.json phaseid1</strong></p>
+<p>Same example with the second phase (phaseid2).</p>
+<p>Run: <strong>node $JSONValidator -i loandata_data_multi_good1.json -r loandata_rules_multi.json phaseid2</strong></p>
+<p>The example with bad data where prime rate is expected to be 5 % or less.</p>
+<p>Run: <strong>node $JSONValidator -i loandata_data_multi_bad1.json -r loandata_rules_multi.json</strong></p>
+<p>The example with bad data where traditional loan is expected to be less than $1M but the file contains $3M.</p>
+<p>Run: <strong>node $JSONValidator -i loandata_data_multi_bad2.json -r loandata_rules_multi.json</strong></p>
+<h2>3.5 Loan Data Main Example</h2>
+<p>This example contains many use cases that exhibit various capabilities of Schematron specification. Run it with various combinations and permutations to activate various phases.</p>
+<p><strong>Business Rules</strong>:</p>
+<p><strong>Data</strong>:</p>
+<p>The data for this example is found in below folder:</p>
+<p>&gt;&gt; $JSONTRON_HOME/examples/main_features_examples/loandata-main</p>
+<p>Loandata-rules-main.json</p>
+<p>Loandata-main.json</p>
+<p>Loandata-main-bad1.json</p>
+<p><strong>Specifying the semantic constraints based on the above business rules</strong></p>
+<p>Run validation with good data.</p>
+<p>Run: <strong>node $JSONValidator -i loandata-main.json -r loandata-rules-main.json</strong></p>
+<p>Run validation with bad data.</p>
+<p>Run: <strong>node $JSONValidator -i loandata-main-bad1.json -r loandata-rules-main.json</strong></p>
+<h2>3.6 Examples for phase, pattern, rule, assert, context, assert and report elements</h2>
+<p>There are multiple examples available in the examples folder to test out main features of the Schematron implementation. Go to each folder and try out various examples.</p>
+<p><strong>Data</strong>:</p>
+<p>There are multiple examples for each of the construct. The data for these examples are found in folders listed below. Go to each of these folders and run the examples to see how various constraints are expressed.</p>
+<p>Theses examples are based on two main sets of data. The loan data that have been used so far will also be used in some of the examples here. Some examples also use &lsquo;Store&rsquo; data set as well to shed light on nuances of Schematron implementation in JSON.</p>
+<p>All the examples with good data, bad data and rule files are located at:</p>
+<p>&gt;&gt; $JSONTRON_HOME/examples/main_features_examples</p>
+<p>/assert</p>
+<p>/context</p>
+<p>/pattern</p>
+<p>/phase</p>
+<p>/rules</p>
+<p>/report</p>
+<h2>3.7 Stack Overflow Meeting Times Dilemma Example</h2>
+<p>There was an unsolved question on Stack Overflow website about Schematron JSON implementation. The question was about making sure that when scheduling meetings, end time should not be before the start time. It was posted a few years ago on the site and was still unresolved. Jsontron successfully and easily solved the problem.</p>
+<p>The original question and our solution are available at the following location:</p>
+<p>https://stackoverflow.com/questions/28629107/json-is-there-an-equivalent-of-schematron-for-json-and-json-schema-that-is-a</p>
+<p><strong>Data</strong>:</p>
+<p>The data for Stack Overflow example is located at:</p>
+<p>&gt;&gt; $JSONTRON_HOME/examples/stackoverflow_example</p>
+<p>meeting-times-rules.json</p>
+<p>good-time.json</p>
+<p>bad-time.json</p>
+<p>Run with good data:</p>
+<p>Run: <strong>node $JSONValidator -i good_time.json -r meeting-times-rules.json</strong></p>
+<p>Run with bad data and debug on:</p>
+<h1>4 IBM Schematron Tutorial</h1>
+<p>This tutorial is based on IBM staff Uche Ogbuji&rsquo;s XML Schematron tutorial [4].</p>
+<h2>4.1 Prerequisites</h2>
+<p>This tutorial assumes knowledge of JSON, JSON Schema, JSONPath, and JavaScript. If you are not familiar with these concepts, please take some basic tutorial first.</p>
+<p>Below are some good resources to get started with these:</p>
+<ul>
+	<li>https://www.w3schools.com/js/js_json_syntax.asp</li>
+	<li>https://json-schema.org/understanding-json-schema</li>
+	<li>https://www.w3schools.com/js/default.asp</li>
+</ul>
+<p>Good understanding of JSONPath node module is very important for understanding the examples in this tutorial. JSONPath documentation is available at:</p>
+<ul>
+	<li>https://www.npmjs.com/package/jsonpath</li>
+</ul>
+<p>There is an online JSONPath evaluator available at below location:</p>
+<ul>
+	<li>http://jsonpath.com</li>
+</ul>
+<p><strong>About the Schematron examples in this tutorial</strong></p>
+<p>The original XML instance documents translated into JSON instance document. All the Schematron rules were re-written in the JSON Schematron specification language.</p>
+<p><strong>Data:</strong></p>
+<p>All the files for this tutorial are available in the following folder:</p>
+<p><strong>&gt;&gt; $JSONTRON_HOME/examples/ibm-test-suite</strong></p>
+<p>The data is also available online on GitHub:</p>
+<ul>
+	<li>https://github.com/amer-ali/jsontron/tree/master/jsontron/examples/ibm-test-suite</li>
+</ul>
+<p>The naming convention used for the example files is similar to the original tutorial.</p>
+<p>The examples are in respective folders and named with a prefix for the particular example like:</p>
+<ul>
+	<li><strong>json</strong> [ Instance document that should pass the validation]</li>
+	<li><strong>json</strong> [Instance document that should fail the validation]</li>
+	<li><strong>eg3_1-rules.json</strong> [The Schematron rules file. It is also a JSON document]</li>
+</ul>
+<p>Reminder: not all the examples in the original tutorial are applicable in JSON format so you will see some missing examples in this implementation.</p>
+<h2>4.2 Schematron overview and example</h2>
+<p><strong>Data:</strong></p>
+<p>All the files for this tutorial are available in the following folder:</p>
+<p><strong>&gt;&gt; $JSONTRON_HOME/examples/ibm-test-suite/4.1</strong></p>
+<p>Below examples are available with core features:</p>
+<ul>
+	<li>eg4_1-rules.json [ Schematron Rules File ]</li>
+	<li>json [ Valid Instance Document ]</li>
+	<li>json [ Invalid Instance Document ]</li>
+</ul>
+<p><strong>Commands:</strong></p>
+<p>Good data: <strong>&gt;&gt;node $JSONValidator -i eg4_1_good1.json -r eg4_1-rules.json</strong></p>
+<p>Bad data:<strong> &gt;&gt;node $JSONValidator -i eg4_1_bad1.json -r eg4_1-rules.json</strong></p>
+<p>Schematron is useful in the scenario where grammar/syntax-based schema languages like JSON Schema [5] are not suitable. It helps you define co-constraints.</p>
+<p>The examples demonstrate the power of the Schematron using a hypothetical organization that handles the publishing of technical documents. The editors write the rules to ensure the submitted documents meet the editorial requirements.</p>
+<p>If you have not done so, please read Section 2 and setup the &lsquo;jsontron&rsquo; validator to run these examples.</p>
+<p>Below is a sample JSON document that needs to be validated:</p>
+<p><strong>A sample rules file that ensures prologue and section elements in the document</strong></p>
+<p>In this example, there is one <em>pattern</em> that contains one <em>rule</em>. The rule has a <em>context</em> expression on line 25. This expression is a <em>jsonpath</em> expression. It is basically the second argument of the <em>jsonpath</em> query method. The validator will run this expression as below during runtime:</p>
+<p>In this example, there is one pattern that contains one rule. The rule has a context expression on line 25. This expression is a <em>jsonpath</em> expression. It is basically the second argument of the <em>jsonpath</em> query method. The validator will run this expression as below during runtime:</p>
+<p>Please note that &ldquo;contextNode&rdquo; is used as a keyword in &lsquo;jsontron&rsquo; implementation. It stores the node set that returns as a result of running &lsquo;jsonpath&rsquo; query. The assertion tests are then run against each node of this node set. One critical thing to note is that <em>jsontron</em> encloses the result of the context expression in an array []. This is to avoid the inconsistency due to the fact that the <em>jsonpath</em> can sometimes return an object {}.</p>
+<p>For more details, see sections on <em>Context</em> and <em>Assertion</em>.</p>
+<h2>4.3 Basics of rules, patterns, and assertions</h2>
+<p><strong>Data: </strong>All the files for this tutorial are available in the following folder:</p>
+<p><strong>&gt;&gt; $JSONTRON_HOME/examples/ibm-test-suite/4.5</strong></p>
+<p>A pattern is a collection of rules. A rule is a collection of assertions. The assertion contains tests conducted against the nodes returned from running the context expression. For each pattern, the rules engine selects the nodes that will trigger the tests. Each pattern can contain multiple rules and each rule can contain multiple assertions. For the example above, the rules engine will select the &lsquo;doc&rsquo; element by running below jsonpath query:&nbsp;</p>
+<p>and will return the following node set:</p>
+<p>Then the first assertion will check to see if the prologue element is present:</p>
+<p>It will return below output:</p>
+<p>It will then run the second assertion checking the presence of &lsquo;section&rsquo; element:</p>
+<p>If both assertions are true, that means the document is valid overall. You will get the following message:</p>
+<p>Now if we have a bad document that has missing &lsquo;prologue&rsquo; element:</p>
+<p>The second assertion will fail, as the prologue is missing, so the overall validation will fail.</p>
+<p><strong>Executing the sample schema</strong></p>
+<p>The sample schema is actually the example 4.5 from the IBM test suite. Below are the files:</p>
+<ul>
+	<li>eg4_5-rules.json [Schematron Rules File]</li>
+	<li>json [Valid Instance Document]</li>
+	<li>json [Invalid Instance Document. Missing &lsquo;prologue&rsquo; element]</li>
+</ul>
+<p>We are now ready to run the example. Follow the below steps to run the example.</p>
+<p>Make sure you are in the right example folder:</p>
+<p>&nbsp;$JSONTRON_HOME/examples/ibm-test-suite/4.5</p>
+<p><strong>&gt;node $JSONValidator -i eg4_5_good1.json -r eg4_5-rules.json</strong></p>
+<p><strong>Starting Semantic Validation .........</strong></p>
+<p><strong>Parsing Pattern: Major_elements</strong></p>
+<p><strong>1 Pattern(s) Requested. 1 Pattern(s) Processed. 0 Pattern(s) Ignored.</strong></p>
+<p><strong>**** THIS INSTANCE IS SEMANTICALLY VALID ****</strong></p>
+<p><strong>Completed Semantic Validation .........</strong></p>
+<p>where -i is the instance document and the -r is the rules document.</p>
+<p>Now if you run with an invalid document that has &lsquo;prologue&rsquo; element missing:</p>
+<p><strong>&gt;node $JSONValidator -i eg4_5_bad1.json -r eg4_5-rules.json</strong></p>
+<p><strong>Starting Semantic Validation .........</strong></p>
+<p><strong>Parsing Pattern: Major_elements</strong></p>
+<p><strong>1 Pattern(s) Requested. 1 Pattern(s) Processed. 0 Pattern(s) Ignored.</strong></p>
+<p><strong>**** THIS INSTANCE CONTAINS SEMANTIC VALIDATION ISSUES. PLEASE SEE FULL REPORT BY ENABLING DEBUG WITH -d OPTION ****</strong></p>
+<p><strong>Completed Semantic Validation .........</strong></p>
+<p>If you run it in debug by adding -d at the end of the command, you will get below output:</p>
+<p><strong>&gt;node $JSONValidator -i eg4_5_bad1.json -r eg4_5-rules.json -d</strong></p>
+<p><strong>Starting Semantic Validation .........</strong></p>
+<p><strong>Parsing Pattern: Major_elements</strong></p>
+<p><strong>1 Pattern(s) Requested. 1 Pattern(s) Processed. 0 Pattern(s) Ignored.</strong></p>
+<p><strong>**** THIS INSTANCE CONTAINS SEMANTIC VALIDATION ISSUES. PLEASE SEE FULL REPORT BY ENABLING DEBUG WITH -d OPTION ****</strong></p>
+<p><strong>Completed Semantic Validation .........</strong></p>
+<p><strong>Total Errors Found: 0</strong></p>
+<p><strong>Total Warnings Found: 0</strong></p>
+<p><strong>Total Validations: 2</strong></p>
+<p><strong>Total Failed Assertions: 1</strong></p>
+<p><strong>Full Validation Report :</strong></p>
+<p><strong>Report {</strong></p>
+<p><strong> errors: [],</strong></p>
+<p><strong> warnings: [],</strong></p>
+<p><strong> validations:</strong></p>
+<p><strong> [ { schRule: [Object],</strong></p>
+<p><strong> ruleContext: [Object],</strong></p>
+<p><strong> assertionid: 'Major_elements_assert_prologue',</strong></p>
+<p><strong> assertionTest: 'jp.query(contextNode, \'$..[?(@.prologue)]\').length &gt; 0',</strong></p>
+<p><strong> message: 'element must have a prologue',</strong></p>
+<p><strong> assertionValid: false },</strong></p>
+<p><strong> { schRule: [Object],</strong></p>
+<p><strong> ruleContext: [Object],</strong></p>
+<p><strong> assertionid: 'Major_elements_assert_section',</strong></p>
+<p><strong> assertionTest: 'jp.query(contextNode, \'$..[?(@.section)]\').length &gt; 0',</strong></p>
+<p><strong> message: 'successful',</strong></p>
+<p><strong> assertionValid: true } ],</strong></p>
+<p><strong> finalValidationReport:</strong></p>
+<p><strong> [ { schRule: [Object],</strong></p>
+<p><strong> ruleContext: [Object],</strong></p>
+<p><strong> assertionid: 'Major_elements_assert_prologue',</strong></p>
+<p><strong> assertionTest: 'jp.query(contextNode, \'$..[?(@.prologue)]\').length &gt; 0',</strong></p>
+<p><strong> message: 'element must have a prologue',</strong></p>
+<p><strong> assertionValid: false } ],</strong></p>
+<p><strong> valid: false }</strong></p>
+<p>As mentioned in the original tutorial, the examples in this tutorial are very simplistic. Same results can be achieved using the syntax-based schema languages like JSONSchema. The tutorial is meant for just getting familiar with features of Schematron so that more complicated rules can be developed later.</p>
+<p>You can experiment with various files in the same folder (<strong>4.5</strong>) to test the various scenarios. Here are the examples in the folder:</p>
+<ul>
+	<li>5/eg4_5_good2.json [Valid Instance Document with multiple &lsquo;section&rsquo; elements]</li>
+	<li>5/eg4_5_bad2.json [Invalid Instance Document. Missing &lsquo;section&rsquo; element]</li>
+	<li>5/eg4_5_bad3.json [Invalid Instance Document. Missing both &lsquo;section&rsquo; and &lsquo;prologue&rsquo; elements]</li>
+</ul>
+<p>Now let&rsquo;s look at other examples one by one. We will follow the same sequence as original IBM tutorial to incrementally introduce various concepts.</p>
+<p><strong>Verifying that a particular element is a root</strong></p>
+<p>In example 3.1 we verify that &lsquo;doc&rsquo; is always the root element. Below are the files for this example.</p>
+<p><strong>Data: </strong>All the files for this tutorial are available in the following folder:</p>
+<p><strong>&gt;&gt; $JSONTRON_HOME/examples/ibm-test-suite/3.1</strong></p>
+<ul>
+	<li>eg3_1-rules.json [ Schematron Rules File ]</li>
+	<li>json [ Valid Instance Document ]</li>
+	<li>json [ Invalid Instance Document. The root element is not &lsquo;doc&rsquo; ]</li>
+</ul>
+<p>Input valid instance document: <strong>eg3_1_good1.json</strong></p>
+<p><strong>{ </strong></p>
+<p><strong> "doc": {}</strong></p>
+<p>&nbsp;</p>
+<p><strong>}</strong></p>
+<p>Input rules file:<strong> eg3_1-rules.json</strong></p>
+<p><strong>{</strong></p>
+<p><strong>"schema":{</strong></p>
+<p><strong> "id":"eg3_1",</strong></p>
+<p><strong> "title":"Technical document schema",</strong></p>
+<p><strong> "schemaVersion":"ISO Schematron 2016",</strong></p>
+<p><strong> "queryBinding":"jsonpath",</strong></p>
+<p><strong> "defaultPhase":"phaseid1",</strong></p>
+<p>&nbsp;</p>
+<p><strong> "phase":[</strong></p>
+<p><strong> {</strong></p>
+<p><strong> "id":"phaseid1",</strong></p>
+<p><strong> "active":["Document_root"]</strong></p>
+<p><strong> }</strong></p>
+<p><strong> ],</strong></p>
+<p>&nbsp;</p>
+<p><strong> "pattern":[</strong></p>
+<p><strong> {"id":"Document_root",</strong></p>
+<p><strong> "title":"pattern title",</strong></p>
+<p><strong> "rule":[</strong></p>
+<p><strong> { </strong></p>
+<p><strong> "id":"doc_root",</strong></p>
+<p><strong> "abstract":false,</strong></p>
+<p><strong> "context": "$",</strong></p>
+<p><strong> "assert":[</strong></p>
+<p><strong> {</strong></p>
+<p><strong> "id":"doc_root_assert",</strong></p>
+<p><strong> "test":"Object.keys(jp.parent(contextNode, '$.*')[0]) == 'doc'",</strong></p>
+<p><strong> "message": "Root element should be 'doc'."</strong></p>
+<p><strong> }</strong></p>
+<p><strong> ]}]}]}}</strong></p>
+<p>Now let&rsquo;s run the example using jsontron:</p>
+<p><strong>&gt;node $JSONValidator -i eg3_1_good1.json -r eg3_1-rules.json</strong></p>
+<p><strong>Starting Semantic Validation .........</strong></p>
+<p><strong>Parsing Pattern: Document_root</strong></p>
+<p><strong>1 Pattern(s) Requested. 1 Pattern(s) Processed. 0 Pattern(s) Ignored.</strong></p>
+<p><strong>**** THIS INSTANCE IS SEMANTICALLY VALID ****</strong></p>
+<p><strong>Completed Semantic Validation .........</strong></p>
+<p>Now with invalid instance document: eg3_1_bad1.json</p>
+<p><strong>{ </strong></p>
+<p><strong> "bogus": {}</strong></p>
+<p>&nbsp;</p>
+<p><strong>}</strong></p>
+<p><strong>&gt;node $JSONValidator -i eg3_1_bad1.json -r eg3_1-rules.json</strong></p>
+<p><strong>Starting Semantic Validation .........</strong></p>
+<p><strong>Parsing Pattern: Document_root</strong></p>
+<p><strong>1 Pattern(s) Requested. 1 Pattern(s) Processed. 0 Pattern(s) Ignored.</strong></p>
+<p><strong>**** THIS INSTANCE CONTAINS SEMANTIC VALIDATION ISSUES. PLEASE SEE FULL REPORT BY ENABLING DEBUG WITH -d OPTION ****</strong></p>
+<p><strong>Completed Semantic Validation .........</strong></p>
+<p>There are other examples you can experiment with:</p>
+<ul>
+	<li>json [Invalid Instance Document. &lsquo;doc&rsquo; element is not at the root]</li>
+</ul>
+<p>Below are the <em>context</em> and <em>test</em> expressions that we will examine closely:</p>
+<p>Let&rsquo;s take a closer look at the <em>context</em> and <em>test</em> expressions. In the <em>context</em> expression, we just select the root element. However, the <em>test</em> expression is a little complex. Basically, it uses combination of &lsquo;jsonpath&rsquo; parent() method and JavaScript Object.keys() method. Since this implementation allows using plain JavaScript expression due to the limitation of &lsquo;jsonpath&rsquo; query language, therefore, you can achieve the same result in &lsquo;test&rsquo; expression through multiple ways and using different methods and expressions. You will see some variations in later examples.</p>
+<p>A little deeper anatomy of the context and test expressions.</p>
+<p>Context expression <strong>&lsquo;$</strong>&rsquo; behind the scene translates into the following call:</p>
+<p>It will return the following <em>context</em> node set</p>
+<p>Note that the returned node-set is an array [] instead of object {}. As explained in detail before, this is due to the fact that jsonpath wraps the output in an array for consistency.</p>
+<p>Now in order to test that the root is actually a <em>doc</em> element, we have to do a few things:</p>
+<ol>
+	<li>First retrieve the root element again by running jsonpath method <em>parent()</em> on the <em>contextNode</em> that was returned from the <em>context</em></li>
+</ol>
+<p>Notice that we used the jsonpath method <em>parent()</em> instead of a query method. We can run the query() method as well and we will show that little later.</p>
+<ol start="2">
+	<li>Now using the plain old JavaScript array indexing, access the first element in the node set.</li>
+</ol>
+<p>This will return the &lsquo;doc&rsquo; object:</p>
+<p>Now retrieve the key of the object using the JavaScript Object.keys() method.</p>
+<p>This comparison will return &lsquo;true&rsquo; in this case. So, combining all this in one statement:</p>
+<p>As mentioned above you can use jsonpath method <em>query()</em> as well to achieve the same result like below:</p>
+<p>Note that when using method <em>query()</em> we have to use another index variable to access the &lsquo;doc&rsquo; object. This is because of the fact that when jp.query() ran on <em>contextNode</em>, it added another wrapper around it so the object became [[{ doc: {} }]], therefore, we will have to use array[0][0] to access the doc object.</p>
+<p>It seems a bit complicated and takes some time to get used to, similar to XPath in XML, but once you get familiar with it, you will understand that it provides a lot of flexibility to express really sophisticated validation rules.</p>
+<p>This is the hardest part to grasp for the new users, so take your time to understand this. If need be, go back to <em>jsonpath</em> and <em>JavaScript</em> tutorials as mentioned in pre-requisite section.</p>
+<p>But the good news is that once you master these concepts, the rest of the tutorial will be a lot easier.<br /><strong>Validating the presence of elements</strong></p>
+<p>You can validate that certain elements are present. This schema checks that &lsquo;doc&rsquo; elements have both &lsquo;prologue&rsquo; and &lsquo;section&rsquo; elements. This is similar to the sample schema we explained at the beginning of the tutorial. But here we will use simple test expressions. Below are the files used in this example</p>
+<p><strong>Data: </strong>All the files for this tutorial are available in the following folder:</p>
+<p><strong>&gt;&gt; $JSONTRON_HOME/examples/ibm-test-suite/3.2</strong></p>
+<ul>
+	<li><strong>eg3_2-rules.json</strong> [ Schematron Rules File]</li>
+	<li><strong>json</strong> [ Valid Instance Document]</li>
+	<li><strong>json</strong> [ Invalid Instance Document. &lsquo;prologue&rsquo; element is missing]</li>
+	<li><strong>json</strong> [ Invalid Instance Document. &lsquo;section&rsquo; element is missing]</li>
+	<li><strong>json</strong> [ Invalid Instance Document. Both &lsquo;prologue&rsquo; and &lsquo;section&rsquo; elements are missing]</li>
+</ul>
+<p>The rule looks like below:</p>
+<p>In this example, the context expresses &ldquo;$..doc&rdquo; will return the &lsquo;doc&rsquo; element as below:</p>
+<p>Next, we simply check if the first element of the array [0] has the <em>prologue</em> and <em>section</em> members. Internally two tests will be run, one for &lsquo;prologue&rsquo; and one for &lsquo;section&rsquo;</p>
+<p>Now let&rsquo;s run the example using jsontron:</p>
+<p><strong>&gt;node $JSONValidator -i eg3_2_good1.json -r eg3_2-rules.json</strong></p>
+<p><strong>Starting Semantic Validation .........</strong></p>
+<p><strong>Parsing Pattern: Major_Elements</strong></p>
+<p><strong>1 Pattern(s) Requested. 1 Pattern(s) Processed. 0 Pattern(s) Ignored.</strong></p>
+<p><strong>**** THIS INSTANCE IS SEMANTICALLY VALID ****</strong></p>
+<p><strong>Completed Semantic Validation .........</strong></p>
+<p>Now with the bad data:</p>
+<p><strong>&gt;node $JSONValidator -i eg3_2_bad1.json -r eg3_2-rules.json -d</strong></p>
+<p><strong>Starting Semantic Validation .........</strong></p>
+<p><strong>Parsing Pattern: Major_Elements</strong></p>
+<p><strong>1 Pattern(s) Requested. 1 Pattern(s) Processed. 0 Pattern(s) Ignored.</strong></p>
+<p><strong>**** THIS INSTANCE CONTAINS SEMANTIC VALIDATION ISSUES. PLEASE SEE FULL REPORT BY ENABLING DEBUG WITH -d OPTION ****</strong></p>
+<p><strong>Completed Semantic Validation .........</strong></p>
+<p><strong>Total Errors Found: 0</strong></p>
+<p><strong>Total Validations: 2</strong></p>
+<p><strong>Total Failed Assertions: 1</strong></p>
+<p><strong>Full Validation Report :</strong></p>
+<p><strong>Report {</strong></p>
+<p><strong> errors: [],</strong></p>
+<p><strong> warnings: [],</strong></p>
+<p><strong> validations:</strong></p>
+<p><strong> [ { assertionid: 'doc_prologue_assert',</strong></p>
+<p><strong> assertionTest: 'contextNode[0].prologue != null',</strong></p>
+<p><strong> message: 'The \'Doc\' element should have \'prologue\' child.',</strong></p>
+<p><strong> assertionValid: false },</strong></p>
+<p><strong> { assertionid: 'doc_section_assert',</strong></p>
+<p><strong> assertionTest: 'contextNode[0].section != null',</strong></p>
+<p><strong> message: 'successful',</strong></p>
+<p><strong> assertionValid: true } ],</strong></p>
+<p><strong> finalValidationReport:</strong></p>
+<p><strong> [ { schRule: [Object],</strong></p>
+<p><strong> ruleContext: [Object],</strong></p>
+<p><strong> assertionid: 'doc_prologue_assert',</strong></p>
+<p><strong> assertionTest: 'contextNode[0].prologue != null',</strong></p>
+<p><strong> message: 'The \'Doc\' element should have \'prologue\' child.',</strong></p>
+<p><strong> assertionValid: false } ],</strong></p>
+<p><strong> valid: false }</strong></p>
+<p><strong>Verifying that elements are where they are expected</strong></p>
+<p>To validate that an element appears only in a certain place, use this schema to check that the only &lsquo;doc&rsquo; element is the root. This is similar to example 3_1 but in that example, we were verifying that the root element is a doc. But there could be other doc sub-elements. In this example, we are verifying that &lsquo;doc&rsquo; element is allowed only as root. There shouldn&rsquo;t be any other &lsquo;doc&rsquo; element in the document other than root.</p>
+<p><strong>Data: </strong>All the files for this tutorial are available in the below folder:</p>
+<p><strong>&gt;&gt; $JSONTRON_HOME/examples/ibm-test-suite/3.3</strong></p>
+<p>The example files here are:</p>
+<ul>
+	<li><strong>eg3_3-rules.json</strong> [Schematron Rules File]</li>
+	<li><strong>json </strong>[Valid Instance Document]</li>
+	<li><strong>json </strong>&nbsp;[Invalid Instance Document. The &lsquo;doc&rsquo; is root element but there is another &lsquo;doc&rsquo; sub-element]</li>
+</ul>
+<p>The valid file:</p>
+<p>The rule file snippet:</p>
+<p><strong>&gt;node $JSONValidator -i eg3_3_good1.json -r eg3_3-rules.json</strong></p>
+<p><strong>Starting Semantic Validation .........</strong></p>
+<p><strong>Parsing Pattern: Extraneous_docs</strong></p>
+<p><strong>1 Pattern(s) Requested. 1 Pattern(s) Processed. 0 Pattern(s) Ignored.</strong></p>
+<p><strong>**** THIS INSTANCE IS SEMANTICALLY VALID ****</strong></p>
+<p><strong>Completed Semantic Validation .........</strong></p>
+<p>Now invalid document where there is a nested &lsquo;doc&rsquo; element:</p>
+<p><strong>{</strong></p>
+<p><strong> "doc": { "doc":{} }</strong></p>
+<p><strong>}</strong></p>
+<p><strong>&gt;node $JSONValidator -i eg3_3_bad1.json -r eg3_3-rules.json</strong></p>
+<p><strong>Starting Semantic Validation .........</strong></p>
+<p><strong>Parsing Pattern: Extraneous_docs</strong></p>
+<p><strong>1 Pattern(s) Requested. 1 Pattern(s) Processed. 0 Pattern(s) Ignored.</strong></p>
+<p><strong>**** THIS INSTANCE CONTAINS SEMANTIC VALIDATION ISSUES. PLEASE SEE FULL REPORT BY ENABLING DEBUG WITH -d OPTION ****</strong></p>
+<p><strong>Completed Semantic Validation .........</strong></p>
+<p>Output with debug enabled (-d)</p>
+<p><strong>&gt;node $JSONValidator -i eg3_3_bad1.json -r eg3_3-rules.json -d</strong></p>
+<p><strong>Starting Semantic Validation .........</strong></p>
+<p><strong>Parsing Pattern: Extraneous_docs</strong></p>
+<p><strong>1 Pattern(s) Requested. 1 Pattern(s) Processed. 0 Pattern(s) Ignored.</strong></p>
+<p><strong>**** THIS INSTANCE CONTAINS SEMANTIC VALIDATION ISSUES. PLEASE SEE FULL REPORT BY ENABLING DEBUG WITH -d OPTION ****</strong></p>
+<p><strong>Completed Semantic Validation .........</strong></p>
+<p><strong>Total Errors Found: 0</strong></p>
+<p><strong>Total Warnings Found: 0</strong></p>
+<p><strong>Total Validations: 1</strong></p>
+<p><strong>Total Failed Assertions: 1</strong></p>
+<p><strong>Full Validation Report :</strong></p>
+<p><strong>Report {</strong></p>
+<p><strong> errors: [],</strong></p>
+<p><strong> warnings: [],</strong></p>
+<p><strong> validations:</strong></p>
+<p><strong> [ { schRule: [Object],</strong></p>
+<p><strong> ruleContext: [Object],</strong></p>
+<p><strong> assertionid: 'extraneous_doc_assert',</strong></p>
+<p><strong> assertionTest: 'jp.query(contextNode,\'$..doc\').length ==1 &amp;&amp; contextNode[0] == jp.parent(contextNode, \'$..doc\')',</strong></p>
+<p><strong> message: 'The \'doc\' element is only allowed at the document root.',</strong></p>
+<p><strong> assertionValid: false } ],</strong></p>
+<p><strong> finalValidationReport:</strong></p>
+<p><strong> [ { schRule: [Object],</strong></p>
+<p><strong> ruleContext: [Object],</strong></p>
+<p><strong> assertionid: 'extraneous_doc_assert',</strong></p>
+<p><strong> assertionTest: 'jp.query(contextNode,\'$..doc\').length ==1 &amp;&amp; contextNode[0] == jp.parent(contextNode, \'$..doc\')',</strong></p>
+<p><strong> message: 'The \'doc\' element is only allowed at the document root.'</strong><strong>,</strong></p>
+<p><strong> assertionValid: false } ],</strong></p>
+<p><strong> valid: false }</strong></p>
+<p><strong>Validating for a certain number of elements</strong></p>
+<p>You can validate whether there is a specific number of a particular element present.</p>
+<p>To make it easier for readers to find the article in relevant contexts, the journal editors want to be sure that articles have at least three keywords in the prologue.</p>
+<p>This schema enforces a minimum of three <em>keyword</em> children of the <em>prologue</em> element.</p>
+<p><strong>Data: </strong>All the files for this tutorial are available in the below folder:</p>
+<p><strong>&gt;&gt; $JSONTRON_HOME/examples/ibm-test-suite/3.6</strong></p>
+<p>Files in this example:</p>
+<ul>
+	<li><strong>eg3_6-rules.json</strong> [ Schematron Rules File]</li>
+	<li><strong>json</strong> [ Valid Instance Document]</li>
+	<li><strong>json</strong> [ Invalid Instance Document. Only has two keywords]</li>
+</ul>
+<p>Valid document:</p>
+<p>Rules file snippet. Simply select the keywords in the context and then count in the test.</p>
+<p>You will get following validation result when running with good data.</p>
+<p><strong>&gt;node $JSONValidator -i eg3_6_good1.json -r eg3_6-rules.json</strong></p>
+<p><strong>Starting Semantic Validation .........</strong></p>
+<p><strong>Parsing Pattern: Minimum_keywords</strong></p>
+<p><strong>1 Pattern(s) Requested. 1 Pattern(s) Processed. 0 Pattern(s) Ignored.</strong></p>
+<p><strong>**** THIS INSTANCE IS SEMANTICALLY VALID ****</strong></p>
+<p><strong>Completed Semantic Validation .........</strong></p>
+<p>Now invalid document with only two keywords instead of three.</p>
+<p><strong>&gt;node $JSONValidator -i eg3_6_bad1.json -r eg3_6-rules.json</strong></p>
+<p><strong>Starting Semantic Validation .........</strong></p>
+<p><strong>Parsing Pattern: Minimum_keywords</strong></p>
+<p><strong>1 Pattern(s) Requested. 1 Pattern(s) Processed. 0 Pattern(s) Ignored.</strong></p>
+<p><strong>**** THIS INSTANCE CONTAINS SEMANTIC VALIDATION ISSUES. PLEASE SEE FULL REPORT BY ENABLING DEBUG WITH -d OPTION ****</strong></p>
+<p><strong>Completed Semantic Validation .........</strong></p>
+<p>Run the bad data example with debug option:</p>
+<p><strong>&gt;node $JSONValidator -i eg3_6_bad1.json -r eg3_6-rules.json -d</strong></p>
+<p><strong>Starting Semantic Validation .........</strong></p>
+<p><strong>Parsing Pattern: Minimum_keywords</strong></p>
+<p><strong>1 Pattern(s) Requested. 1 Pattern(s) Processed. 0 Pattern(s) Ignored.</strong></p>
+<p><strong>**** THIS INSTANCE CONTAINS SEMANTIC VALIDATION ISSUES. PLEASE SEE FULL REPORT BY ENABLING DEBUG WITH -d OPTION ****</strong></p>
+<p><strong>Completed Semantic Validation .........</strong></p>
+<p><strong>Total Errors Found: 0</strong></p>
+<p><strong>Total Warnings Found: 0</strong></p>
+<p><strong>Total Validations: 1</strong></p>
+<p><strong>Total Failed Assertions: 1</strong></p>
+<p><strong>Full Validation Report :</strong></p>
+<p><strong>Report {</strong></p>
+<p><strong> errors: [],</strong></p>
+<p><strong> warnings: [],</strong></p>
+<p><strong> validations:</strong></p>
+<p><strong> [ { schRule: [Object],</strong></p>
+<p><strong> ruleContext: [Object],</strong></p>
+<p><strong> assertionid: 'Minimum_keywords_assert',</strong></p>
+<p><strong> assertionTest: 'contextNode[0].length &gt; 2',</strong></p>
+<p><strong> message: 'At least three keywords are required.',</strong></p>
+<p><strong> assertionValid: false } ],</strong></p>
+<p><strong> finalValidationReport:</strong></p>
+<p><strong> [ { schRule: [Object],</strong></p>
+<p><strong> ruleContext: [Object],</strong></p>
+<p><strong> assertionid: 'Minimum_keywords_assert',</strong></p>
+<p><strong> assertionTest: 'contextNode[0].length &gt; 2',</strong></p>
+<p><strong>message: 'At least three keywords are required.',</strong></p>
+<p><strong> assertionValid: false } ],</strong></p>
+<p><strong> valid: false }</strong></p>
+<p><strong>Validating presence and value of attributes</strong></p>
+<p>You can validate that an attribute appears, or that it has a certain value. This schema checks that an <em>author</em> element (child of the <em>prologue</em>) has an <em>e-mail</em> attribute and a <em>member</em> attribute. The latter indicates whether or not an author is a member of the technical association, and this schema checks that its value is &ldquo;yes&rdquo; or &ldquo;no&rdquo;.</p>
+<p><strong>Data: </strong>All the files for this tutorial are available in the following folder:</p>
+<p><strong>&gt;&gt; $JSONTRON_HOME/examples/ibm-test-suite/3.7</strong></p>
+<p>The files for this example are:</p>
+<ul>
+	<li><strong>eg3_7-rules.json</strong> [ Schematron Rules File ]</li>
+	<li><strong>json</strong> [ Valid Instance Document ]</li>
+	<li><strong>json</strong> [ Invalid Instance Document. Missing &lsquo;email, attribute ]</li>
+</ul>
+<p>Valid document:</p>
+<p>Rules snippet. Two assertions. First checks &lsquo;email&rsquo;. Other, checks &lsquo;member&rsquo; and &lsquo;yes/no&rsquo;.</p>
+<p>Let&rsquo;s run the example with valid data:</p>
+<p><strong>&gt;node $JSONValidator -i eg3_7_good1.json -r eg3_7-rules.json</strong></p>
+<p><strong>Starting Semantic Validation .........</strong></p>
+<p><strong>Parsing Pattern: Author_attributes</strong></p>
+<p><strong>1 Pattern(s) Requested. 1 Pattern(s) Processed. 0 Pattern(s) Ignored.</strong></p>
+<p><strong>**** THIS INSTANCE IS SEMANTICALLY VALID ****</strong></p>
+<p><strong>Completed Semantic Validation .........</strong></p>
+<p>Now with an invalid document that has missing attribute &lsquo;email&rsquo;:</p>
+<p><strong>&gt;node $JSONValidator -i eg3_7_bad1.json -r eg3_7-rules.json -d</strong></p>
+<p><strong>Starting Semantic Validation .........</strong></p>
+<p><strong>Parsing Pattern: Author_attributes</strong></p>
+<p><strong>1 Pattern(s) Requested. 1 Pattern(s) Processed. 0 Pattern(s) Ignored.</strong></p>
+<p><strong>**** THIS INSTANCE CONTAINS SEMANTIC VALIDATION ISSUES. PLEASE SEE FULL REPORT BY ENABLING DEBUG WITH -d OPTION ****</strong></p>
+<p><strong>Completed Semantic Validation .........</strong></p>
+<p><strong>Total Errors Found: 0</strong></p>
+<p><strong>Total Warnings Found: 0</strong></p>
+<p><strong>Total Validations: 2</strong></p>
+<p><strong>Total Failed Assertions: 1</strong></p>
+<p><strong>Full Validation Report :</strong></p>
+<p><strong>Report {</strong></p>
+<p><strong> errors: [],</strong></p>
+<p><strong> warnings: [],</strong></p>
+<p><strong> validations:</strong></p>
+<p><strong> [ { schRule: [Object],</strong></p>
+<p><strong> ruleContext: [Object],</strong></p>
+<p><strong> assertionid: 'Author_attributes_assert_email',</strong></p>
+<p><strong> assertionTest: '(\'email\' in contextNode[0])',</strong></p>
+<p><strong> message: 'Author must have e-mail attribute.',</strong></p>
+<p><strong> assertionValid: false },</strong></p>
+<p><strong> { schRule: [Object],</strong></p>
+<p><strong> ruleContext: [Object],</strong></p>
+<p><strong> assertionid: 'Author_attributes_assert_member',</strong></p>
+<p><strong> assertionTest: '(\'member\' in contextNode[0]) &amp;&amp; ((jp.query(contextNode, \'$..member\'))[0] == (\'yes\')||(jp.query(contextNode, \'$..member\'))[0] == (\'no\'))',</strong></p>
+<p><strong> message: 'successful',</strong></p>
+<p><strong> assertionValid: true } ],</strong></p>
+<p><strong> finalValidationReport:</strong></p>
+<p><strong> [ { schRule: [Object],</strong></p>
+<p><strong> ruleContext: [Object],</strong></p>
+<p><strong> assertionid: 'Author_attributes_assert_email',</strong></p>
+<p><strong> assertionTest: '(\'email\' in contextNode[0])',</strong></p>
+<p><strong> message: 'Author must have e-mail attribute.',</strong></p>
+<p><strong> assertionValid: false } ],</strong></p>
+<p><strong> valid: false }</strong></p>
+<p><strong>Simple validation of element content</strong></p>
+<p>To validate that an element has a certain value, use this schema to check that the the title element is not empty.</p>
+<p><strong>Data: </strong>All the files for this tutorial are available in the following folder:</p>
+<p><strong>&gt;&gt; $JSONTRON_HOME/examples/ibm-test-suite/3.8</strong></p>
+<p>The files for this example are:</p>
+<ul>
+	<li><strong>eg3_8-rules.json</strong> [ Schematron Rules File ]</li>
+	<li><strong>json</strong> [ Valid Instance Document ]</li>
+	<li><strong>json</strong> [ Invalid Instance Document. Empty &lsquo;title&rsquo; attribute ]</li>
+</ul>
+<p>Valid document:</p>
+<p>Rules file snippet. Just check the length of title&rsquo;s value:</p>
+<p>Let&rsquo;s run the example with valid data:</p>
+<p><strong>&gt;node $JSONValidator -i eg3_8_good1.json -r eg3_8-rules.json</strong></p>
+<p><strong>Starting Semantic Validation .........</strong></p>
+<p><strong>Parsing Pattern: Useful_title</strong></p>
+<p><strong>1 Pattern(s) Requested. 1 Pattern(s) Processed. 0 Pattern(s) Ignored.</strong></p>
+<p><strong>**** THIS INSTANCE IS SEMANTICALLY VALID ****</strong></p>
+<p><strong>Completed Semantic Validation .........</strong></p>
+<p>Now with an invalid document with the empty title:</p>
+<p><strong>&gt;node $JSONValidator -i eg3_8_bad1.json -r eg3_8-rules.json</strong></p>
+<p><strong>Starting Semantic Validation .........</strong></p>
+<p><strong>Parsing Pattern: Useful_title</strong></p>
+<p><strong>1 Pattern(s) Requested. 1 Pattern(s) Processed. 0 Pattern(s) Ignored.</strong></p>
+<p><strong>**** THIS INSTANCE CONTAINS SEMANTIC VALIDATION ISSUES. PLEASE SEE FULL REPORT BY ENABLING DEBUG WITH -d OPTION ****</strong></p>
+<p><strong>Completed Semantic Validation .........</strong></p>
+<p>Now with an invalid document with the empty title:</p>
+<p><strong>&gt;node $JSONValidator -i eg3_8_bad1.json -r eg3_8-rules.json -d</strong></p>
+<p><strong>Starting Semantic Validation .........</strong></p>
+<p><strong>Parsing Pattern: Useful_title</strong></p>
+<p><strong>1 Pattern(s) Requested. 1 Pattern(s) Processed. 0 Pattern(s) Ignored.</strong></p>
+<p><strong>**** THIS INSTANCE CONTAINS SEMANTIC VALIDATION ISSUES. PLEASE SEE FULL REPORT BY ENABLING DEBUG WITH -d OPTION ****</strong></p>
+<p><strong>Completed Semantic Validation .........</strong></p>
+<p><strong>Total Errors Found: 0</strong></p>
+<p><strong>Total Warnings Found: 0</strong></p>
+<p><strong>Total Validations: 1</strong></p>
+<p><strong>Total Failed Assertions: 1</strong></p>
+<p><strong>Full Validation Report :</strong></p>
+<p><strong>Report {</strong></p>
+<p><strong> errors: [],</strong></p>
+<p><strong> warnings: [],</strong></p>
+<p><strong> validations:</strong></p>
+<p><strong> [ { schRule: [Object],</strong></p>
+<p><strong> ruleContext: [Object],</strong></p>
+<p><strong> assertionid: 'Useful_title_assert',</strong></p>
+<p><strong> assertionTest: 'contextNode[0].length &gt; 0',</strong></p>
+<p><strong> message: 'Title may not be empty',</strong></p>
+<p><strong> assertionValid: false } ],</strong></p>
+<p><strong> finalValidationReport:</strong></p>
+<p><strong> [ { schRule: [Object],</strong></p>
+<p><strong> ruleContext: [Object],</strong></p>
+<p><strong> assertionid: 'Useful_title_assert',</strong></p>
+<p><strong> assertionTest: 'contextNode[0].length &gt; 0',</strong></p>
+<p><strong>message: 'Title may not be empty',</strong></p>
+<p><strong> assertionValid: false } ],</strong></p>
+<p><strong> valid: false }</strong></p>
+<p><strong>Validating exclusivity of elements</strong></p>
+<p>You can validate that no unwanted elements are present. This schema checks that author elements only have a name, bio, and affiliation elements as children.</p>
+<p><strong>Data: </strong>All the files for this tutorial are available in the following folder:</p>
+<p><strong>&gt;&gt; $JSONTRON_HOME/examples/ibm-test-suite/3.9</strong></p>
+<p>The files are:</p>
+<ul>
+	<li><strong>eg3_9-rules.json</strong> [ Schematron Rules File ]</li>
+	<li><strong>json </strong>[ Valid Instance Document ]</li>
+	<li><strong>json</strong> [ Invalid Instance Document. Has &lsquo;age&rsquo; as extra child for author]</li>
+</ul>
+<p>Valid document:</p>
+<p>Rules snippet. The context expression selects the author elements. The test expression then counts the number of children of author element and checks for the name, bio, and affiliation. If the count doesn&rsquo;t match that means there is an extraneous element.</p>
+<p>"context": <em>"$..author"</em>,</p>
+<p>"assert":[</p>
+<p>{</p>
+<p>"id":<em>"Author_elements_assert"</em>,</p>
+<p>"test":<em>"(jp.query(contextNode, '$..bio').length + jp.query(contextNode, '$..affiliation').length + jp.query(contextNode, '$..name').length) == jp.query(contextNode, '$[0].*').length"</em>,</p>
+<p>"message": <em>"Only 'name', 'bio' and 'affiliation' elements are allowed as children of 'author'"</em></p>
+<p>}</p>
+<p>Let&rsquo;s run the example with jsontron with valid data:</p>
+<p><strong>&gt;node $JSONValidator -i eg3_9_good1.json -r eg3_9-rules.json</strong></p>
+<p><strong>Starting Semantic Validation .........</strong></p>
+<p><strong>Parsing Pattern: Author_elements</strong></p>
+<p><strong>1 Pattern(s) Requested. 1 Pattern(s) Processed. 0 Pattern(s) Ignored.</strong></p>
+<p><strong>**** THIS INSTANCE IS SEMANTICALLY VALID ****</strong></p>
+<p><strong>Completed Semantic Validation .........</strong></p>
+<p>Now with an invalid document that has an extra &lsquo;age&rsquo; element:</p>
+<p><strong>&gt;node $JSONValidator -i eg3_9_bad1.json -r eg3_9-rules.json -d</strong></p>
+<p><strong>Starting Semantic Validation .........</strong></p>
+<p><strong>Parsing Pattern: Author_elements</strong></p>
+<p><strong>1 Pattern(s) Requested. 1 Pattern(s) Processed. 0 Pattern(s) Ignored.</strong></p>
+<p><strong>**** THIS INSTANCE CONTAINS SEMANTIC VALIDATION ISSUES. PLEASE SEE FULL REPORT BY ENABLING DEBUG WITH -d OPTION ****</strong></p>
+<p><strong>Completed Semantic Validation .........</strong></p>
+<p><strong>Total Errors Found: 0</strong></p>
+<p><strong>Total Warnings Found: 0</strong></p>
+<p><strong>Total Validations: 1</strong></p>
+<p><strong>Total Failed Assertions: 1</strong></p>
+<p><strong>Full Validation Report :</strong></p>
+<p><strong>Report {</strong></p>
+<p><strong> errors: [],</strong></p>
+<p><strong> warnings: [],</strong></p>
+<p><strong> validations:</strong></p>
+<p><strong> [ { schRule: [Object],</strong></p>
+<p><strong> ruleContext: [Object],</strong></p>
+<p><strong> assertionid: 'Author_elements_assert',</strong></p>
+<p><strong> assertionTest: '(jp.query(contextNode, \'$..bio\').length + jp.query(contextNode, \'$..affiliation\').length + jp.query(contextNode, \'$..name\').length) == jp.query(contextNode, \'$[0].*\').length',</strong></p>
+<p><strong> message: 'Only \'name\', \'bio\' and \'affiliation\' elements are allowed as children of \'author\'',</strong></p>
+<p><strong> assertionValid: false } ],</strong></p>
+<p><strong> finalValidationReport:</strong></p>
+<p><strong> [ { schRule: [Object],</strong></p>
+<p><strong> ruleContext: [Object],</strong></p>
+<p><strong> assertionid: 'Author_elements_assert',</strong></p>
+<p><strong> assertionTest: '(jp.query(contextNode, \'$..bio\').length + jp.query(contextNode, \'$..affiliation\').length + jp.query(contextNode, \'$..name\').length) == jp.query(contextNode, \'$[0].*\').length',</strong></p>
+<p><strong> message: 'Only 'name', 'bio' and 'affiliation' elements are allowed as children of 'author'',</strong></p>
+<p><strong> assertionValid: false } ],</strong></p>
+<p><strong>valid: false</strong><strong> }</strong></p>
+<h2>4.4 Reports and communications control</h2>
+<p>This section in the original tutorial mainly discusses some optional features of Schematron that were out of scope for this particular implementation. However, the core rules of these examples have still been implemented. In future, when the optional features are implemented then these examples can easily be tweaked accordingly.</p>
+<p><strong>Data: </strong>All the files for this tutorial are available in the following folder:</p>
+<p><strong>&gt;&gt; $JSONTRON_HOME/examples/ibm-test-suite/4.1</strong></p>
+<p>Below examples are available with core features:</p>
+<ul>
+	<li><strong>eg4_1-rules.json</strong> [ Schematron Rules File ]</li>
+	<li><strong>json</strong> [ Valid Instance Document ]</li>
+	<li><strong>json</strong> [ Invalid Instance Document ]</li>
+</ul>
+<p>Valid document:</p>
+<p>{</p>
+<p>"doc": {</p>
+<p>"prologue": {</p>
+<p>"title": <em>"Faster than light travel"</em>,</p>
+<p>"subtitle": <em>"From fantasy to reality"</em>,</p>
+<p>"author": [</p>
+<p>{</p>
+<p>"member": <em>"yes"</em>,</p>
+<p>"email": <em>"cemereuwa@nasa.gov"</em>,</p>
+<p>"name": <em>"Chikezie Emereuwa"</em></p>
+<p>},</p>
+<p>{</p>
+<p>"member": <em>"yes"</em>,</p>
+<p>"email": <em>"okey.agu@navy.mil"</em>,</p>
+<p>"name": <em>"Okechukwu Agu"</em></p>
+<p>}</p>
+<p>]</p>
+<p>},</p>
+<p>"section":{}</p>
+<p>}</p>
+<p>}</p>
+<p>This example actually has a better test than the original tutorial. In the original tutorial, it only checks if it contains &lsquo;.mil&rsquo; as there is no XPath function equivalent of endsWith(). Here we test if the email ends with &lsquo;.mil&rsquo; with JavaScript method endsWith().</p>
+<p><strong>Example 4_2 implements the rule to check the presence of elements</strong></p>
+<p><strong>Data: </strong>All the files for this tutorial are available in the below folder:</p>
+<p><strong>Example 4_2 implements the rule to check the presence of elements</strong></p>
+<p><strong>Data: </strong>All the files for this tutorial are available in the following folder:</p>
+<p><strong>&gt;&gt; $JSONTRON_HOME/examples/ibm-test-suite/4.2</strong></p>
+<p>This example tests the presence of the <strong>&lsquo;link&rsquo;</strong> in the text. Below are the files for it:</p>
+<ul>
+	<li><strong>eg4_2-rules.json</strong> [ Schematron Rules File ]</li>
+	<li><strong>json</strong> [ Valid Instance Document ]</li>
+	<li><strong>json</strong> [ Invalid Instance Document ]</li>
+</ul>
+<p>Valid document has a link:</p>
+<p><strong>{</strong></p>
+<p><strong> "doc": {</strong></p>
+<p><strong> "prologue":{},</strong></p>
+<p><strong> "section": {</strong></p>
+<p><strong> "text":"Placeholder for the emphasis text",</strong></p>
+<p><strong> "emphasis": {</strong></p>
+<p><strong> "link": "http://nasa.gov/ftl/paper.xml",</strong></p>
+<p><strong> "content": "actual content"</strong></p>
+<p><strong> }</strong></p>
+<p><strong> }</strong></p>
+<p><strong> }</strong></p>
+<p><strong>}</strong></p>
+<p>The context expression selects all elements in the document. Then the &lsquo;test&rsquo; checks to see if any of the elements is a &lsquo;link&rsquo;:</p>
+<p><strong>Example 4_3 implements the rule to check the sequence </strong>of elements.</p>
+<p><strong>Data: </strong>All the files for this tutorial are available in the following folder:</p>
+<p><strong>&gt;&gt; $JSONTRON_HOME/examples/ibm-test-suite/4.3</strong></p>
+<p>Below are the files for it:</p>
+<ul>
+	<li><strong>eg4_3-rules.json</strong> [ Schematron Rules File ]</li>
+	<li><strong>json</strong> [ Valid Instance Document ]</li>
+	<li><strong>json</strong> [ Invalid Instance Document ]</li>
+</ul>
+<p>The rule is that <em>title</em> must be immediately followed by <em>subtitle</em>. Below is the valid document where <em>subtitle</em> follows the <em>title</em> element:</p>
+<p><strong>{</strong></p>
+<p><strong> "doc": {</strong></p>
+<p><strong> "prologue": {</strong></p>
+<p><strong> "title": "Faster than light travel",</strong></p>
+<p><strong> "subtitle": "From fantasy to reality"</strong></p>
+<p><strong> },</strong></p>
+<p><strong> "section":{}</strong></p>
+<p><strong> }</strong></p>
+<p><strong>}</strong></p>
+<p>The <em>context</em> expression first selects the <em>prologue</em> element. Then, Object.keys() JavaScript method is leveraged. Then the sequence is verified by checking the index of the subtitle and title.</p>
+<p><strong>&gt;node $JSONValidator -i eg4_3_good1.json -r eg4_3-rules.json</strong></p>
+<p><strong>Starting Semantic Validation .........</strong></p>
+<p><strong>Parsing Pattern: Title_with_subtitle</strong></p>
+<p><strong>1 Pattern(s) Requested. 1 Pattern(s) Processed. 0 Pattern(s) Ignored.</strong></p>
+<p><strong>**** THIS INSTANCE IS SEMANTICALLY VALID ****</strong></p>
+<p><strong>Completed Semantic Validation .........</strong></p>
+<p>Now let&rsquo;s validate the bad document where subtitle is missing altogether:</p>
+<p><strong>{</strong></p>
+<p><strong> "doc": {</strong></p>
+<p><strong> "prologue": {</strong></p>
+<p><strong> "title": "Faster than light travel"</strong></p>
+<p><strong> },</strong></p>
+<p><strong> "section":{}</strong></p>
+<p><strong> }</strong></p>
+<p><strong>}</strong></p>
+<p><strong>&gt;node $JSONValidator -i eg4_3_bad1.json -r eg4_3-rules.json -d</strong></p>
+<p><strong>Starting Semantic Validation .........</strong></p>
+<p><strong>Parsing Pattern: Title_with_subtitle</strong></p>
+<p><strong>1 Pattern(s) Requested. 1 Pattern(s) Processed. 0 Pattern(s) Ignored.</strong></p>
+<p><strong>**** THIS INSTANCE CONTAINS SEMANTIC VALIDATION ISSUES. PLEASE SEE FULL REPORT BY ENABLING DEBUG WITH -d OPTION ****</strong></p>
+<p><strong>Completed Semantic Validation .........</strong></p>
+<p><strong>Total Validations: 1</strong></p>
+<p><strong>Total Failed Assertions: 1</strong></p>
+<p><strong>Full Validation Report :</strong></p>
+<p><strong>Report {</strong></p>
+<p><strong> errors: [],</strong></p>
+<p><strong> warnings: [],</strong></p>
+<p><strong> validations:</strong></p>
+<p><strong> [ { schRule: [Object],</strong></p>
+<p><strong> ruleContext: [Object],</strong></p>
+<p><strong> assertionid: 'Title_with_subtitle_assert',</strong></p>
+<p><strong> assertionTest: '(((Object.keys(contextNode[0])).indexOf(\'subtitle\')) - ((Object.keys(contextNode[0])).indexOf(\'title\'))) == 1',</strong></p>
+<p><strong> message: 'Title must be immediately followed by subtitle',</strong></p>
+<p><strong> assertionValid: false } ],</strong></p>
+<p><strong> finalValidationReport:</strong></p>
+<p><strong> [ { schRule: [Object],</strong></p>
+<p><strong> ruleContext: [Object],</strong></p>
+<p><strong> assertionid: 'Title_with_subtitle_assert',</strong></p>
+<p><strong> assertionTest: '(((Object.keys(contextNode[0])).indexOf(\'subtitle\')) - ((Object.keys(contextNode[0])).indexOf(\'title\'))) == 1',</strong></p>
+<p><strong>message: 'Title must be immediately followed by subtitle',</strong></p>
+<p><strong> assertionValid: false } ],</strong></p>
+<p><strong> valid: false }</strong></p>
+<p>Same is the result if try another bad document that has some other element after:</p>
+<p><strong>{</strong></p>
+<p><strong> "doc": {</strong></p>
+<p><strong> "prologue": {</strong></p>
+<p><strong> "title": "Faster than light travel",</strong></p>
+<p><strong> "midtitle": "Seriously",</strong></p>
+<p><strong> "subtitle": "From fantasy to reality"</strong></p>
+<p><strong> },</strong></p>
+<p><strong> "section":{}</strong></p>
+<p><strong> }</strong></p>
+<p><strong>}</strong></p>
+<p><strong>Example 4_4</strong> is a variation of some of the earlier examples that we used to check the presence of an element.</p>
+<p><strong>Data: </strong>All the files for this tutorial are available in the following folder:</p>
+<p><strong>&gt;&gt; $JSONTRON_HOME/examples/ibm-test-suite/4.4</strong></p>
+<ul>
+	<li><strong>eg4_4-rules.json</strong> [ Schematron Rules File ]</li>
+	<li><strong>json </strong>[ Valid Instance Document ]</li>
+	<li><strong>json </strong>&nbsp;[ Invalid Instance Document ]</li>
+</ul>
+<p><strong>{</strong></p>
+<p><strong> "doc": {</strong></p>
+<p><strong> "prologue":{},</strong></p>
+<p><strong> "section": {</strong></p>
+<p><strong> "text":"Placeholder for the emphasis text",</strong></p>
+<p><strong> "emphasis": {</strong></p>
+<p><strong> "link": "http://nasa.gov/ftl/paper.xml",</strong></p>
+<p><strong> "content": "actual content"</strong></p>
+<p><strong> }</strong></p>
+<p><strong> }</strong></p>
+<p><strong> }</strong></p>
+<p><strong>}</strong></p>
+<p><strong>Example 4_5</strong> has already been explained at the beginning of the tutorial</p>
+<h2>4.5 Intermediate Schematron features</h2>
+<p>In this section Example 5_1, Example 5_2 and Example 5_3 implement features that are out of scope for this implementation. But still, their core rules are implemented.</p>
+<p>This section has two very interesting features that we will examine in the following sections:</p>
+<p><strong>Validating based on conditions in the document</strong></p>
+<p>&ldquo;Very often you&rsquo;ll want to validate one part of a document based on what occurs in another part. This is something called a co-occurrence constraint. Syntax-based languages like JSON Schema cannot handle such validation at all, and RELAX NG can handle only limited examples, but Schematron provides extraordinary power for such validation tasks.</p>
+<p>This schema checks that content by each author includes at least three sections, with the goal of encouraging longer submissions and discouraging people from padding the author list.&rdquo;</p>
+<p><strong>Data: </strong>All the files for this tutorial are available in the following folder:</p>
+<p><strong>&gt;&gt; $JSONTRON_HOME/examples/ibm-test-suite/5.4</strong></p>
+<p><strong>Example 5_4</strong> is variation implements this feature. Below are the files</p>
+<ul>
+	<li><strong>eg5_4-rules.json</strong> [ Schematron Rules File ]</li>
+	<li><strong>json</strong> [ Valid Instance Document ]</li>
+	<li><strong>json</strong> [ Invalid Instance Document ]</li>
+</ul>
+<p>&ldquo;When using Schematron, don&rsquo;t think in terms of other schema languages, or you probably won&rsquo;t take advantage of all its power. Just think of what rules you&rsquo;d like to express about the candidate document, and chances are you&rsquo;ll be able to find a way to express it using a combination of &lsquo;jsonpath&rsquo; and JavaScript and thus in Schematron.&rdquo;</p>
+<p>Valid example with three sections:</p>
+<p>Now let&rsquo;s run this example with good data using jsontron:</p>
+<p><strong>&gt;node $JSONValidator -i eg5_4_good1.json -r eg5_4-rules.json -d</strong></p>
+<p><strong>Starting Semantic Validation .........</strong></p>
+<p><strong>Parsing Pattern: Section_minimum</strong></p>
+<p><strong>1 Pattern(s) Requested. 1 Pattern(s) Processed. 0 Pattern(s) Ignored.</strong></p>
+<p><strong>**** THIS INSTANCE IS SEMANTICALLY VALID ****</strong></p>
+<p><strong>Completed Semantic Validation .........</strong></p>
+<p><strong>Total Errors Found: 0</strong></p>
+<p><strong>Total Warnings Found: 0</strong></p>
+<p><strong>Total Validations: 1</strong></p>
+<p><strong>Total Failed Assertions: 0</strong></p>
+<p><strong>Full Validation Report :</strong></p>
+<p><strong>Report {</strong></p>
+<p><strong> errors: [],</strong></p>
+<p><strong> warnings: [],</strong></p>
+<p><strong> validations:</strong></p>
+<p><strong> [ { schRule: [Object],</strong></p>
+<p><strong> ruleContext: [Object],</strong></p>
+<p><strong> assertionid: 'Section_minimum_assert',</strong></p>
+<p><strong> assertionTest: '((jp.query(contextNode, \'$..section\'))[0].length) &gt;= (((jp.query(contextNode, \'$..author\')).length) * 3)',</strong></p>
+<p><strong>message: 'successful'</strong><strong>,</strong></p>
+<p><strong> assertionValid: true } ],</strong></p>
+<p><strong> finalValidationReport: [],</strong></p>
+<p><strong>valid: true </strong><strong>}</strong></p>
+<p>Invalid example with two sections only:</p>
+<p><strong>&gt;node $JSONValidator -i eg5_4_bad1.json -r eg5_4-rules.json -d</strong></p>
+<p><strong>Starting Semantic Validation .........</strong></p>
+<p><strong>Parsing Pattern: Section_minimum</strong></p>
+<p><strong>1 Pattern(s) Requested. 1 Pattern(s) Processed. 0 Pattern(s) Ignored.</strong></p>
+<p><strong>**** THIS INSTANCE CONTAINS SEMANTIC VALIDATION ISSUES. PLEASE SEE FULL REPORT BY ENABLING DEBUG WITH -d OPTION ****</strong></p>
+<p><strong>Completed Semantic Validation .........</strong></p>
+<p><strong>Total Errors Found: 0</strong></p>
+<p><strong>Total Warnings Found: 0</strong></p>
+<p><strong>Total Validations: 1</strong></p>
+<p><strong>Total Failed Assertions: 1</strong></p>
+<p><strong>Full Validation Report :</strong></p>
+<p><strong>Report {</strong></p>
+<p><strong> errors: [],</strong></p>
+<p><strong> warnings: [],</strong></p>
+<p><strong> validations:</strong></p>
+<p><strong> [ { schRule: [Object],</strong></p>
+<p><strong> ruleContext: [Object],</strong></p>
+<p><strong> assertionid: 'Section_minimum_assert',</strong></p>
+<p><strong> assertionTest: '((jp.query(contextNode, \'$..section\'))[0].length) &gt;= (((jp.query(contextNode, \'$..author\')).length) * 3)',</strong></p>
+<p><strong> message: 'There must be at least three sections for each author.',</strong></p>
+<p><strong> assertionValid: false } ],</strong></p>
+<p><strong> finalValidationReport:</strong></p>
+<p><strong> [ { schRule: [Object],</strong></p>
+<p><strong> ruleContext: [Object],</strong></p>
+<p><strong> assertionid: 'Section_minimum_assert',</strong></p>
+<p><strong> assertionTest: '((jp.query(contextNode, \'$..section\'))[0].length) &gt;= (((jp.query(contextNode, \'$..author\')).length) * 3)',</strong></p>
+<p><strong> message: 'There must be at least three sections for each author.',</strong></p>
+<p><strong> assertionValid: false } ],</strong></p>
+<p><strong> valid: false }</strong></p>
+<p><strong>Phases</strong></p>
+<p>If we were to combine all the rules in this tutorial into one Schematron schema, it would be a large one. Schematron allows for modularity of schemata by allowing patterns to be organized into phases. A phase is a simple collection of patterns that are executed together. Some Schematron implementations allow you to select a particular phase to process. The following large sample schema incorporates several of the example rules from this tutorial and organizes them into phases.</p>
+<p><strong>Data: </strong>All the files for this tutorial are available in the below folder:</p>
+<p><strong>&gt;&gt; $JSONTRON_HOME/examples/ibm-test-suite/5.5</strong></p>
+<p>Below example files are available for testing the phase implementation:</p>
+<ul>
+	<li><strong>eg5_5-rules.json</strong> [ Schematron Rules File ]</li>
+	<li><strong>json </strong>[ Valid Instance Document ]</li>
+	<li><strong>json</strong> [ Valid Instance Document ]</li>
+	<li><strong>json</strong> [ Valid Instance Document ]</li>
+	<li><strong>json</strong> [ Valid Instance Document ]</li>
+	<li><strong>json</strong> [ Valid Instance Document ]</li>
+	<li><strong>json</strong> [ Valid Instance Document ]</li>
+</ul>
+<p>Just to remind, the phases are specified as below:</p>
+<p>and they are invoked as below from command line:</p>
+<ul>
+	<li><strong>Invoking a single phase:</strong></li>
+	<li>&lsquo;quick-check&rsquo; that has only one pattern</li>
+</ul>
+<ul>
+	<li><strong>Invoking multiple patterns in one phase</strong></li>
+</ul>
+<p>The phase &lsquo;full-check&rsquo; has two patterns &ldquo;rightdoc&rdquo; and &ldquo;majelements&rdquo;. Invoking full-check phase will process both patterns.</p>
+<ul>
+	<li><strong>Invoking multiple phases</strong></li>
+</ul>
+<p>The phase &lsquo;quick-check&rsquo; has one pattern &ldquo;rightdoc&rdquo;, and phrase &ldquo;extra-doc&rdquo; has one pattern called &ldquo;extradocs&rdquo;. Invoking both phases will process both patterns.</p>
+<ul>
+	<li><strong>Invoking keyword #DEFAULT </strong></li>
+</ul>
+<p>The default phase will be invoked by using this keyword. Remember the defaultPhase = &lsquo;phase Name&rsquo; is mentioned in the schema.</p>
+<ul>
+	<li><strong>Invoking all phases by keyword #ALL </strong></li>
+</ul>
+<p>Keyword #ALL will invoke all phases. three patterns.</p>
+<ul>
+	<li><strong>Invoking all phases by omitting the phase names</strong></li>
+</ul>
+<p>If no phase is mentioned, all phases are processed</p>
+<ul>
+	<li><strong>Handling invalid phases</strong></li>
+</ul>
+<p>If an invalid phase is mentioned, all phases are processed. This is to ensure optimistic validation where inadvertent typo shouldn&rsquo;t let invalid data slip through the cracks.</p>
+<h1>5 References</h1>
+<ol>
+	<li>Rick Jelliffe, https://www.xml.com/authors/rick-jelliffe</li>
+	<li>ISO/IEC, Information technology, Document Schema Definition Languages (DSDL), Part 3: Rule-based validation, Schematron (ISO/IEC 19757-3:2016), https://www.iso.org/standard/55982.html</li>
+	<li>ISO/IEC, Information technology, Document Schema Definition Language (DSDL), Part 2: Regular-grammar-based validation, RELAX NG (ISO/IEC 19757-2:2008), https://www.iso.org/standard/52348.html</li>
+	<li>Uche Ogbuji, A hands-on introduction to Schematron, <a href="https://www6.software.ibm.com/developerworks/education/x-schematron/x-schematron-a4.pdf">https://www6.software.ibm.com/developerworks/education/x-schematron/x-schematron-a4.pdf</a></li>
+	<li>JSON Schema, https://json-schema.org</li>
+</ol>
+
+</html>
