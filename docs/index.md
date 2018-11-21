@@ -87,29 +87,29 @@ The power of Schematron lies in its simplicity and abstraction. There are only a
 
 This is the top-level element of a Schematron schema. All other elements are enclosed inside the schema element. This element has several optional attributes like title, schemaVersion, queryBinding and defaultPhase. Some of these optional elements will be explained later.
 
-1.3	Element phase
+### 1.3	Element phase
 
 The is a higher level of abstraction and specifies a group of patterns to be activated to cater to variation in schemas. It supports progressive validation. ‘#ALL’ and ‘#DEFAULT’ are special phases that activate all and the default phase respectively. The phase element will be discussed more later.
 
-1.4	Element pattern
+### 1.4	Element pattern
 
 The pattern element contains a set of rule elements. This is a higher-level abstraction to encompass related rules. It has several optional attributes that will be discussed later.
 
 
-1.5	Element rule
+### 1.5	Element rule
 
 A rule element contains one or more assertions that need to be applied to a given context. The rule element has a required context attribute that returns the nodes on which the assertions need to be applied. A query language like XPath is used to select the nodes via the context expression.
 
-1.6	Element assert or report
+### 1.6	Element assert or report
 
 The assert and report elements contain a test attribute that is the condition to be tested on the context nodes. The content of the assert or report element is the message that is returned as a result of the test. The assert element will display the message if the test fails whereas the report element will display the message if the test passes. Similar to attribute context, the value of attribute test is expressed in a query language such as XPath. The value of attribute context is an XPath statement to express ‘where’ to test, and the value of attribute test is an XPath statement to express ‘what’ to test.
 
 This tutorial introduces a Schematron-based semantic validator, Jsontron, explains how to set it up and its basic features through a series of hands-on labs in parallel to the IBM Schematron tutorial [4].
 
 
-##2	Setting Up and Running Jsontron
+## 2	Setting Up and Running Jsontron
 
-2.1	Installing node.js
+### 2.1	Installing node.js
 
 Download and install node.js from https://nodejs.org/en/download/
 
@@ -135,7 +135,7 @@ Setup Node and NPM on Ubuntu
 
  
 
-2.2	Installing module jsontron 
+### 2.2	Installing module jsontron 
 
 -	Create a new folder jsontron.
 -	Open terminal window in folder jsontron, and run command: npm  i  jsontron
@@ -146,7 +146,7 @@ Setup Node and NPM on Ubuntu
 -	Later you can also update folder jsontron by running npm update jsontron in the current node root folder.
 
 
-2.3	Module jsontron structure
+### 2.3	Module jsontron structure
 
 o	Go to folder node_modules, and you will see many modules installed in folder node_modules along with module jsontron. This is because npm automatically installs all the dependencies.
  
@@ -188,7 +188,7 @@ o	The data for tests are in folder jsontron/data.
 
  
 
-2.4	Setting up jsontron environment variables on Windows
+### 2.4	Setting up jsontron environment variables on Windows
 
 Please set up a new OS environment variable JSONTRON_HOME pointing to the root folder of the jsontron module. In our example, you can do so in the current Windows terminal window by running command
 
@@ -209,7 +209,7 @@ Start a new Windows terminal window, run commands “echo %JSONTRON_HOME%” and
  
 
 
-2.5	Setting up jsontron environment variables on Linux
+### 2.5	Setting up jsontron environment variables on Linux
 
 Assume you have set up jsontron in ~/jsontron. Open terminal window in ~. Run sudo gedit .bashrc to add the following two lines at the bottom of file ~/.bashrc:
 
@@ -220,7 +220,7 @@ Save and exit ~/.bashrc. Run source ~/.bashrc to active the edited environments.
  
 
 
-2.6	Test run module  jsontron 
+### 2.6	Test run module  jsontron 
 
 Change terminal window work folder to “jsontron/node_modules/jsontron/data/dissertation/pattern” by 
 “cd  %JSONTRON_HOME%\data\dissertation\pattern” (Windows) or 
@@ -242,20 +242,20 @@ node  $JSONValidator  -i  loandata_pattern_good1.json  -r  loandata-rules_disser
 In the remainder of this tutorial, we assume you are using a Linux system. You can easily revise our commands for Windows, as shown above.
 
 
-3	How to Specify a Semantic Rule
+## 3	How to Specify a Semantic Rule
 
 In this tutorial, we will go through the steps you need to take to specify a Schematron rule for the system that we developed in this study.
 
-3.1	Prerequisites
+### 3.1	Prerequisites
 
 A working knowledge of JSON, JSONPath, and JavaScript is assumed.
 
-3.2	Data 
+### 3.2	Data 
 
 All the files for the examples in this tutorial are located at below location:
  >> $JSONTRON_HOME/examples/main_features_examples
 
-3.3	Simple Example 
+### 3.3	Simple Example 
 
 First let’s use a simple example to construct a JSON Schematron rules file.
 
@@ -663,7 +663,7 @@ A few things to note about the detailed report.
 -	‘Total Failed Assertions” denotes the failed validations. It is denoted by the ‘finalValidationReport’ array in the report.
 -	The last line in the report is ‘valid’ Boolean attribute. The report has one passed validation and one failed validation, but overall the validation has failed so this attribute will return ‘false’. All validations have to pass and there shouldn’t be any warnings or errors for this ‘valid’ attribute to be set to ‘true’.
 
-3.4	Adding multiple assert, rule, pattern and phase elements 
+### 3.4	Adding multiple assert, rule, pattern and phase elements 
 
 As mentioned earlier, the assert, rule, pattern and phase elements are array elements and can contain multiple items of their own type respectively. In this example, we will extend the rules schema from example 3.3 and add an assert, a rule, a pattern, and a phase element to the schema.
 
@@ -786,7 +786,7 @@ Run:  node $JSONValidator -i loandata_data_multi_bad2.json -r loandata_rules_mul
  
 
 
-3.5	Loan Data Main Example
+### 3.5	Loan Data Main Example
 
 This example contains many use cases that exhibit various capabilities of Schematron specification. Run it with various combinations and permutations to activate various phases.
 
@@ -837,7 +837,7 @@ Run:  node $JSONValidator -i loandata-main-bad1.json -r loandata-rules-main.json
  
 
 
-3.6	Examples for phase, pattern, rule, assert, context, assert and report elements 
+### 3.6	Examples for phase, pattern, rule, assert, context, assert and report elements 
 
 There are multiple examples available in the examples folder to test out main features of the Schematron implementation. Go to each folder and try out various examples.
  
@@ -857,7 +857,7 @@ All the examples with good data, bad data and rule files are located at:
 /rules
 /report
 
-3.7	Stack Overflow Meeting Times Dilemma Example 
+### 3.7	Stack Overflow Meeting Times Dilemma Example 
 
 There was an unsolved question on Stack Overflow website about Schematron JSON implementation. The question was about making sure that when scheduling meetings, end time should not be before the start time. It was posted a few years ago on the site and was still unresolved. Jsontron successfully and easily solved the problem.
 
@@ -886,12 +886,12 @@ Run with bad data and debug on:
  
  
 
-4	IBM Schematron Tutorial
+## 4	IBM Schematron Tutorial
 
 This tutorial is based on IBM staff Uche Ogbuji’s XML Schematron tutorial [4].
 
 
-4.1	Prerequisites
+### 4.1	Prerequisites
 
 This tutorial assumes knowledge of JSON, JSON Schema, JSONPath, and JavaScript. If you are not familiar with these concepts, please take some basic tutorial first. 
 
@@ -930,7 +930,7 @@ The examples are in respective folders and named with a prefix for the particula
 Reminder: not all the examples in the original tutorial are applicable in JSON format so you will see some missing examples in this implementation.
 
 
-4.2	Schematron overview and example
+### 4.2	Schematron overview and example
 
 Data:
 All the files for this tutorial are available in the following folder:
@@ -973,7 +973,7 @@ Please note that “contextNode” is used as a keyword in ‘jsontron’ implem
 For more details, see sections on Context and Assertion.
 
 
-4.3	Basics of rules, patterns, and assertions
+### 4.3	Basics of rules, patterns, and assertions
 
 Data: All the files for this tutorial are available in the following folder:
 
@@ -2226,7 +2226,7 @@ If an invalid phase is mentioned, all phases are processed. This is to ensure op
 
  
 
-5	References
+## 5	References
 
 1.	Rick Jelliffe, https://www.xml.com/authors/rick-jelliffe
 2.	ISO/IEC, Information technology, Document Schema Definition Languages (DSDL), Part 3: Rule-based validation, Schematron (ISO/IEC 19757-3:2016), https://www.iso.org/standard/55982.html
