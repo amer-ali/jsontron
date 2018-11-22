@@ -54,7 +54,7 @@ _“Considered as a document type, a Schematron schema contains natural-language
 
 _Considered theoretically, a Schematron schema reduces to a non-chaining rule system whose terms are Boolean functions invoking an external query language on the instance and other visible XML documents, with syntactic features to reduce specification size and to allow efficient implementation._
 
-_Considered analytically, Schematron has two characteristic high-level abstractions: the pattern and the phase. These allow the representation of non-regular, non-sequential constraints that ISO/IEC 19757-2 [Regular-grammar-based validation — RELAX NG] [3] cannot specify and various dynamic or contingent constraints.”
+_Considered analytically, Schematron has two characteristic high-level abstractions: the pattern and the phase. These allow the representation of non-regular, non-sequential constraints that ISO/IEC 19757-2 [Regular-grammar-based validation — RELAX NG] [3] cannot specify and various dynamic or contingent constraints.”_
 
 Schematron is used in many use cases like business rules validation, data reporting, general validation, quality control, quality assurance, firewalling, filtering, constraint checking, naming and design rules checking, statistical consistency, data exploration, transformation testing, feature extraction, house-style-rules checking.
 
@@ -83,24 +83,24 @@ The power of Schematron lies in its simplicity and abstraction. There are only a
 
  
  
-### 1.2	Element schema
+### 1.2	Element _schema_
 
 This is the top-level element of a Schematron schema. All other elements are enclosed inside the schema element. This element has several optional attributes like title, schemaVersion, queryBinding and defaultPhase. Some of these optional elements will be explained later.
 
-### 1.3	Element _phase
+### 1.3	Element _phase_
 
 The is a higher level of abstraction and specifies a group of patterns to be activated to cater to variation in schemas. It supports progressive validation. ‘#ALL’ and ‘#DEFAULT’ are special phases that activate all and the default phase respectively. The phase element will be discussed more later.
 
-### 1.4	Element _pattern
+### 1.4	Element _pattern_
 
 The pattern element contains a set of rule elements. This is a higher-level abstraction to encompass related rules. It has several optional attributes that will be discussed later.
 
 
-### 1.5	Element _rule
+### 1.5	Element _rule_
 
 A rule element contains one or more assertions that need to be applied to a given context. The rule element has a required context attribute that returns the nodes on which the assertions need to be applied. A query language like XPath is used to select the nodes via the context expression.
 
-### 1.6	Element _assert or report
+### 1.6	Element _assert_ or _report_
 
 The assert and report elements contain a test attribute that is the condition to be tested on the context nodes. The content of the assert or report element is the message that is returned as a result of the test. The assert element will display the message if the test fails whereas the report element will display the message if the test passes. Similar to attribute context, the value of attribute test is expressed in a query language such as XPath. The value of attribute context is an XPath statement to express ‘where’ to test, and the value of attribute test is an XPath statement to express ‘what’ to test.
 
@@ -111,7 +111,7 @@ This tutorial introduces a Schematron-based semantic validator, Jsontron, explai
 
 ### 2.1	Installing node.js
 
-Download and install node.js from https://nodejs.org/en/download/
+Download and install node.js from  https://nodejs.org/en/download/ 
 
  
 
