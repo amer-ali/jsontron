@@ -11,7 +11,7 @@ November 14, 2018
 
 Table of Contents
 
-1	[Introduction]	2
+1	[Introduction]	[2]
 1.1	Constraint Specification in Schematron	3
 1.2	Element schema	3
 1.3	Element phase	3
@@ -42,7 +42,7 @@ Table of Contents
  
 
 
-##  1	[Introduction]
+##  1	[2][Introduction]
 
 Schematron is a rule-based XML validation schema language for making assertions about the presence or absence of patterns in XML trees. It is different from XML syntax schema languages like XML Schema, RELAX NG or DTD. Schematron is capable of specifying validation rules that syntax-based schema languages cannot. For instance, it can control the contents of an element via its siblings. The fundamental difference from other languages is that Schematron is not based on grammar, but it is based on finding tree patterns in XML documents and that makes it suitable for finding and validating structures that are difficult to be represented in grammar-based languages.
 
