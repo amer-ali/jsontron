@@ -55,11 +55,11 @@ Same thread on StackOverflow contains the [solution provided by Jsontron](https:
 
 # Presentation Deck
 
-Here is a pdf version of presentation deck that summarizes the study.
+Here is a pdf version of [Presentation Deck](./Jsontron-presentation-v1.pdf) that summarizes the study.
 
 # Tutorial
 
-Here is the pdf version of the Jsontron tutorial.
+Here is the pdf version of the [Jsontron Tutorial](./Jsontron-tutorial-v1.pdf).
 
 
 Text can be **bold**, _italic_, or ~~strikethrough~~.
