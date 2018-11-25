@@ -18,6 +18,8 @@ _This study proposes a framework for specifying semantic constraints for JSON da
 
 _The framework assumes that due to inherent differences between XML and JSON data formats, not all Schematron concepts will be applicable to this study._
 
+* * *
+
 ## What Problem Jsontron Solves?
 
 Jsontron - Schematron based JSON semantic validator solves problems similar to one posted on [StackOverflow](https://stackoverflow.com/questions/28629107/json-is-there-an-equivalent-of-schematron-for-json-and-json-schema-that-is-a):
@@ -53,6 +55,7 @@ Excerpt from StackOverflow:
 
 Same thread on StackOverflow contains the [solution provided by Jsontron](https://stackoverflow.com/a/52840754/10514417).
 
+* * *
 # Presentation Deck
 
 Here is a pdf version of [Presentation Deck](./Jsontron-presentation-v1.pdf) that summarizes the study.
@@ -68,6 +71,7 @@ Here is a pdf version of [Presentation Deck](./Jsontron-presentation-v1.pdf) tha
 * Limitations of Current JSON Data Validation
 * What is Schematron ?
 
+* * *
 # Jsontron Tutorial
 
 Here is the pdf version of the [Jsontron Tutorial](./Jsontron-tutorial-v1.pdf).
@@ -76,11 +80,11 @@ Here is the pdf version of the [Jsontron Tutorial](./Jsontron-tutorial-v1.pdf).
 
 - **Introduction**
     - Constraint Specification in Schematron
-    - Element schema
-    - Element phase
-    - Element pattern	
-    - Element rule	
-    - Element assert or report	
+    - Element _schema_
+    - Element _phase_
+    - Element _pattern_	
+    - Element _rule_	
+    - Element _assert_ or _report_	
  - **Setting Up and Running Jsontron**	
     - Installing node.js	
     - Installing module jsontron	
@@ -100,124 +104,9 @@ Here is the pdf version of the [Jsontron Tutorial](./Jsontron-tutorial-v1.pdf).
     - Basics of rules, patterns, and assertions	
     - Reports and communications control	
     - Intermediate Schematron features
- - References	
-
-Text can be **bold**, _italic_, or ~~strikethrough~~.
-
-[Link to another page](./another-page.html).
-
-There should be whitespace between paragraphs.
-
-There should be whitespace between paragraphs. We recommend including a README, or a file with information about your project.
-
-# Header 1
-
-This is a normal paragraph following a header. GitHub is a code hosting platform for version control and collaboration. It lets you and others work together on projects from anywhere.
-
-## Header 2
-
-> This is a blockquote following a header.
->
-> When something is important enough, you do it even if the odds are not in your favor.
-
-### Header 3
-
-```js
-// Javascript code with syntax highlighting.
-var fun = function lang(l) {
-  dateformat.i18n = require('./lang/' + l)
-  return true;
-}
-```
-
-```ruby
-# Ruby code with syntax highlighting
-GitHubPages::Dependencies.gems.each do |gem, version|
-  s.add_dependency(gem, "= #{version}")
-end
-```
-
-#### Header 4
-
-*   This is an unordered list following a header.
-*   This is an unordered list following a header.
-*   This is an unordered list following a header.
-
-##### Header 5
-
-1.  This is an ordered list following a header.
-2.  This is an ordered list following a header.
-3.  This is an ordered list following a header.
-
-###### Header 6
-
-| head1        | head two          | three |
-|:-------------|:------------------|:------|
-| ok           | good swedish fish | nice  |
-| out of stock | good and plenty   | nice  |
-| ok           | good `oreos`      | hmm   |
-| ok           | good `zoute` drop | yumm  |
-
-### There's a horizontal rule below this.
-
+ - **References**	
+ 
 * * *
 
-### Here is an unordered list:
-
-*   Item foo
-*   Item bar
-*   Item baz
-*   Item zip
-
-### And an ordered list:
-
-1.  Item one
-1.  Item two
-1.  Item three
-1.  Item four
-
-### And a nested list:
-
-- level 1 item
-  - level 2 item
-  - level 2 item
-    - level 3 item
-    - level 3 item
-- level 1 item
-  - level 2 item
-  - level 2 item
-  - level 2 item
-- level 1 item
-  - level 2 item
-  - level 2 item
-- level 1 item
-
-### Small image
-
-![Octocat](https://assets-cdn.github.com/images/icons/emoji/octocat.png)
-
-### Large image
-
-![Branching](https://guides.github.com/activities/hello-world/branching.png)
-
-
-### Definition lists can be used with HTML syntax.
-
-<dl>
-<dt>Name</dt>
-<dd>Godzilla</dd>
-<dt>Born</dt>
-<dd>1952</dd>
-<dt>Birthplace</dt>
-<dd>Japan</dd>
-<dt>Color</dt>
-<dd>Green</dd>
-</dl>
-
-```
-Long, single-line code blocks should not wrap. They should horizontally scroll if they are too long. This line should be long enough to demonstrate this.
-```
-
-```
-The final element.
-```
+# Resources
+TBD
