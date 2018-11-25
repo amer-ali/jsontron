@@ -55,12 +55,52 @@ Same thread on StackOverflow contains the [solution provided by Jsontron](https:
 
 # Presentation Deck
 
-Here is a pdf version of [**Presentation Deck](./Jsontron-presentation-v1.pdf)** that summarizes the study.
+Here is a pdf version of [Presentation Deck](./Jsontron-presentation-v1.pdf) that summarizes the study.
+
+**Highlights of Presentation**
+
+* Why Business Data Validation ?
+* JSON - JavaScript Object Notation
+* Loan Data Example
+* Data Validation Analogy
+* What is JSON Syntax Validation ?
+* What is JSON Semantic Validation ?
+* Limitations of Current JSON Data Validation
+* What is Schematron ?
 
 # Jsontron Tutorial
 
-Here is the pdf version of the **[Jsontron Tutorial](./Jsontron-tutorial-v1.pdf)**.
+Here is the pdf version of the [Jsontron Tutorial](./Jsontron-tutorial-v1.pdf).
 
+**Highlights of Jsontron Tutorial**
+
+- **Introduction**
+    - Constraint Specification in Schematron
+    - Element schema
+    - Element phase
+    - Element pattern	
+    - Element rule	
+    - Element assert or report	
+ - **Setting Up and Running Jsontron**	
+    - Installing node.js	
+    - Installing module jsontron	
+    - Module jsontron structure	
+    - Test run module  jsontron	
+ - **How to Specify a Semantic Rule**	
+    - Prerequisites	
+    - Data	
+    - Simple Example	
+    - Adding multiple assert, rule, pattern and phase elements	
+    - Loan Data Main Example	
+    - Examples for phase, pattern, rule, assert, context, assert and report elements	
+    - Stack Overflow Meeting Times Dilemma Example	
+ - **IBM Schematron Tutorial**	
+    - Prerequisites	
+    - Schematron overview and example	
+    - Basics of rules, patterns, and assertions	
+    - Reports and communications control	
+    - Intermediate Schematron features
+ - References	
 
 Text can be **bold**, _italic_, or ~~strikethrough~~.
 
