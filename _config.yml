@@ -1,1 +1,4 @@
 theme: jekyll-theme-leap-day
+
+```yml
+show_downloads: "true"
