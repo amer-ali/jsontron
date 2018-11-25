@@ -18,7 +18,7 @@ _This study proposes a framework for specifying semantic constraints for JSON da
 
 _The framework assumes that due to inherent differences between XML and JSON data formats, not all Schematron concepts will be applicable to this study._
 
-# What Problem Jsontron Solves ?
+## What Problem Jsontron Solves ?
 
 Jsontron - Schematron based JSON semantic validator solves problems similar to one posted on [StackOverflow](https://stackoverflow.com/questions/28629107/json-is-there-an-equivalent-of-schematron-for-json-and-json-schema-that-is-a):
 
@@ -51,7 +51,15 @@ Excerpt from StackOverflow:
 }
 </code></pre>
 
-Same thread on StackOverflow contains the **[solution provided by Jsontron](https://stackoverflow.com/a/52840754/10514417)**.
+Same thread on StackOverflow contains the [solution provided by Jsontron](https://stackoverflow.com/a/52840754/10514417).
+
+# Presentation Deck
+
+Here is a pdf version of presentation deck that summarizes the study.
+
+# Tutorial
+
+Here is the pdf version of the Jsontron tutorial.
 
 
 Text can be **bold**, _italic_, or ~~strikethrough~~.
