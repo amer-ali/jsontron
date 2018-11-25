@@ -1,6 +1,25 @@
 ---
 layout: default
 ---
+# Overview
+
+Jsontron is a **Schematron** based **JSON** semantic rules engine. It implements **_phase, pattern, rule, context_** and **_assert_** elements of Schematron. It also provides a detailed reporting mechanism for semantic validation results.
+
+Jsontron module was developed by **Amer Ali** as part of DPS dissertation at **School of Computer Science and Information Systems
+Pace University, New York**.
+
+Here is an **abstract** from the study:
+
+_JavaScript Object Notation (JSON) has emerged as a popular format for business data exchange. It has a grammar-based schema language called – JSON Schema (IETF draft 7). The JSON Schema provides facilities to specify syntax constraints on the JSON data. There are a number of tools available in a variety of programming languages for JSON Schema validation. However, JSON does not have a standard or a framework to specify the semantic constraints, neither it has any reusable validation tool for semantic rules. In order for JSON data validation to be effective, it needs both syntax and semantic specification standards/frameworks and validation toolset._
+
+_XML is another popular format for business data exchange that preceded JSON. XML has a mature ecosystem for specifying and validating syntax and semantic constraints. It has XML Schema and several other syntax constraints specification standards. It has Schematron as a semantic constraints specification language which is an ISO standard [ISO/IEC 19757-3]._
+
+_This study proposes a framework for specifying semantic constraints for JSON data in JSON format, drawing upon the power, simplicity, and semantics of Schematron standard. A reusable JavaScript/NodeJS based validation tool was also developed to process the JSON semantic rules._
+
+_The framework assumes that due to inherent differences between XML and JSON data formats, not all Schematron concepts will be applicable to this study._
+
+
+
 
 Text can be **bold**, _italic_, or ~~strikethrough~~.
 
