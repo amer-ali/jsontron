@@ -51,6 +51,9 @@ Excerpt from StackOverflow:
 }
 </code></pre>
 
+Same thread on StackOverflow contains the **[solution provided by Jsontron](https://stackoverflow.com/a/52840754/10514417)**.
+
+
 Text can be **bold**, _italic_, or ~~strikethrough~~.
 
 [Link to another page](./another-page.html).
