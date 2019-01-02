@@ -9,47 +9,41 @@ $ npm  i  jsontron
 
 
 
-    Note: If you have not installed node and npm. Please follow instructions at below site to install node and npm
-    https://docs.npmjs.com/getting-started/installing-node#installing-npm-from-the-nodejs-site
+&nbsp;&nbsp; Note: If you have not installed node and npm. Please follow instructions at below site to install node and npm<br/>&nbsp;&nbsp; [docs.npmjs.com/getting-started/installing-node](https://docs.npmjs.com/getting-started/installing-node#installing-npm-from-the-nodejs-site).
 
+## Usage at terminal
 
+Command Lines:
 
-
-
-## Usage: Command Line 
-
-
-	//go to the bin folder of jsontron module
+```sh
+	#go to the bin folder of jsontron module
 	
-	$ cd $JSONTRON_ROOT/bin
+	cd $JSONTRON_ROOT/bin
 	 
 	//run JSONValidator with instance doc, rules doc and optional phase list
 	//#ALL and #DEFAULT are special key words meant to invoke all or default phases respectively
 	
 	
-	$ node JSONValidator -i {instance doc} -r { rules doc} [#ALL | #DEFAULT | Phase List] [-d]
+	node JSONValidator -i {instance doc} -r { rules doc} [#ALL | #DEFAULT | Phase List] [-d]
 	
-	where:
-	 i is json instance document to be validated
-	 r is rules file
-	 #ALL | #DEFAULT | Phase list  specifies the phase (s)
-	 d is to enable debug
+	# where:
+	# i is json instance document to be validated
+	# r is rules file
+	# #ALL | #DEFAULT | Phase list  specifies the phase (s)
+	# d is to enable debug
 	 
-	 //alternatively you can set an environment variable for JSONValidator like below
-	 //in Windows
+	# alternatively you can set an environment variable for JSONValidator like below
+	# in Windows
 	 
-	 $ set JSONValidator = $JSONTRON_ROOT/bin/JSONValidator
-	 
-	
-	//example
-	$ cd ../node_modules/jsontron/data/dissertation/phase
-	
-	$ node %JSONValidator% -i loandata.json -r loandat-rulees_dissertation_singlePhase.json
-	
-	
+	set JSONValidator = $JSONTRON_ROOT/bin/JSONValidator
 
+	# Example
+	cd ../node_modules/jsontron/data/dissertation/phase
+	node %JSONValidator% -i loandata.json -r loandat-rulees_dissertation_singlePhase.json
+```
 
-### Output
+Output:
+```
     Parsing Pattern: patternid1
     1 Pattern(s) Requested.
     1 Pattern(s) Processed.
@@ -66,15 +60,11 @@ $ npm  i  jsontron
            assertionValid: true } ] }
      true
      **** THIS INSTANCE IS SEMANTICALLY VALID ****
+```
 
+## Usage inside other modules/scripts
 
-
-
-## Usage: Inside other modules/scripts
-
-
-	
-	
+```js
 	var jsontron = require("jsontron");
 	
 	myInstance = { "doc": {} };
@@ -118,22 +108,20 @@ $ npm  i  jsontron
     var myReport = jsontron.JSONTRON.validate(myInstance, myRules, ['phaseid1']);
     var valid = myReport.valid;
     [Note: the phase(s) have to be in array format like ['phaseid1'] or ['phaseid2'] or ['phaseid1', 'phaseid2'] or ['#DEFAULT']   ]
-    
-  
-    
+```
 
+## Example - Using IBM Examples from Command Line 
 
-## Examples: Using IBM Examples from Command Line 
-
-
-	//IBM Schematron examples translated from XML to JSON are bundled with the module in data/ibm-test-suite folder
+```sh
+        # IBM Schematron examples translated from XML to JSON are bundled with the module in data/ibm-test-suite folder
+	# Below is an example using IBM Example 3.1
 	
-	// Below is an example using IBM Example 3.1
-	$cd $JSONTRON_ROOT\data\ibm-test-suite\3.1
+	cd $JSONTRON_ROOT\data\ibm-test-suite\3.1
 	
-	$ node JSONValidator -i eg3_1_good1.json -r eg3_1-rules.json
-	
-### Output
+	node JSONValidator -i eg3_1_good1.json -r eg3_1-rules.json
+```
+
+Output:
 
     Parsing Pattern: Document_root
 	 1 Pattern(s) Requested.
@@ -151,8 +139,13 @@ $ npm  i  jsontron
            assertionValid: true } ] }
     true
     **** THIS INSTANCE IS SEMANTICALLY VALID ****
-    
 
-### Keywords
+## How to contribute and participate!
 
-Schematron JSON Semantic-Validator JSON Co-constraints JSON-Rules-Engine 
+**`jsontron`** is a "standard under construction" open to anyone interested in  testing, enhancements, add new issues, add examples, documentation, etc.
+
+We welcome contributions from everyone, and there are many ways to contribute, from Github issues and pull requests, to contribution to our monthly teleconferences.
+
+We welcome contributions from everyone, and there are many ways to contribute, the main channel at this moment is the [Github issues](https://github.com/amer-ali/jsontron/issues)  and pull requests.
+
+
