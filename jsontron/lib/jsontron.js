@@ -139,7 +139,18 @@ var parseAssert = function (assert, instance){
 	
 }
 
-
+var evalMessage = function (message){
+	var result;
+	try{
+		result = eval(message);
+	} 
+	
+	catch(e){
+		result = message;
+	}
+	
+	return result;
+}
 
 
 /**
@@ -153,7 +164,7 @@ var validateAssert = function (parsedAssert){
 	
 	try{
 		
-		var assrtMsg = parsedAssert.result ? "successful" : parsedAssert.message;
+		var assrtMsg = parsedAssert.result ? "successful" : evalMessage(parsedAssert.message); 
 		
 		}catch(e){
 			
