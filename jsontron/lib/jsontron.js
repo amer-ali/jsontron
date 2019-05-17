@@ -117,7 +117,7 @@ var myAssert = {
  * @return {Object containing id, result and message}
  * 
  */
-var parseAssert = function (assert){
+var parseAssert = function (assert, instance){
 	
 
 	
@@ -246,7 +246,7 @@ var  validateRule = function(instance, rule){
 			;
 							try{
 								
-								let parAssert = parseAssert(element);
+								let parAssert = parseAssert(element, instance);
 								let valAssert = validateAssert(parAssert);
 								myReport.addValidation(rule, contextNode, parAssert.id, element.test, valAssert,parAssert.result);
 								
