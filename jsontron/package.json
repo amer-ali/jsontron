@@ -1,5 +1,5 @@
 {
-  "name": "jsontron",
+  "name": "@shoops/jsontron",
   "version": "0.8.19",
   "description": "Schematron based JSON Validator",
   "main": "lib/jsontron.js",
@@ -11,6 +11,7 @@
   "directories": {
     "doc": "docs",
     "example": "examples",
+    "lib": "lib",
     "test": "tests"
   },
   "dependencies": {
@@ -23,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/amer-ali/jsontron.git"
+    "url": "git+https://github.com/shoops/jsontron.git"
   },
   "keywords": [
     "schematron",
@@ -33,7 +34,10 @@
     "rules-engine"
   ],
   "bugs": {
-    "url": "https://github.com/amer-ali/jsontron/issues"
+    "url": "https://github.com/shoops/jsontron/issues"
   },
-  "homepage": "https://amer-ali.github.io/jsontron"
+  "homepage": "https://amer-ali.github.io/jsontron",
+  "bin": {
+    "jsontron": "JSONValidator.js"
+  }
 }
