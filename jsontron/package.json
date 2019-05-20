@@ -1,6 +1,6 @@
 {
   "name": "@shoops/jsontron",
-  "version": "0.8.19",
+  "version": "0.8.21",
   "description": "Schematron based JSON Validator",
   "main": "lib/jsontron.js",
   "scripts": {
@@ -38,6 +38,6 @@
   },
   "homepage": "https://amer-ali.github.io/jsontron",
   "bin": {
-    "@shoops/jsontron": "JSONValidator.js"
+    "@shoops/jsontron": "bin/JSONValidator.js"
   }
 }
