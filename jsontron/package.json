@@ -38,6 +38,6 @@
   },
   "homepage": "https://amer-ali.github.io/jsontron",
   "bin": {
-    "jsontron": "JSONValidator.js"
+    "@shoops/jsontron": "JSONValidator.js"
   }
 }
