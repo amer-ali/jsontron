@@ -17,7 +17,7 @@
         "queryBinding": {
           "type": "string"
         },
-        "defatulePhase": {
+        "defaultPhase": {
           "type": "string"
         },
         "phase": {

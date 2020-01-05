@@ -5,7 +5,7 @@
   	"title":"Schematron Title",
   	"schemaVersion":"ISO Schematron 2016",
   	"queryBinding":"jsonpath",
-  	"defatulePhase":"phase default",
+  	"defaultPhase":"phase default",
   
     "phase":[
     	{

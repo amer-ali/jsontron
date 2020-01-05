@@ -19,7 +19,7 @@
           "type": "string",
           "minLength":1
         },
-        "defatulePhase": {
+        "defaultPhase": {
           "type": "string"
         },
         "phase": {
